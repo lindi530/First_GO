@@ -1,0 +1,25 @@
+mysql:
+    host: 127.0.0.1
+    port: 3306
+    db: GO1_db
+    user: root
+    password: lindi530
+    log_level: dev
+logger:
+    fileNameHttp: "logs/http/gin.log"   # 存放路径
+    fileNameOther: "logs/other/gin.log"
+    appName : "GO1"
+    maxSize: 10                # 每个日志的最大内存
+    maxBackups: 30             # 最多可以保存都少个日志
+    maxAge: 7                  # 保存时间（天）
+    compress: true             # 是否压缩旧文件
+#    lever: info
+#    prefix: "GO1"
+#    director: log
+#    show_line: true
+#    log_in_console: true
+
+system:
+    host: "0.0.0.0"
+    port: 8080
+    env: dev
