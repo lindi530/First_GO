@@ -1,9 +1,16 @@
 package settings_api
 
-import "github.com/gin-gonic/gin"
+import (
+	"GO1/models/response"
+	"github.com/gin-gonic/gin"
+)
 
 func (SettingsAPI) SettingsInfoView(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "settings_info_view",
-	})
+	response.Ok(map[string]string{}, "Success", c)
+	response.OkWithData(map[string]string{}, c)
+	response.OkWithMessage("Success", c)
+
+	response.Fail(map[string]string{}, "Fail", c)
+	response.FailWithCode(response.SettingsError, c)
+	response.FailWithMessage("Fail", c)
 }
