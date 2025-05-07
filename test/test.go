@@ -12,7 +12,4 @@ func Test(router *gin.RouterGroup) {
 	global.DB.Find(&users)
 	fmt.Println(users)
 	global.Logger.Info("日志文件")
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{})
-	})
 }

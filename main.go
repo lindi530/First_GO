@@ -2,18 +2,21 @@ package main
 
 import (
 	"GO1/core"
-	"GO1/middlewares"
+	"GO1/global"
+	"GO1/routers"
 	"GO1/test"
-	"github.com/gin-gonic/gin"
+	"fmt"
 )
 
 func main() {
 	Start()
-	router := gin.New()
-	test.Test(router.Group("/"))
-	router.Use(gin.Recovery(), middlewares.Logger())
+	router := routers.InitRouter()
+	api := router.Group("/")
+	test.Test(api)
 
-	router.Run(":8000")
+	addr := global.Config.System.Addr()
+	global.Logger.Info(fmt.Sprintf("Gin 运行在：%s", addr))
+	router.Run(addr)
 
 }
 
