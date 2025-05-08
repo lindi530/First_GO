@@ -6,10 +6,10 @@ mysql:
     password: lindi530
     log_level: dev
 logger:
-    fileNameHttp: "logs/http/gin.log"   # 存放路径
-    fileNameOther: "logs/other/gin.log"
+    fileName: "logs/logs/gin.log"   # 存放路径
+    fileNameError: "logs/error/gin.log"
     appName : "GO1"
-    maxSize: 10                # 每个日志的最大内存
+    maxSize: 1                # 每个日志的最大内存
     maxBackups: 30             # 最多可以保存都少个日志
     maxAge: 7                  # 保存时间（天）
     compress: true             # 是否压缩旧文件
@@ -23,3 +23,7 @@ system:
     host: "0.0.0.0"
     port: 8000
     env: release   # test  debug
+
+snowflake:
+    start_time: "2025-05-08"
+    machine_id: 1

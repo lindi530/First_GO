@@ -1,4 +1,4 @@
-package core
+package gorm
 
 import (
 	"GO1/global"
@@ -34,5 +34,5 @@ func InitGorm() {
 
 	global.DB = db
 
-	fmt.Printf("core 文件链接数据库成功\n")
+	fmt.Printf("pkg 文件链接数据库成功\n")
 }

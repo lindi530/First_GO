@@ -1,8 +1,8 @@
 package config
 
 type Logger struct {
-	FilenameHttp  string `mapstructure:"fileNameHttp"`
-	FilenameOther string `mapstructure:"fileNameOther"`
+	Filename      string `mapstructure:"fileName"`
+	FilenameError string `mapstructure:"fileNameError"`
 	AppName       string `mapstructure:"appName"`
 	MaxSize       int    `mapstructure:"maxSize"`
 	MaxBackups    int    `mapstructure:"maxBackups"`
