@@ -3,12 +3,14 @@ package user
 import (
 	"GO1/global"
 	"GO1/models"
+	"GO1/pkg/snowflake"
+	"time"
 )
 
 func CheckUserByName(name string) bool {
 	user := models.User{}
 	global.DB.Where("username = ?", name).First(&user)
-	if user.Id != 0 {
+	if user.UserID != 0 {
 		return true
 	}
 	return false
@@ -27,7 +29,19 @@ func CheckUser(i interface{}) bool {
 	return result
 }
 
-func Register(user models.Register) {
-	//global.DB.Create(&user)
+func Register(register models.Register) {
+	userId := snowflake.Snowflake{}.GenID()
+	time := time.Now()
+	user := models.User{
+		UserID:     userId,
+		Username:   register.Name,
+		Password:   register.Password,
+		Email:      register.Email,
+		Gender:     register.Gender,
+		CreateTime: time,
+		UpdateTime: time,
+	}
+	global.DB.Create(&user)
 
+	global.Logger.Info(user)
 }

@@ -11,11 +11,11 @@ import (
 
 func Logger() gin.HandlerFunc {
 	logFile := &lumberjack.Logger{
-		Filename:   global.Config.Logger.FilenameHttp, // 路径建议 logs 目录存在
-		MaxSize:    global.Config.Logger.MaxSize,      // 文件最大大小
-		MaxBackups: global.Config.Logger.MaxBackups,   // 最多保留文件个数
-		MaxAge:     global.Config.Logger.MaxAge,       // 保留时间天
-		Compress:   global.Config.Logger.Compress,     // 是否压缩旧文件
+		Filename:   global.Config.Logger.Filename,   // 路径建议 logs 目录存在
+		MaxSize:    global.Config.Logger.MaxSize,    // 文件最大大小
+		MaxBackups: global.Config.Logger.MaxBackups, // 最多保留文件个数
+		MaxAge:     global.Config.Logger.MaxAge,     // 保留时间天
+		Compress:   global.Config.Logger.Compress,   // 是否压缩旧文件
 	}
 	return func(c *gin.Context) {
 		start := time.Now()

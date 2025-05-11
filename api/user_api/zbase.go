@@ -2,11 +2,13 @@ package user_api
 
 import (
 	"GO1/global"
+	"GO1/middlewares/response"
 	"GO1/models"
 	service "GO1/service/user"
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
-	"net/http"
+	"github.com/go-playground/validator/v10"
+	"strings"
 )
 
 type UsersAPI struct{}
@@ -19,26 +21,35 @@ func (UsersAPI) UsersInfoView(c *gin.Context) {
 
 func (UsersAPI) RegisterUser(c *gin.Context) {
 	// 数据校验
-	user := models.Register{}
-	if err := c.ShouldBindJSON(&user); err != nil {
-		global.Logger.Info("注册数据错误！", zap.Error(err))
-		c.JSON(http.StatusOK, gin.H{
-			"message": err.Error(),
-			"data":    user,
-		})
+	register := models.Register{}
+	if err := c.ShouldBindJSON(&register); err != nil {
+		errs, ok := err.(validator.ValidationErrors) // 验证错误类型是否是校验器错误
+		if !ok {
+			response.FailWithMessage(err.Error(), c)
+			global.Logger.Error("注册数据错误！", err.Error())
+			return
+		}
+
+		result := removeTopStruct(errs.Translate(global.Trans))
+		global.Logger.Error(fmt.Sprintf("注册数据错误！ %s", result))
+		response.FailWithMessage(result, c)
 		return
 	}
-
 	// 调用服务
-	result := service.Register(user)
+	result := service.Register(register)
 
 	if !result {
-		c.JSON(http.StatusOK, "已存在该用户！")
+		response.FailWithMessage("已存在该用户！", c)
 		return
 	}
 
-	// 响应结果
-	c.JSON(http.StatusOK, gin.H{
-		"message": "注册成功！",
-	})
+	response.OkWithMessage("注册成功！", c)
+}
+
+func removeTopStruct(fields map[string]string) map[string]string {
+	res := map[string]string{}
+	for field, err := range fields {
+		res[field[strings.Index(field, ".")+1:]] = err
+	}
+	return res
 }

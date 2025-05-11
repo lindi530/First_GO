@@ -31,7 +31,7 @@ func getEncoder() zapcore.Encoder { // 编码形式
 		StacktraceKey: "stacktrace",
 		LineEnding:    zapcore.DefaultLineEnding,
 		EncodeTime:    zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05.000"),
-		EncodeCaller:  zapcore.ShortCallerEncoder,
+		EncodeCaller:  zapcore.FullCallerEncoder,
 		EncodeLevel:   zapcore.CapitalLevelEncoder,
 	}
 	//encoderConfig := zap.NewProductionEncoderConfig()
@@ -60,6 +60,6 @@ func getLogWriterError() zapcore.WriteSyncer {
 		MaxAge:     global.Config.Logger.MaxAge,
 		Compress:   global.Config.Logger.Compress,
 	})
-	ws := io.MultiWriter(lumberJackLogger, os.Stdout)
+	ws := io.MultiWriter(lumberJackLogger)
 	return zapcore.AddSync(ws)
 }

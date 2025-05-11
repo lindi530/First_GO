@@ -6,6 +6,7 @@ import (
 	"GO1/pkg/gorm"
 	"GO1/pkg/logger"
 	"GO1/pkg/snowflake"
+	"GO1/pkg/translator"
 	"GO1/routers"
 	"GO1/test"
 	"fmt"
@@ -26,4 +27,5 @@ func Start() {
 	gorm.InitGorm()
 	logger.InitLogger()
 	snowflake.InitSnowFlake()
+	translator.InitTrans("zh")
 }
