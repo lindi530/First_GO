@@ -4,6 +4,7 @@ import (
 	"GO1/config"
 	"github.com/bwmarrin/snowflake"
 	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -14,4 +15,5 @@ var (
 	Logger    *zap.SugaredLogger
 	Snowflake *snowflake.Node
 	Trans     ut.Translator // 校验器翻译器
+	Validator *validator.Validate
 )

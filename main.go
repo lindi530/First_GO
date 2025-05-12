@@ -7,6 +7,7 @@ import (
 	"GO1/pkg/logger"
 	"GO1/pkg/snowflake"
 	"GO1/pkg/translator"
+	"GO1/pkg/validator"
 	"GO1/routers"
 	"GO1/test"
 	"fmt"
@@ -14,6 +15,7 @@ import (
 
 func main() {
 	Start()
+	Define()
 	router := routers.InitRouter()
 	api := router.Group("/")
 	test.Test(api)
@@ -27,5 +29,10 @@ func Start() {
 	gorm.InitGorm()
 	logger.InitLogger()
 	snowflake.InitSnowFlake()
+	validator.InitValidator()
 	translator.InitTrans("zh")
+}
+
+func Define() {
+	validator.DefinedValidator()
 }
