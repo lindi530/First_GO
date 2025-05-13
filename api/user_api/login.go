@@ -2,28 +2,33 @@ package user_api
 
 import (
 	"GO1/middlewares/response"
-	"GO1/models"
 	"GO1/service/hash"
-	userService "GO1/service/user"
+	service "GO1/service/user"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func (UserAPI) LoginUser(c *gin.Context) {
+	var input struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+
 	// 信息校验
-	user := models.ParamLogin{}
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&input); err != nil {
 		response.FailWithCode(http.StatusBadRequest, c)
 		return
 	}
-	if result := hash.CheckPassword(user); result {
+	if result := hash.CheckPassword(input.Username, input.Password); result {
 		response.FailWithMessage("用户名或密码错误", c)
 		return
 	}
-
 	// 登录
-	userService.Login(user)
+	token := service.Login(input.Username, c)
 
 	// 返回结果
-	response.OkWithMessage("登录成功！", c)
+	response.Ok(gin.H{
+		"username": input.Username,
+		"token":    token,
+	}, "登录成功！", c)
 }

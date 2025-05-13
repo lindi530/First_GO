@@ -1,9 +1,17 @@
 package user_api
 
-import "github.com/gin-gonic/gin"
+import (
+	"GO1/middlewares/response"
+	"GO1/service/user"
+	"github.com/gin-gonic/gin"
+	"strconv"
+)
 
 func (UserAPI) UserInfo(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "users_info",
-	})
+	userid, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		response.FailWithMessage(response.BadRequest, c)
+	}
+	userInfo := user.FindUserById(userid)
+	response.OkWithData(userInfo, c)
 }
