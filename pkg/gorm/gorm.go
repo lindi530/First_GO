@@ -34,5 +34,4 @@ func InitGorm() {
 
 	global.DB = db
 
-	fmt.Printf("pkg 文件链接数据库成功\n")
 }

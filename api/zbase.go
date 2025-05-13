@@ -7,7 +7,7 @@ import (
 
 type ApiGroup struct {
 	SettingsAPI settings_api.SettingsAPI
-	UsersAPI    user_api.UsersAPI
+	UserAPI     user_api.UserAPI
 }
 
 var ApiGroups = new(ApiGroup)

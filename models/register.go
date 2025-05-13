@@ -1,6 +1,6 @@
 package models
 
-type Register struct {
+type ParamRegister struct {
 	Name       string `json:"username" binding:"required"`
 	Password   string `json:"password" binding:"required,password"`
 	RePassword string `json:"re_password" binding:"required,eqfield=Password"`

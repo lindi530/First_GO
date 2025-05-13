@@ -5,7 +5,7 @@ import (
 	"GO1/models"
 )
 
-func Register(register models.Register) bool {
+func Register(register models.ParamRegister) bool {
 	name := database.Name(register.Name)
 
 	result := database.CheckUser(name)
@@ -13,6 +13,7 @@ func Register(register models.Register) bool {
 	if result {
 		return false
 	}
+
 	database.Register(register)
 	return true
 }

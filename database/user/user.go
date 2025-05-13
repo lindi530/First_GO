@@ -4,6 +4,8 @@ import (
 	"GO1/global"
 	"GO1/models"
 	"GO1/pkg/snowflake"
+	"GO1/service/hash"
+	"fmt"
 	"time"
 )
 
@@ -29,19 +31,23 @@ func CheckUser(i interface{}) bool {
 	return result
 }
 
-func Register(register models.Register) {
+func Register(register models.ParamRegister) {
 	userId := snowflake.Snowflake{}.GenID()
+	hashPassword, err := hash.HashPassword(register.Password)
+	if err != nil {
+		global.Logger.Error(fmt.Sprintf("%s hash password error: %v", register.Name, err))
+	}
 	time := time.Now()
 	user := models.User{
 		UserID:     userId,
 		Username:   register.Name,
-		Password:   register.Password,
+		Password:   hashPassword,
 		Email:      register.Email,
 		Gender:     register.Gender,
 		CreateTime: time,
 		UpdateTime: time,
 	}
 	global.DB.Create(&user)
-
+	
 	global.Logger.Info(user)
 }

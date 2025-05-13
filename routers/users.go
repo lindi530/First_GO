@@ -7,6 +7,8 @@ import (
 
 func UsersRouter(router *gin.RouterGroup) {
 	users := router.Group("/users")
-	users.GET("/", api.ApiGroups.UsersAPI.UsersInfoView)
-	users.POST("/register/", api.ApiGroups.UsersAPI.RegisterUser)
+	users.GET("/", api.ApiGroups.UserAPI.UserInfo)
+	users.POST("/register/", api.ApiGroups.UserAPI.RegisterUser)
+	users.POST("/login/", api.ApiGroups.UserAPI.LoginUser)
+	users.DELETE("/:id", api.ApiGroups.UserAPI.DeleteUser)
 }

@@ -32,5 +32,5 @@ func forTranslator(v *v10.Validate) {
 
 func forUser(v *v10.Validate) {
 	v.RegisterValidation("password", validator.UserPassword)
-	v.RegisterStructValidation(validator.SignUpParamStructLevelValidation, models.Register{})
+	v.RegisterStructValidation(validator.SignUpParamStructLevelValidation, models.ParamRegister{})
 }
