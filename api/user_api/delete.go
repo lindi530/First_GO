@@ -1,30 +1,29 @@
 package user_api
 
 import (
+	mysql "GO1/database/mysql/user"
 	"GO1/middlewares/response"
-	service "GO1/service/user"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
-func (UserAPI) DeleteUser(c *gin.Context) {
-	userid, err := strconv.Atoi(c.Param("id"))
+func (UserAPI) Delete(c *gin.Context) {
+	userId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		response.FailWithCode(response.BadRequest, c)
 		return
 	}
 
-	user := service.FindUserById(userid)
-	if user.Username == "" {
+	if result := mysql.CheckUser(mysql.UserIdParam(userId)); result == false {
 		response.FailWithMessage("该用户不存在！", c)
 		return
 	}
-	if result := service.DeleteUser(userid); result != true {
+	if result := mysql.DeleteUser(userId); result == false {
 		response.FailWithMessage("删除失败！", c)
 		return
 	}
 	response.OkWithData(gin.H{
-		"user": user,
-		"msg":  "success delete",
+		"userId": userId,
+		"msg":    "success delete",
 	}, c)
 }

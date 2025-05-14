@@ -1,31 +1,33 @@
 package jwt
 
 import (
-	"GO1/auth"
+	"GO1/middlewares/response"
+	"GO1/pkg/jwt"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"strings"
 )
+
+const CUserIdKey = "user_id"
 
 func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
-			c.JSON(http.StatusUnauthorized, gin.H{"msg": "未登录"})
+			response.FailWithCode(response.NeedLogin, c)
 			c.Abort()
 			return
 		}
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-		claims, err := auth.ParseToken(tokenStr)
+		claims, err := jwt.ParseToken(tokenStr)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"msg": "token无效"})
+			response.FailWithCode(response.InvalidAccessToken, c)
 			c.Abort()
 			return
 		}
 
 		// 将用户信息存入上下文
-		c.Set("user_id", claims["user_id"])
+		c.Set(CUserIdKey, claims.UserId)
 		c.Next()
 	}
 }

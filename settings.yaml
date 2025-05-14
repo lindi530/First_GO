@@ -27,3 +27,8 @@ system:
 snowflake:
     start_time: "2025-05-08"
     machine_id: 1
+redis:
+    address: "localhost:6379"
+    key_prefix: "refresh_jti:"
+    max_idle: 10
+    idle_timeout: 300

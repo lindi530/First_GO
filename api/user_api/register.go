@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func (UserAPI) RegisterUser(c *gin.Context) {
+func (UserAPI) Register(c *gin.Context) {
 	// 数据校验
 	register := models.ParamRegister{}
 	if err := c.ShouldBindJSON(&register); err != nil {

@@ -9,28 +9,6 @@ import (
 	"time"
 )
 
-func CheckUserByName(name string) bool {
-	user := models.User{}
-	global.DB.Where("username = ?", name).First(&user)
-	if user.UserID != 0 {
-		return true
-	}
-	return false
-}
-
-func CheckUser(i interface{}) bool {
-	var result bool
-	switch t := i.(type) {
-	case Name:
-		result = CheckUserByName(string(t))
-	default:
-
-		result = false
-		break
-	}
-	return result
-}
-
 func Register(register models.ParamRegister) {
 	userId := snowflake.Snowflake{}.GenID()
 	hashPassword, err := hash.HashPassword(register.Password)
@@ -40,7 +18,7 @@ func Register(register models.ParamRegister) {
 	time := time.Now()
 	user := models.User{
 		UserID:     userId,
-		Username:   register.Name,
+		UserName:   register.Name,
 		Password:   hashPassword,
 		Email:      register.Email,
 		Gender:     register.Gender,
@@ -48,6 +26,6 @@ func Register(register models.ParamRegister) {
 		UpdateTime: time,
 	}
 	global.DB.Create(&user)
-	
+
 	global.Logger.Info(user)
 }

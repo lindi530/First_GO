@@ -1,8 +1,8 @@
 package user_api
 
 import (
+	mysql "GO1/database/mysql/user"
 	"GO1/middlewares/response"
-	"GO1/service/user"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -12,6 +12,7 @@ func (UserAPI) UserInfo(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(response.BadRequest, c)
 	}
-	userInfo := user.FindUserById(userid)
+	userInfo := mysql.FindUser(mysql.UserIdParam(userid))
+
 	response.OkWithData(userInfo, c)
 }

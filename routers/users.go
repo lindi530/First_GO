@@ -9,9 +9,11 @@ import (
 func UsersRouter(router *gin.RouterGroup) {
 	users := router.Group("/users")
 
-	users.POST("/register/", api.ApiGroups.UserAPI.RegisterUser)
-	users.POST("/login/", api.ApiGroups.UserAPI.LoginUser)
-	users.DELETE("/:id", api.ApiGroups.UserAPI.DeleteUser)
+	users.POST("/register/", api.ApiGroups.UserAPI.Register)
+	users.POST("/login/", api.ApiGroups.UserAPI.Login)
+	users.POST("/refresh", api.ApiGroups.UserAPI.Refresh)
+	users.POST("/logout", api.ApiGroups.UserAPI.Logout)
+	users.DELETE("/:id", api.ApiGroups.UserAPI.Delete)
 
 	users.Use(jwt.JWTAuthMiddleware())
 	{

@@ -1,0 +1,31 @@
+package user
+
+import (
+	"GO1/global"
+	"GO1/models"
+)
+
+func FindUser(i interface{}) models.User {
+	var result models.User
+	switch t := i.(type) {
+	case UserNameParam:
+		result = FindUserByUserName(string(t))
+	case UserIdParam:
+		result = FindUserByUserId(int64(t))
+	default:
+		break
+	}
+	return result
+}
+
+func FindUserByUserId(id int64) models.User {
+	user := models.User{}
+	global.DB.Where("id = ?", id).First(&user)
+	return user
+}
+
+func FindUserByUserName(username string) models.User {
+	user := models.User{}
+	global.DB.Where("user_name = ?", username).First(&user)
+	return user
+}

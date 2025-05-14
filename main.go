@@ -5,6 +5,7 @@ import (
 	"GO1/pkg/conf"
 	"GO1/pkg/gorm"
 	"GO1/pkg/logger"
+	"GO1/pkg/redis"
 	"GO1/pkg/snowflake"
 	"GO1/pkg/translator"
 	"GO1/pkg/validator"
@@ -33,6 +34,7 @@ func Start() {
 	snowflake.InitSnowFlake()
 	validator.InitValidator()
 	translator.InitTrans("zh")
+	redis.InitRedisClient()
 }
 
 func Define() {

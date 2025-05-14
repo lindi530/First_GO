@@ -1,34 +1,41 @@
 package user_api
 
 import (
+	mysql "GO1/database/mysql/user"
+	"GO1/database/redis"
 	"GO1/middlewares/response"
 	"GO1/service/hash"
 	service "GO1/service/user"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
-func (UserAPI) LoginUser(c *gin.Context) {
+func (UserAPI) Login(c *gin.Context) {
 	var input struct {
-		Username string `json:"username"`
+		UserName string `json:"username"`
 		Password string `json:"password"`
 	}
 
 	// 信息校验
 	if err := c.ShouldBindJSON(&input); err != nil {
-		response.FailWithCode(http.StatusBadRequest, c)
+		response.FailWithCode(response.BadRequest, c)
 		return
 	}
-	if result := hash.CheckPassword(input.Username, input.Password); result {
-		response.FailWithMessage("用户名或密码错误", c)
+
+	user := mysql.FindUser(mysql.UserNameParam(input.UserName))
+
+	if result := hash.CheckPassword(user.Password, input.Password); !result {
+		response.FailWithCode(response.InvalidLoginInfo, c)
 		return
 	}
 	// 登录
-	token := service.Login(input.Username, c)
+	accessToken, refreshToken, jti := service.Login(user.UserID, user.UserName)
+	
+	redis.SaveJWTId(c, user.UserID, jti)
 
 	// 返回结果
 	response.Ok(gin.H{
-		"username": input.Username,
-		"token":    token,
+		"userName":     input.UserName,
+		"accessToken":  accessToken,
+		"refreshToken": refreshToken,
 	}, "登录成功！", c)
 }

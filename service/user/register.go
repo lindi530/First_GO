@@ -1,19 +1,18 @@
 package user
 
 import (
-	database "GO1/database/user"
+	mysql "GO1/database/mysql/user"
 	"GO1/models"
 )
 
 func Register(register models.ParamRegister) bool {
-	name := database.Name(register.Name)
-
-	result := database.CheckUser(name)
+	name := mysql.UserNameParam(register.Name)
+	result := mysql.CheckUser(name)
 
 	if result {
 		return false
 	}
 
-	database.Register(register)
+	mysql.Register(register)
 	return true
 }

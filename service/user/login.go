@@ -1,12 +1,12 @@
 package user
 
 import (
-	"GO1/auth"
-	"github.com/gin-gonic/gin"
+	"GO1/pkg/jwt"
 )
 
-func Login(username string, c *gin.Context) string {
-	user := FindUserByUsername(username)
-	token, _ := auth.GenerateToken(user.UserID)
-	return token
+func Login(userid int64, username string) (string, string, string) {
+	accessToken, _ := jwt.GenerateAccessToken(userid, username)
+	refreshToken, jti, _ := jwt.GenerateRefreshToken(userid, username)
+
+	return accessToken, refreshToken, jti
 }
