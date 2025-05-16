@@ -18,6 +18,7 @@ func UsersRouter(router *gin.RouterGroup) {
 	users.Use(jwt.JWTAuthMiddleware())
 	{
 		users.GET("/:id", api.ApiGroups.UserAPI.UserInfo)
+		users.GET("posts", api.ApiGroups.UserAPI.UserPosts)
 	}
 
 }

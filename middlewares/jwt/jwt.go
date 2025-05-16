@@ -3,6 +3,7 @@ package jwt
 import (
 	"GO1/middlewares/response"
 	"GO1/pkg/jwt"
+	"GO1/service/context"
 	"github.com/gin-gonic/gin"
 	"strings"
 )
@@ -27,7 +28,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 		}
 
 		// 将用户信息存入上下文
-		c.Set(CUserIdKey, claims.UserId)
+		context.SetContext(c, CUserIdKey, claims.UserId)
 		c.Next()
 	}
 }
