@@ -16,9 +16,8 @@ import (
 func main() {
 	Start()
 	Define()
-	router := routers.InitRouter()
-	api := router.Group("/")
 
+	api, router := routers.InitRouter()
 	if global.Config.System.Env == "test" {
 		test.Test(api)
 	}

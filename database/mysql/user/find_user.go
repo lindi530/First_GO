@@ -20,7 +20,7 @@ func FindUser(i interface{}) models.User {
 
 func FindUserByUserId(id int64) models.User {
 	user := models.User{}
-	global.DB.Where("id = ?", id).First(&user)
+	global.DB.Where("user_id = ?", id).First(&user)
 	return user
 }
 

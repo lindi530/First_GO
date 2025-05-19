@@ -12,6 +12,9 @@ const (
 	Logout
 	Login
 	Register
+	InvalidUser
+	ServiceError
+	NotFound = 404
 )
 
 var (
@@ -25,5 +28,8 @@ var (
 		Logout:              "已登出",
 		Login:               "登录成功",
 		Register:            "注册成功",
+		NotFound:            "该页面不存在",
+		InvalidUser:         "该用户不存在",
+		ServiceError:        "服务器繁忙",
 	}
 )

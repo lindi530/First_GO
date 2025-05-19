@@ -2,17 +2,39 @@ package routers
 
 import (
 	"GO1/global"
+	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
-func InitRouter() *gin.Engine {
+func InitRouter() (*gin.RouterGroup, *gin.Engine) {
 	gin.SetMode(global.Config.System.Env)
 
 	router := gin.New()
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:8080"}, // 允许前端地址
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
+	router.Use(func(c *gin.Context) {
+		fmt.Printf(">> CORS applied on %s %s\n", c.Request.Method, c.Request.URL.Path)
+		c.Next()
+	})
 	api := router.Group("/")
 	AddRouter(api)
-
-	return router
+	router.NoRoute(func(c *gin.Context) {
+		global.Logger.Infof("404 <UNK>")
+		c.JSON(404, gin.H{
+			"code":    404,
+			"message": "Not Found",
+		})
+	})
+	return api, router
 }
 
 func AddRouter(api *gin.RouterGroup) {

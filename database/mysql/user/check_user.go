@@ -30,7 +30,7 @@ func CheckUserByUserName(username string) bool {
 
 func CheckUserByUserId(userid int64) bool {
 	user := models.User{}
-	global.DB.Where("user_name = ?", userid).First(&user)
+	global.DB.Where("user_id = ?", userid).First(&user)
 	if user.UserID != 0 {
 		return true
 	}

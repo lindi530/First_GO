@@ -9,8 +9,8 @@ import (
 func UsersRouter(router *gin.RouterGroup) {
 	users := router.Group("/users")
 
-	users.POST("/register/", api.ApiGroups.UserAPI.Register)
-	users.POST("/login/", api.ApiGroups.UserAPI.Login)
+	users.POST("/register", api.ApiGroups.UserAPI.Register)
+	users.POST("/login", api.ApiGroups.UserAPI.Login)
 	users.POST("/refresh", api.ApiGroups.UserAPI.Refresh)
 	users.POST("/logout", api.ApiGroups.UserAPI.Logout)
 	users.DELETE("/:id", api.ApiGroups.UserAPI.Delete)
@@ -18,7 +18,8 @@ func UsersRouter(router *gin.RouterGroup) {
 	users.Use(jwt.JWTAuthMiddleware())
 	{
 		users.GET("/:id", api.ApiGroups.UserAPI.UserInfo)
-		users.GET("posts", api.ApiGroups.UserAPI.UserPosts)
+		users.GET("/:id/posts", api.ApiGroups.UserAPI.GetUserPosts)
+		users.POST("/:id/post", api.ApiGroups.UserAPI.SaveUserPost)
 	}
 
 }

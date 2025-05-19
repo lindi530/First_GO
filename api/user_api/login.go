@@ -29,13 +29,14 @@ func (UserAPI) Login(c *gin.Context) {
 	}
 	// 登录
 	accessToken, refreshToken, jti := service.Login(user.UserID, user.UserName)
-	
+
 	redis.SaveJWTId(c, user.UserID, jti)
 
+	user.Password = ""
 	// 返回结果
 	response.Ok(gin.H{
-		"userName":     input.UserName,
 		"accessToken":  accessToken,
 		"refreshToken": refreshToken,
+		"user":         user,
 	}, "登录成功！", c)
 }

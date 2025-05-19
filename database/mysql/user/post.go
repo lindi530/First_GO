@@ -14,3 +14,7 @@ func GetPost(userID int64) ([]models.Post, error) {
 		Find(&posts).Error
 	return posts, err
 }
+
+func SavePost(post models.Post) {
+	global.DB.Save(&post)
+}
