@@ -5,10 +5,10 @@ import (
 	"GO1/models"
 )
 
-func SavePost(p models.CreatePost) models.Post {
+func CreatePost(p models.CreatePost) models.Post {
 	post := CreatePostHandler(p)
 
-	mysql.SavePost(post)
+	mysql.CreatePost(&post)
 
 	return post
 }

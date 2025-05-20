@@ -14,6 +14,7 @@ const (
 	Register
 	InvalidUser
 	ServiceError
+	NoAuthority
 	NotFound = 404
 )
 
@@ -31,5 +32,6 @@ var (
 		NotFound:            "该页面不存在",
 		InvalidUser:         "该用户不存在",
 		ServiceError:        "服务器繁忙",
+		NoAuthority:         "没有操作权限",
 	}
 )

@@ -8,10 +8,15 @@ import (
 	"time"
 )
 
-func InitRouter() (*gin.RouterGroup, *gin.Engine) {
+func InitRouter() *gin.Engine {
 	gin.SetMode(global.Config.System.Env)
 
 	router := gin.New()
+	router.RemoveExtraSlash = true
+	router.Use(func(c *gin.Context) {
+		fmt.Printf(">> CORS applied on %s %s\n", c.Request.Method, c.Request.URL.Path)
+		c.Next()
+	})
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:8080"}, // 允许前端地址
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -20,13 +25,7 @@ func InitRouter() (*gin.RouterGroup, *gin.Engine) {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-
-	router.Use(func(c *gin.Context) {
-		fmt.Printf(">> CORS applied on %s %s\n", c.Request.Method, c.Request.URL.Path)
-		c.Next()
-	})
-	api := router.Group("/")
-	AddRouter(api)
+	AddRouter(router.Group(""))
 	router.NoRoute(func(c *gin.Context) {
 		global.Logger.Infof("404 <UNK>")
 		c.JSON(404, gin.H{
@@ -34,10 +33,11 @@ func InitRouter() (*gin.RouterGroup, *gin.Engine) {
 			"message": "Not Found",
 		})
 	})
-	return api, router
+	return router
 }
 
 func AddRouter(api *gin.RouterGroup) {
 	SettingsRouter(api)
 	UsersRouter(api)
+	PostsRouter(api)
 }

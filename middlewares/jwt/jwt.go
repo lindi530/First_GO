@@ -8,8 +8,6 @@ import (
 	"strings"
 )
 
-const CUserIdKey = "user_id"
-
 func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -27,8 +25,8 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// 将用户信息存入上下文
-		context.SetContext(c, CUserIdKey, claims.UserId)
+		// 将用户信息存入上下文 每个http都会存在一个独立的context，所以不会冲突
+		context.SetContext(c, context.CtxUserIdKey, claims.UserId)
 		c.Next()
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models"
+	"GO1/service/context"
 	service "GO1/service/user/post"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -13,10 +14,10 @@ import (
 
 func (UserAPI) GetUserPosts(c *gin.Context) {
 	// 得到此时登录的userID
-	userId, _ := strconv.Atoi(c.Param("id"))
+	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
 
 	// 通过server获得帖子信息
-	posts, err := service.GetPosts(int64(userId))
+	posts, err := service.GetUserPosts(userId)
 	if err != nil {
 		response.FailWithMessage("出错", c)
 		return
@@ -28,11 +29,11 @@ func (UserAPI) GetUserPosts(c *gin.Context) {
 	}, c)
 }
 
-func (UserAPI) SaveUserPost(c *gin.Context) {
+func (UserAPI) CreateUserPost(c *gin.Context) {
 	// 数据校验
 	post := models.CreatePost{}
-	userId, _ := strconv.Atoi(c.Param("id"))
-	if err := c.ShouldBindJSON(&post); err != nil || int64(userId) != post.UserID {
+	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if err := c.ShouldBindJSON(&post); err != nil || userId != post.UserID {
 		global.Logger.Error("<UNK>", zap.Error(err))
 		response.FailWithCode(response.BadRequest, c)
 		return
@@ -43,12 +44,33 @@ func (UserAPI) SaveUserPost(c *gin.Context) {
 		return
 	}
 
-	newPost := service.SavePost(post)
+	newPost := service.CreatePost(post)
 	if !result {
 		response.FailWithCode(response.ServiceError, c)
 		return
 	}
 	response.OkWithData(gin.H{
 		"post": newPost,
+	}, c)
+}
+
+func (UserAPI) DeleteUserPost(c *gin.Context) {
+	// 前端数据的提取，校验
+	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
+
+	if userId != context.GetContext(c, context.CtxUserIdKey) {
+		response.FailWithCode(response.NoAuthority, c)
+		return
+	}
+	// 服务
+	res := service.DeleteUserPost(postId, userId)
+	if res == false {
+		response.FailWithCode(response.NoAuthority, c)
+		return
+	}
+
+	response.OkWithData(gin.H{
+		"message": "删除成功",
 	}, c)
 }

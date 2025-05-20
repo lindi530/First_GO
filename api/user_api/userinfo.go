@@ -8,11 +8,11 @@ import (
 )
 
 func (UserAPI) UserInfo(c *gin.Context) {
-	userid, err := strconv.Atoi(c.Param("id"))
+	userId, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if err != nil {
 		response.FailWithMessage(response.BadRequest, c)
 	}
-	userInfo := mysql.FindUser(mysql.UserIdParam(userid))
+	userInfo := mysql.FindUser(mysql.UserIdParam(userId))
 
 	response.OkWithData(userInfo, c)
 }

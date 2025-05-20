@@ -7,8 +7,8 @@ import (
 	"strconv"
 )
 
-func (UserAPI) Delete(c *gin.Context) {
-	userId, err := strconv.Atoi(c.Param("id"))
+func (UserAPI) DeleteUser(c *gin.Context) {
+	userId, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if err != nil {
 		response.FailWithCode(response.BadRequest, c)
 		return

@@ -2,7 +2,7 @@ package context
 
 import "github.com/gin-gonic/gin"
 
-const CUserIdKey = "user_id"
+const CtxUserIdKey = "user_id"
 
 func SetContext(c *gin.Context, key string, value interface{}) {
 	c.Set(key, value)

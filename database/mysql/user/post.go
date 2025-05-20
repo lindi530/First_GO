@@ -5,7 +5,7 @@ import (
 	"GO1/models"
 )
 
-func GetPost(userID int64) ([]models.Post, error) {
+func GetUserPost(userID int64) ([]models.Post, error) {
 	var posts []models.Post
 	err := global.DB.
 		Preload("Author").
@@ -15,6 +15,7 @@ func GetPost(userID int64) ([]models.Post, error) {
 	return posts, err
 }
 
-func SavePost(post models.Post) {
-	global.DB.Save(&post)
+func CreatePost(post *models.Post) {
+	global.DB.Create(post) // create 固定执行插入操作
+	//global.DB.Save(&post)     // save 先判断主键，主键存在则修改该信息，不存在进行插入操作
 }

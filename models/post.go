@@ -36,3 +36,19 @@ type CreatePost struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+func BuildPostResponse(p Post) PostResponse {
+	return PostResponse{
+		PostID:    p.PostID,
+		UserID:    p.UserID,
+		Title:     p.Title,
+		Content:   p.Content,
+		Status:    p.Status,
+		CreatedAt: p.CreatedAt,
+		UpdatedAt: p.UpdatedAt,
+		Author: AuthorInfo{
+			UserName: p.Author.UserName,
+			Email:    p.Author.Email,
+		},
+	}
+}
