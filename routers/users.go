@@ -13,10 +13,10 @@ func UsersRouter(router *gin.RouterGroup) {
 	users.POST("/login", api.ApiGroups.UserAPI.Login)
 	users.POST("/refresh", api.ApiGroups.UserAPI.Refresh)
 	users.POST("/logout", api.ApiGroups.UserAPI.Logout)
-	users.DELETE("/:id", api.ApiGroups.UserAPI.Delete)
 
 	users.Use(jwt.JWTAuthMiddleware())
 	{
+		users.DELETE("/:id", api.ApiGroups.UserAPI.Delete)
 		users.GET("/:id", api.ApiGroups.UserAPI.UserInfo)
 		users.GET("/:id/posts", api.ApiGroups.UserAPI.GetUserPosts)
 		users.POST("/:id/post", api.ApiGroups.UserAPI.SaveUserPost)

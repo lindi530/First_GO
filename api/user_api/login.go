@@ -3,6 +3,7 @@ package user_api
 import (
 	mysql "GO1/database/mysql/user"
 	"GO1/database/redis"
+	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/service/hash"
 	service "GO1/service/user"
@@ -22,6 +23,12 @@ func (UserAPI) Login(c *gin.Context) {
 	}
 
 	user := mysql.FindUser(mysql.UserNameParam(input.UserName))
+
+	if user.UserID == 0 {
+		global.Logger.Error("无效的用户信息")
+		response.FailWithCode(response.InvalidLoginInfo, c)
+		return
+	}
 
 	if result := hash.CheckPassword(user.Password, input.Password); !result {
 		response.FailWithCode(response.InvalidLoginInfo, c)
