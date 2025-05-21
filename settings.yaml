@@ -32,3 +32,7 @@ redis:
     key_prefix: "refresh_jti:"
     max_idle: 10
     idle_timeout: 300
+upload:
+    image:
+        path: "upload/images"
+        size: 2

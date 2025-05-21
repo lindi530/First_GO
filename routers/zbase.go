@@ -40,4 +40,5 @@ func AddRouter(api *gin.RouterGroup) {
 	SettingsRouter(api)
 	UsersRouter(api)
 	PostsRouter(api)
+	ImagesRouter(api)
 }
