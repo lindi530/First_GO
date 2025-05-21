@@ -2,8 +2,8 @@ package image_api
 
 import (
 	"GO1/middlewares/response"
-	models "GO1/models/Upload"
-	service "GO1/service/Upload/images"
+	models_upload "GO1/models/upload"
+	service "GO1/service/upload/images"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
@@ -11,15 +11,15 @@ import (
 func (ImageAPI) UploadImages(c *gin.Context) {
 	form, err := c.MultipartForm()
 	if err != nil {
-		response.FailWithMessage("无效数据", c)
+		response.FailWithMessage("无效数据1", c)
 		return
 	}
 	fileList, ok := form.File["images"]
 	if !ok {
-		response.FailWithMessage("无效数据", c)
+		response.FailWithMessage("无效数据2", c)
 		return
 	}
-	rsp := []*models.ResponseUploadImages{}
+	rsp := []models_upload.ResponseUploadImages{}
 	service.UploadImage(c, fileList, &rsp)
 	fmt.Println(rsp)
 	response.OkWithData(rsp, c)
