@@ -1,7 +1,9 @@
 package post_api
 
 import (
+	"GO1/global"
 	"GO1/middlewares/response"
+	"GO1/models"
 	service "GO1/service/user/post"
 	"github.com/gin-gonic/gin"
 )
@@ -12,5 +14,24 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 	posts, _ := service.GetAllPost()
 
 	// 响应
+	response.OkWithData(posts, c)
+}
+
+func (PostAPI) GetThePagePost(c *gin.Context) {
+	var pageInfo models.PageInfo
+
+	global.Logger.Info("GetThePagePost")
+	if err := c.ShouldBind(&pageInfo); err != nil {
+		response.FailWithCode(response.BadRequest, c)
+		return
+	}
+
+	posts, err := service.GetThePagePost(pageInfo)
+
+	if err != nil {
+		response.FailWithMessage("数据拉取失败", c)
+		return
+	}
+
 	response.OkWithData(posts, c)
 }

@@ -52,3 +52,11 @@ func BuildPostResponse(p Post) PostResponse {
 		},
 	}
 }
+
+func BuildPostsResponse(p []Post) []PostResponse {
+	postsResponse := make([]PostResponse, 0, len(p))
+	for _, post := range p {
+		postsResponse = append(postsResponse, BuildPostResponse(post))
+	}
+	return postsResponse
+}
