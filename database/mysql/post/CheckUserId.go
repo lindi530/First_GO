@@ -9,7 +9,7 @@ func CheckUserIDByPostID(postId int64, userId int64) bool {
 	var id int64
 	err := global.DB.
 		Model(&models.Post{}).
-		Where("post_id = ?", postId).
+		Where("id = ?", postId).
 		Pluck("user_id", &id).Error
 	if err != nil {
 		return false

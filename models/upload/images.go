@@ -1,9 +1,14 @@
 package upload
 
-import "time"
+import (
+	"GO1/global"
+	"gorm.io/gorm"
+	"os"
+	"time"
+)
 
 type Image struct {
-	Id        int       `json:"id" gorm:"primaryKey"`
+	Id        int64     `json:"id" gorm:"primaryKey"`
 	MD5       string    `json:"md5"`
 	Path      string    `json:"path"`
 	Name      string    `json:"name"`
@@ -19,4 +24,13 @@ var WriteImageList = []string{
 	".jpg",
 	".png",
 	".gif",
+}
+
+func (I *Image) BeforeDelete(db *gorm.DB) error {
+	err := os.Remove(I.Path)
+	if err != nil {
+		global.Logger.Error("删除失败！")
+		return err
+	}
+	return nil
 }

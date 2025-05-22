@@ -19,13 +19,11 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 
 func (PostAPI) GetThePagePost(c *gin.Context) {
 	var pageInfo models.PageInfo
-
-	global.Logger.Info("GetThePagePost")
 	if err := c.ShouldBind(&pageInfo); err != nil {
 		response.FailWithCode(response.BadRequest, c)
 		return
 	}
-
+	global.Logger.Infof("GetThePagePost pageInfo: %v", pageInfo)
 	posts, err := service.GetThePagePost(pageInfo)
 
 	if err != nil {

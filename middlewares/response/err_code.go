@@ -15,6 +15,7 @@ const (
 	InvalidUser
 	ServiceError
 	NoAuthority
+	DeleteFail
 	NotFound = 404
 )
 

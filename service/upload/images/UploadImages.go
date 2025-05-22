@@ -33,11 +33,6 @@ func UploadImage(c *gin.Context, file []*multipart.FileHeader, rsp *[]models_upl
 		}
 		filePath := dirPath + "/" + filename
 
-		//err := c.SaveUploadedFile(file, filePath)
-		//if err != nil {
-		//	addResponse(rsp, filename, "上传失败", "保存失败")
-		//	continue
-		//}
 		fileObj, err := file.Open()
 		if err != nil {
 			global.Logger.Error(err)
@@ -57,6 +52,12 @@ func UploadImage(c *gin.Context, file []*multipart.FileHeader, rsp *[]models_upl
 		}
 
 		err = image.CreateImage(md5Str, filename, filePath)
+		if err != nil {
+			addResponse(rsp, filename, "上传失败", "保存失败")
+			continue
+		}
+
+		err = c.SaveUploadedFile(file, filePath)
 		if err != nil {
 			addResponse(rsp, filename, "上传失败", "保存失败")
 			continue

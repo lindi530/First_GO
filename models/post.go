@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Post struct {
-	PostID    int64     `gorm:"primaryKey;column:post_id"  json:"post_id,omitempty"`
+	PostID    int64     `gorm:"primaryKey;column:id"  json:"id,omitempty"`
 	UserID    int64     `gorm:"index;not null"             json:"user_id"`
 	Title     string    `gorm:"size:200;not null"          json:"title"`
 	Content   string    `gorm:"type:text;not null"         json:"content"`
@@ -19,7 +19,7 @@ type AuthorInfo struct {
 	Email    string `json:"email"`
 }
 type PostResponse struct {
-	PostID    int64      `json:"post_id"`
+	PostID    int64      `json:"id"`
 	UserID    int64      `json:"user_id"`
 	Title     string     `json:"title"`
 	Content   string     `json:"content"`

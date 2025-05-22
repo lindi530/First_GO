@@ -7,7 +7,7 @@ import (
 
 func GetPostByPostId(postId int64) models.Post {
 	post := models.Post{}
-	global.DB.Where("post_id = ?", postId).First(&post)
+	global.DB.Where("id = ?", postId).First(&post)
 	return post
 }
 

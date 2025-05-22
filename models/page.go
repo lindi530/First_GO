@@ -1,6 +1,6 @@
 package models
 
 type PageInfo struct {
-	Page  int `json:"page"`
-	Limit int `json:"limit"`
+	Page  int `form:"page" json:"page"`
+	Limit int `form:"limit" json:"limit"` // form 使用 ShouldBindQuery
 }
