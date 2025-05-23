@@ -11,7 +11,7 @@ func (UserAPI) GetUserList(c *gin.Context) {
 	// 数据校验
 
 	// 服务
-	userList := service.GetUserList()
+	userList := service.GetUserList(c)
 	// 相应
 	global.Logger.Info("UserList: ", userList)
 	response.OkWithData(gin.H{

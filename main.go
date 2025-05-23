@@ -10,6 +10,7 @@ import (
 	"GO1/pkg/translator"
 	"GO1/pkg/validator"
 	"GO1/routers"
+	"fmt"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 	//	test.Test(api)
 	//}
 	addr := global.Config.System.Addr()
-	//global.Logger.Info(fmt.Sprintf("Gin 运行在：%s", addr))
+	global.Logger.Info(fmt.Sprintf("Gin 运行在：%s", addr))
 	router.Run(addr)
 }
 

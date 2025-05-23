@@ -3,9 +3,9 @@ package config
 import "fmt"
 
 type System struct {
-	Host string `mapstructure:"host"`
-	Port int    `mapstructure:"port"`
-	Env  string `mapstructure:"env"`
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
+	Env  string `yaml:"env"`
 }
 
 func (s *System) Addr() string {

@@ -15,6 +15,7 @@ func FindUser(i interface{}) models.User {
 	default:
 		break
 	}
+
 	return result
 }
 

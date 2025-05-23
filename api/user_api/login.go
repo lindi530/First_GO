@@ -5,6 +5,7 @@ import (
 	"GO1/database/redis"
 	"GO1/global"
 	"GO1/middlewares/response"
+	"GO1/models"
 	"GO1/service/hash"
 	service "GO1/service/user"
 	"github.com/gin-gonic/gin"
@@ -39,11 +40,11 @@ func (UserAPI) Login(c *gin.Context) {
 
 	redis.SaveJWTId(c, user.UserID, jti)
 
-	user.Password = ""
+	responseUser := models.BuildUserResponse(c, user)
 	// 返回结果
 	response.Ok(gin.H{
 		"accessToken":  accessToken,
 		"refreshToken": refreshToken,
-		"user":         user,
+		"user":         responseUser,
 	}, "登录成功！", c)
 }

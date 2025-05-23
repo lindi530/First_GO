@@ -5,7 +5,6 @@ import (
 	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models"
-	"GO1/service/context"
 	service "GO1/service/user/post"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -59,12 +58,8 @@ func (UserAPI) DeleteUserPost(c *gin.Context) {
 	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
 
-	if userId != context.GetContext(c, context.CtxUserIdKey) {
-		response.FailWithCode(response.NoAuthority, c)
-		return
-	}
 	// 服务
-	res := service.DeleteUserPost(postId, userId)
+	res := service.DeleteUserPost(c, postId, userId)
 	if res == false {
 		response.FailWithCode(response.NoAuthority, c)
 		return

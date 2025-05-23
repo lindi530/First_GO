@@ -16,6 +16,7 @@ const (
 	ServiceError
 	NoAuthority
 	DeleteFail
+	UploadFail
 	NotFound = 404
 )
 
@@ -34,5 +35,6 @@ var (
 		InvalidUser:         "该用户不存在",
 		ServiceError:        "服务器繁忙",
 		NoAuthority:         "没有操作权限",
+		UploadFail:          "上传失败",
 	}
 )

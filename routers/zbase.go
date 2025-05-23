@@ -2,6 +2,7 @@ package routers
 
 import (
 	"GO1/global"
+	service_router "GO1/mapping"
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func InitRouter() *gin.Engine {
 	gin.SetMode(global.Config.System.Env)
 
 	router := gin.New()
+	service_router.MappingRouter(router)
 	router.RemoveExtraSlash = true
 	router.Use(func(c *gin.Context) {
 		fmt.Printf(">> CORS applied on %s %s\n", c.Request.Method, c.Request.URL.Path)
