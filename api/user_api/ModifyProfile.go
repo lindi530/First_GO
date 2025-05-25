@@ -1,24 +1,22 @@
 package user_api
 
 import (
-	"GO1/global"
 	"GO1/middlewares/response"
-	"GO1/service/user"
+	"GO1/models"
+	service "GO1/service/user"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
-func (UserAPI) ModifyAvatar(c *gin.Context) {
-	avatar, err := c.FormFile("avatar")
+func (UserAPI) ModifyProfile(c *gin.Context) {
 	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
-
-	if err != nil {
+	var profile models.UserProfile
+	if err := c.ShouldBindJSON(&profile); err != nil {
 		response.FailWithCode(response.BadRequest, c)
 		return
 	}
-	result := user.ModifyAvatar(c, userId, avatar)
 
-	global.Logger.Info(result)
+	result := service.ModifyProfile(c, userId, profile)
 
 	response.OkWithData(result, c)
 }

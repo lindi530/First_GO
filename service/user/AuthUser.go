@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CheckUserId(c *gin.Context, userId int64) bool {
+func AuthUser(c *gin.Context, userId int64) bool {
 
 	ctxUserId := context.GetContext(c, context.CtxUserIdKey)
 	//global.Logger.Info(fmt.Sprintf("userId: %d   ctxUserId: %d", userId, ctxUserId))

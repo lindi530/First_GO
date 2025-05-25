@@ -8,7 +8,7 @@ import (
 
 func DeleteUserPost(c *gin.Context, postId int64, userId int64) bool {
 
-	if service_user.CheckUserId(c, userId) == false {
+	if service_user.AuthUser(c, userId) == false {
 		return false
 	}
 

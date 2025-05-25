@@ -1,13 +1,12 @@
-package service
+package user
 
 import (
 	mysql_image "GO1/database/mysql/image"
 	mysql_user "GO1/database/mysql/user"
 	"GO1/global"
+	"GO1/models"
 	models_upload "GO1/models/upload"
 	"GO1/pkg/md5"
-	"GO1/service/user"
-	"errors"
 	"github.com/gin-gonic/gin"
 	"io"
 	"mime/multipart"
@@ -16,20 +15,28 @@ import (
 	"strings"
 )
 
-func ModifyAvatar(c *gin.Context, userId int64, avatar *multipart.FileHeader) error {
-
-	if !user.CheckUserId(c, userId) {
+func ModifyAvatar(c *gin.Context, userId int64, avatar *multipart.FileHeader) gin.H {
+	if !AuthUser(c, userId) {
 		global.Logger.Error("无权限")
-		return errors.New("无权限")
+		return gin.H{
+			"avatarPath": "",
+			"msg":        "无权限",
+		}
 	}
 
 	if !inWriteList(filepath.Ext(avatar.Filename)) {
-		return errors.New("格式不允许")
+		return gin.H{
+			"avatarPath": "",
+			"msg":        "格式不允许",
+		}
 	}
 
 	imageLimitSize := float64(global.Config.Upload.Image.Size)
 	if float64(avatar.Size/1024/1024) > imageLimitSize {
-		return errors.New("超出限制大小")
+		return gin.H{
+			"avatarPath": "",
+			"msg":        "超出限制大小",
+		}
 	}
 
 	dirPath := global.Config.Upload.Image.Path
@@ -39,26 +46,41 @@ func ModifyAvatar(c *gin.Context, userId int64, avatar *multipart.FileHeader) er
 
 	fileObj, err := avatar.Open()
 	if err != nil {
-		return errors.New("文件解析失败")
+		return gin.H{
+			"avatarPath": "",
+			"msg":        "文件解析失败",
+		}
 	}
 	byteData, err := io.ReadAll(fileObj)
 	if err != nil {
-		return errors.New("文件解析失败")
+		return gin.H{
+			"avatarPath": "",
+			"msg":        "文件解析失败",
+		}
 	}
-	md5Str := md5.MD5(byteData)
-	if !mysql_image.CheckImage(md5Str) {
-		err = mysql_image.CreateImage(md5Str, avatar.Filename, filePath)
+	fileMD5 := md5.MD5(byteData)
+	if !mysql_image.CheckImage(fileMD5) {
+		err = mysql_image.CreateImage(fileMD5, avatar.Filename, filePath)
 		if err != nil {
-			return errors.New("文件保存失败")
+			return gin.H{
+				"avatarPath": "",
+				"msg":        "文件保存失败",
+			}
 		}
 		err = c.SaveUploadedFile(avatar, filePath)
 		if err != nil {
-			return errors.New("文件保存失败")
+			return gin.H{
+				"avatarPath": "",
+				"msg":        "文件保存失败",
+			}
 		}
 	}
-
-	mysql_user.ModifyAvatar(userId, md5Str)
-	return nil
+	mysql_user.ModifyAvatar(userId, fileMD5)
+	avatarPath := models.GetAvatarPath(c, fileMD5)
+	return gin.H{
+		"avatar": avatarPath,
+		"msg":    "上传成功",
+	}
 }
 
 func ensureDir(dirPath string) {

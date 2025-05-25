@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	//ID         int64     `json:"id"`
+	ID         int64     `json:"id"`
 	UserID     int64     `json:"user_id"`
 	UserName   string    `json:"username"`
 	Password   string    `json:"password"`
@@ -34,7 +34,7 @@ func BuildUserResponse(c *gin.Context, u User) UserResponse {
 	user := UserResponse{
 		UserID:     u.UserID,
 		UserName:   u.UserName,
-		AvatarPath: getAvatarPath(c, u.Avatar),
+		AvatarPath: GetAvatarPath(c, u.Avatar),
 		Email:      u.Email,
 		Gender:     u.Gender,
 		UpdateTime: u.UpdateTime,
@@ -42,7 +42,7 @@ func BuildUserResponse(c *gin.Context, u User) UserResponse {
 	return user
 }
 
-func getAvatarPath(c *gin.Context, md5Avatar string) string {
+func GetAvatarPath(c *gin.Context, md5Avatar string) string {
 
 	var path string
 	global.DB.Model(models_upload.Image{}).Where("md5 = ?", md5Avatar).Select("path").First(&path)
