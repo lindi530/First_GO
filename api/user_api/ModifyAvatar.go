@@ -1,6 +1,7 @@
 package user_api
 
 import (
+	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/service"
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ func (UserAPI) ModifyAvatar(c *gin.Context) {
 	}
 	err = service.ModifyAvatar(c, userId, avatar)
 	if err != nil {
+		global.Logger.Error(err)
 		response.FailWithCode(response.UploadFail, c)
 		return
 	}
