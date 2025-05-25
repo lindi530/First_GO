@@ -3,21 +3,25 @@ package user
 import (
 	"GO1/global"
 	"GO1/models"
-	"github.com/gin-gonic/gin"
 )
 
-func ModifyProfile(user models.User, profile models.UserProfile) gin.H {
+func ModifyProfile(user models.User, profile models.UserProfile) (rsp models.HandleFuncRsp) {
 	updates := map[string]interface{}{
-		"username": profile.UserName,
-		"email":    profile.Email,
+		"user_name": profile.UserName,
+		"email":     profile.Email,
+		"quote":     profile.Quote,
 	}
+	global.Logger.Info(profile)
+	global.Logger.Info(user)
 	err := global.DB.Model(&user).Updates(updates).Error
 	if err != nil {
-		return gin.H{
-			"msg": "数据库保存失败",
+		return models.HandleFuncRsp{
+			Msg: "数据库存储失败",
+			Ok:  false,
 		}
 	}
-	return gin.H{
-		"msg": "修改成功",
+	return models.HandleFuncRsp{
+		Msg: "修改成功",
+		Ok:  true,
 	}
 }

@@ -17,6 +17,8 @@ func (UserAPI) ModifyProfile(c *gin.Context) {
 	}
 
 	result := service.ModifyProfile(c, userId, profile)
-
-	response.OkWithData(result, c)
+	if !result.Ok {
+		response.FailWithMessage(result.Msg, c)
+	}
+	response.OkWithMessage(result.Msg, c)
 }

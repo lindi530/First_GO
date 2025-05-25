@@ -6,16 +6,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ModifyProfile(c *gin.Context, userId int64, profile models.UserProfile) gin.H {
+func ModifyProfile(c *gin.Context, userId int64, profile models.UserProfile) models.HandleFuncRsp {
 	if result := AuthUser(c, userId); !result {
-		return gin.H{
-			"msg": "无权限",
+		return models.HandleFuncRsp{
+			Msg: "无权限",
+			Ok:  false,
 		}
 	}
 	user := mysql_user.FindUser(mysql_user.UserIdParam(userId))
 	if user.UserID == 0 {
-		return gin.H{
-			"msg": "无权限",
+		return models.HandleFuncRsp{
+			Msg: "无权限",
+			Ok:  false,
 		}
 	}
 	result := mysql_user.ModifyProfile(user, profile)
