@@ -39,6 +39,7 @@ func (UserAPI) Login(c *gin.Context) {
 	accessToken, refreshToken, jti := service.Login(user.UserID, user.UserName)
 
 	redis.SaveJWTId(c, user.UserID, jti)
+	redis.SaveOnlineState(c, user.UserID)
 
 	responseUser := models.BuildUserResponse(c, user)
 	// 返回结果

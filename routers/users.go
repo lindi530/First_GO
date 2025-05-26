@@ -23,6 +23,12 @@ func UsersRouter(router *gin.RouterGroup) {
 		users.POST("/:user_id/posts/create", api.ApiGroups.UserAPI.CreateUserPost)
 		users.POST("/:user_id/modify_avatar", api.ApiGroups.UserAPI.ModifyAvatar)
 		users.PATCH("/:user_id/profile", api.ApiGroups.UserAPI.ModifyProfile)
+
+		users.POST("/online", api.ApiGroups.UserAPI.RefreshOnlineState)
+
+		users.GET("/:user_id/is_following", api.ApiGroups.UserAPI.CheckFollows)
+		users.POST("/:user_id/follow", api.ApiGroups.UserAPI.FollowUser)
+		users.DELETE("/:user_id/follow", api.ApiGroups.UserAPI.UnFollowUser)
 	}
 
 }

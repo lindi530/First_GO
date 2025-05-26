@@ -24,6 +24,7 @@ func (UserAPI) Logout(c *gin.Context) {
 	jti := claims.JTI
 
 	redis.DeleteJWTId(c, jti)
+	redis.DeleteOnlineState(c, claims.UserId)
 
 	response.FailWithCode(response.Logout, c)
 }

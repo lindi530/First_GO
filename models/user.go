@@ -1,6 +1,7 @@
 package models
 
 import (
+	"GO1/database/redis"
 	"GO1/global"
 	"GO1/mapping"
 	models_upload "GO1/models/upload"
@@ -10,7 +11,6 @@ import (
 )
 
 type User struct {
-	ID         int64     `json:"id"`
 	UserID     int64     `json:"user_id"`
 	UserName   string    `json:"user_name"`
 	Password   string    `json:"password"`
@@ -23,26 +23,32 @@ type User struct {
 }
 
 type UserResponse struct {
-	UserID     int64     `json:"user_id"`
-	UserName   string    `json:"user_name"`
-	AvatarPath string    `json:"avatar"`
-	Quote      string    `json:"quote"`
-	Email      string    `json:"email"`
-	Gender     string    `json:"gender"`
-	UpdateTime time.Time `json:"update_time"`
+	UserID      int64     `json:"user_id"`
+	UserName    string    `json:"user_name"`
+	AvatarPath  string    `json:"avatar"`
+	Quote       string    `json:"quote"`
+	Email       string    `json:"email"`
+	Gender      string    `json:"gender"`
+	OnlineState bool      `json:"online_state"`
+	UpdateTime  time.Time `json:"update_time"`
 }
 
 func BuildUserResponse(c *gin.Context, u User) UserResponse {
 	user := UserResponse{
-		UserID:     u.UserID,
-		UserName:   u.UserName,
-		AvatarPath: GetAvatarPath(c, u.Avatar),
-		Quote:      u.Quote,
-		Email:      u.Email,
-		Gender:     u.Gender,
-		UpdateTime: u.UpdateTime,
+		UserID:      u.UserID,
+		UserName:    u.UserName,
+		AvatarPath:  GetAvatarPath(c, u.Avatar),
+		Quote:       u.Quote,
+		Email:       u.Email,
+		Gender:      u.Gender,
+		OnlineState: getOnlineState(c, u.UserID),
+		UpdateTime:  u.UpdateTime,
 	}
 	return user
+}
+
+func getOnlineState(c *gin.Context, userId int64) bool {
+	return redis.GetOnlineState(c, userId)
 }
 
 func GetAvatarPath(c *gin.Context, md5Avatar string) string {
