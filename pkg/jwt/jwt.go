@@ -4,6 +4,7 @@ import (
 	"GO1/models"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"strings"
 	"time"
 )
 
@@ -57,4 +58,11 @@ func ParseToken(tokenString string) (*models.CustomClaims, error) {
 		return claims, nil
 	}
 	return nil, err
+}
+
+func GetUserIdFromToken(authHeader string) int64 {
+	accessToken := strings.TrimPrefix(authHeader, "Bearer ")
+	claims, _ := ParseToken(accessToken)
+
+	return claims.UserId
 }

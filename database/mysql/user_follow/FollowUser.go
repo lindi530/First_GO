@@ -18,7 +18,7 @@ func FollowUser(followerID int64, followeeID int64) bool {
 		if err := global.DB.Create(&follow).Error; err != nil {
 			return false
 		}
-		return true
+		return UpdateFollowUserCount(followerID, followeeID)
 	}
 	return false
 }

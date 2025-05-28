@@ -10,20 +10,26 @@ import (
 )
 
 func Register(register models.ParamRegister) {
+
 	userId := snowflake.Snowflake{}.GenID()
 	hashPassword, err := hash.HashPassword(register.Password)
+
 	if err != nil {
 		global.Logger.Error(fmt.Sprintf("%s hash password error: %v", register.Name, err))
 	}
 	time := time.Now()
 	user := models.User{
-		UserID:     userId,
-		UserName:   register.Name,
-		Password:   hashPassword,
-		Email:      register.Email,
-		Gender:     register.Gender,
-		CreateTime: time,
-		UpdateTime: time,
+		UserID:         userId,
+		UserName:       register.Name,
+		Password:       hashPassword,
+		Email:          register.Email,
+		Gender:         global.Config.Settings.User.Gender,
+		Quote:          global.Config.Settings.User.Quote,
+		Avatar:         global.Config.Settings.User.Avatar,
+		FollowerCount:  0,
+		FollowingCount: 0,
+		CreateTime:     time,
+		UpdateTime:     time,
 	}
 	global.DB.Create(&user)
 

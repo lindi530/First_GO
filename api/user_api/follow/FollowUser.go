@@ -1,16 +1,17 @@
-package user_api
+package follow
 
 import (
 	"GO1/global"
 	"GO1/middlewares/response"
+	"GO1/pkg/jwt"
 	"GO1/service/user_follow"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
-func (UserAPI) FollowUser(c *gin.Context) {
-	followerID := GetUserIdFromToken(c.GetHeader("Authorization"))
+func (UserFollowAPI) FollowUser(c *gin.Context) {
+	followerID := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	followeeID, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	global.Logger.Info(fmt.Sprintf("Following follower %d, followee %d", followerID, followeeID))
 	if followerID == followeeID {

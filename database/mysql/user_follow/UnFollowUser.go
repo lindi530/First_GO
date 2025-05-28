@@ -12,5 +12,5 @@ func UnFollowUser(followerID int64, followeeID int64) bool {
 	if err != nil {
 		return false
 	}
-	return true
+	return UpdateUnFollowUserCount(followerID, followeeID)
 }

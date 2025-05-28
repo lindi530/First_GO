@@ -21,11 +21,16 @@ func CheckUser(i interface{}) bool {
 
 func CheckUserByUserName(username string) bool {
 	user := models.User{}
-	global.DB.Where("username = ?", username).First(&user)
-	if user.UserID != 0 {
-		return true
+
+	err := global.DB.Where("user_name = ?", username).First(&user).Error
+	if err != nil {
+		global.Logger.Error(err)
+		return false
 	}
-	return false
+	//if user.UserID {
+	//	return true
+	//}
+	return user.UserID != 0
 }
 
 func CheckUserByUserId(userid int64) bool {

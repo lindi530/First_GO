@@ -1,4 +1,4 @@
-package user_api
+package account
 
 import (
 	"GO1/database/redis"
@@ -8,7 +8,7 @@ import (
 )
 
 // 登出：从 Redis 删除对应 jti
-func (UserAPI) Logout(c *gin.Context) {
+func (UserAccountAPI) Logout(c *gin.Context) {
 	// 前端提交当前 refresh_token
 	var req struct {
 		RefreshToken string `json:"refresh_token"`

@@ -1,4 +1,4 @@
-package user_api
+package account
 
 import (
 	mysql "GO1/database/mysql/user"
@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (UserAPI) Login(c *gin.Context) {
+func (UserAccountAPI) Login(c *gin.Context) {
 	var input struct {
 		UserName string `json:"username"`
 		Password string `json:"password"`

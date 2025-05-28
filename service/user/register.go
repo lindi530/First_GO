@@ -6,13 +6,11 @@ import (
 )
 
 func Register(register models.ParamRegister) bool {
-	name := mysql.UserNameParam(register.Name)
-	result := mysql.CheckUser(name)
+	result := mysql.CheckUser(mysql.UserNameParam(register.Name))
 
 	if result {
 		return false
 	}
-
 	mysql.Register(register)
 	return true
 }

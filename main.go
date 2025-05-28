@@ -28,8 +28,8 @@ func main() {
 
 func Start() {
 	conf.InitConfig()
-	gorm.InitGorm()
 	logger.InitLogger()
+	gorm.InitGorm()
 	snowflake.InitSnowFlake()
 	validator.InitValidator()
 	translator.InitTrans("zh")

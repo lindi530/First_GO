@@ -1,4 +1,4 @@
-package user_api
+package account
 
 import (
 	"GO1/global"
@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func (UserAPI) Register(c *gin.Context) {
+func (UserAccountAPI) Register(c *gin.Context) {
 	// 数据校验
 	register := models.ParamRegister{}
 	if err := c.ShouldBindJSON(&register); err != nil {

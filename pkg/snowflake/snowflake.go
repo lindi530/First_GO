@@ -13,10 +13,13 @@ func InitSnowFlake() {
 func Init(startTime string, machineID int64) {
 	st, err := time.Parse("2006-01-02", startTime)
 	if err != nil {
+		global.Logger.Error("雪花算法初始化失败")
 		return
 	}
 	snowflake.Epoch = st.UnixNano() / 1000000
+
 	global.Snowflake, err = snowflake.NewNode(machineID)
+
 	if err != nil {
 		global.Logger.Error(err)
 	}

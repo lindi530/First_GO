@@ -1,4 +1,4 @@
-package user_api
+package account
 
 import (
 	mysql "GO1/database/mysql/user"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (UserAPI) DeleteUser(c *gin.Context) {
+func (UserAccountAPI) DeleteUser(c *gin.Context) {
 	userId, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if err != nil {
 		response.FailWithCode(response.BadRequest, c)

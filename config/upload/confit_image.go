@@ -1,6 +1,6 @@
 package upload
 
 type Image struct {
-	Path string `yaml: "path"`
-	Size int64  `yaml: "size"`
+	Path string `mapstructure:"path"`
+	Size int64  `mapstructure:"size"`
 }

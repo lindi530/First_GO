@@ -8,15 +8,16 @@ import (
 
 func UsersRouter(router *gin.RouterGroup) {
 	users := router.Group("/users")
-	users.POST("/register", api.ApiGroups.UserAPI.Register)
-	users.POST("/login", api.ApiGroups.UserAPI.Login)
+
+	users.POST("/register", api.ApiGroups.UserAPI.UserAccountAPI.Register)
+	users.POST("/login", api.ApiGroups.UserAPI.UserAccountAPI.Login)
 	users.POST("/refresh", api.ApiGroups.UserAPI.Refresh)
-	users.POST("/logout", api.ApiGroups.UserAPI.Logout)
+	users.POST("/logout", api.ApiGroups.UserAPI.UserAccountAPI.Logout)
 
 	users.Use(jwt.JWTAuthMiddleware())
 	{
 		users.DELETE("/:user_id/posts/:post_id", api.ApiGroups.UserAPI.DeleteUserPost)
-		users.DELETE("/:user_id", api.ApiGroups.UserAPI.DeleteUser)
+		users.DELETE("/:user_id", api.ApiGroups.UserAPI.UserAccountAPI.DeleteUser)
 		users.GET("/:user_id", api.ApiGroups.UserAPI.UserInfo)
 		users.GET("/userlist", api.ApiGroups.UserAPI.GetUserList)
 		users.GET("/:user_id/posts", api.ApiGroups.UserAPI.GetUserPosts)
@@ -26,9 +27,9 @@ func UsersRouter(router *gin.RouterGroup) {
 
 		users.POST("/online", api.ApiGroups.UserAPI.RefreshOnlineState)
 
-		users.GET("/:user_id/is_following", api.ApiGroups.UserAPI.CheckFollows)
-		users.POST("/:user_id/follow", api.ApiGroups.UserAPI.FollowUser)
-		users.DELETE("/:user_id/follow", api.ApiGroups.UserAPI.UnFollowUser)
+		users.GET("/:user_id/is_following", api.ApiGroups.UserAPI.UserFollowAPI.CheckFollows)
+		users.POST("/:user_id/follow", api.ApiGroups.UserAPI.UserFollowAPI.FollowUser)
+		users.DELETE("/:user_id/follow", api.ApiGroups.UserAPI.UserFollowAPI.UnFollowUser)
 	}
 
 }
