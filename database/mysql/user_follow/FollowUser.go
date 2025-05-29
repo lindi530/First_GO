@@ -2,7 +2,7 @@ package user_follow
 
 import (
 	"GO1/global"
-	"GO1/models"
+	"GO1/models/user_follow"
 	"time"
 )
 
@@ -10,7 +10,7 @@ func FollowUser(followerID int64, followeeID int64) bool {
 
 	result := CheckFollows(followerID, followeeID)
 	if !result {
-		follow := models.UserFollow{
+		follow := user_follow.UserFollow{
 			FollowerID: followerID,
 			FolloweeID: followeeID,
 			CreatedAt:  time.Now(),

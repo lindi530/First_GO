@@ -2,11 +2,11 @@ package user
 
 import (
 	"GO1/global"
-	"GO1/models"
+	"GO1/models/user"
 )
 
-func FindUser(i interface{}) models.User {
-	var result models.User
+func FindUser(i interface{}) user.User {
+	var result user.User
 	switch t := i.(type) {
 	case UserNameParam:
 		result = FindUserByUserName(string(t))
@@ -19,14 +19,14 @@ func FindUser(i interface{}) models.User {
 	return result
 }
 
-func FindUserByUserId(id int64) models.User {
-	user := models.User{}
+func FindUserByUserId(id int64) user.User {
+	user := user.User{}
 	global.DB.Where("user_id = ?", id).First(&user)
 	return user
 }
 
-func FindUserByUserName(username string) models.User {
-	user := models.User{}
+func FindUserByUserName(username string) user.User {
+	user := user.User{}
 	global.DB.Where("user_name = ?", username).First(&user)
 	return user
 }

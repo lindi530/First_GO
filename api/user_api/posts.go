@@ -4,7 +4,7 @@ import (
 	mysql "GO1/database/mysql/user"
 	"GO1/global"
 	"GO1/middlewares/response"
-	"GO1/models"
+	"GO1/models/post"
 	service "GO1/service/user/post"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -30,7 +30,7 @@ func (UserAPI) GetUserPosts(c *gin.Context) {
 
 func (UserAPI) CreateUserPost(c *gin.Context) {
 	// 数据校验
-	post := models.CreatePost{}
+	post := post.CreatePost{}
 	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if err := c.ShouldBindJSON(&post); err != nil || userId != post.UserID {
 		global.Logger.Error("<UNK>", zap.Error(err))

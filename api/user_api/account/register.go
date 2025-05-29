@@ -3,7 +3,7 @@ package account
 import (
 	"GO1/global"
 	"GO1/middlewares/response"
-	"GO1/models"
+	"GO1/models/user"
 	service "GO1/service/user"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -13,7 +13,7 @@ import (
 
 func (UserAccountAPI) Register(c *gin.Context) {
 	// 数据校验
-	register := models.ParamRegister{}
+	register := user.ParamRegister{}
 	if err := c.ShouldBindJSON(&register); err != nil {
 		errs, ok := err.(validator.ValidationErrors) // 验证错误类型是否是校验器错误
 		if !ok {

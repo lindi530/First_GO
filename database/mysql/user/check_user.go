@@ -2,7 +2,7 @@ package user
 
 import (
 	"GO1/global"
-	"GO1/models"
+	"GO1/models/user"
 )
 
 func CheckUser(i interface{}) bool {
@@ -20,7 +20,7 @@ func CheckUser(i interface{}) bool {
 }
 
 func CheckUserByUserName(username string) bool {
-	user := models.User{}
+	user := user.User{}
 
 	err := global.DB.Where("user_name = ?", username).First(&user).Error
 	if err != nil {
@@ -34,7 +34,7 @@ func CheckUserByUserName(username string) bool {
 }
 
 func CheckUserByUserId(userid int64) bool {
-	user := models.User{}
+	user := user.User{}
 	global.DB.Where("user_id = ?", userid).First(&user)
 	if user.UserID != 0 {
 		return true

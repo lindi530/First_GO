@@ -1,11 +1,11 @@
 package account
 
 import (
-	mysql "GO1/database/mysql/user"
+	mysql_user "GO1/database/mysql/user"
 	"GO1/database/redis"
 	"GO1/global"
 	"GO1/middlewares/response"
-	"GO1/models"
+	models_user "GO1/models/user"
 	"GO1/service/hash"
 	service "GO1/service/user"
 	"github.com/gin-gonic/gin"
@@ -23,7 +23,7 @@ func (UserAccountAPI) Login(c *gin.Context) {
 		return
 	}
 
-	user := mysql.FindUser(mysql.UserNameParam(input.UserName))
+	user := mysql_user.FindUser(mysql_user.UserNameParam(input.UserName))
 
 	if user.UserID == 0 {
 		global.Logger.Error("无效的用户信息")
@@ -41,7 +41,7 @@ func (UserAccountAPI) Login(c *gin.Context) {
 	redis.SaveJWTId(c, user.UserID, jti)
 	redis.SaveOnlineState(c, user.UserID)
 
-	responseUser := models.BuildUserResponse(c, user)
+	responseUser := models_user.BuildUserResponse(c, user)
 	// 返回结果
 	response.Ok(gin.H{
 		"accessToken":  accessToken,

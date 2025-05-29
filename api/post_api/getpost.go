@@ -3,7 +3,7 @@ package post_api
 import (
 	"GO1/global"
 	"GO1/middlewares/response"
-	"GO1/models"
+	"GO1/models/post"
 	service "GO1/service/user/post"
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +18,7 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 }
 
 func (PostAPI) GetThePagePost(c *gin.Context) {
-	var pageInfo models.PageInfo
+	var pageInfo post.PageInfo
 	if err := c.ShouldBind(&pageInfo); err != nil {
 		response.FailWithCode(response.BadRequest, c)
 		return

@@ -4,7 +4,7 @@ import (
 	"GO1/global"
 	"GO1/middlewares/translator"
 	"GO1/middlewares/validator"
-	"GO1/models"
+	"GO1/models/user"
 	"github.com/gin-gonic/gin/binding"
 	v10 "github.com/go-playground/validator/v10"
 )
@@ -32,5 +32,5 @@ func forTranslator(v *v10.Validate) {
 
 func forUser(v *v10.Validate) {
 	v.RegisterValidation("password", validator.UserPassword)
-	v.RegisterStructValidation(validator.SignUpParamStructLevelValidation, models.ParamRegister{})
+	v.RegisterStructValidation(validator.SignUpParamStructLevelValidation, user.ParamRegister{})
 }

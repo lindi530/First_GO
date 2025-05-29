@@ -2,10 +2,10 @@ package post
 
 import (
 	mysql "GO1/database/mysql/user"
-	"GO1/models"
+	"GO1/models/post"
 )
 
-func CreatePost(p models.CreatePost) models.Post {
+func CreatePost(p post.CreatePost) post.Post {
 	post := CreatePostHandler(p)
 
 	mysql.CreatePost(&post)

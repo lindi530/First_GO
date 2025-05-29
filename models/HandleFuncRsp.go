@@ -1,6 +1,7 @@
 package models
 
-type HandleFuncRsp struct {
-	Msg string
-	Ok  bool
+type HandleFuncResp struct {
+	Data any
+	Msg  string
+	Ok   bool
 }

@@ -2,7 +2,7 @@ package user_api
 
 import (
 	"GO1/middlewares/response"
-	"GO1/models"
+	"GO1/models/user"
 	service "GO1/service/user"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -10,7 +10,7 @@ import (
 
 func (UserAPI) ModifyProfile(c *gin.Context) {
 	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
-	var profile models.UserProfile
+	var profile user.UserProfile
 	if err := c.ShouldBindJSON(&profile); err != nil {
 		response.FailWithCode(response.BadRequest, c)
 		return

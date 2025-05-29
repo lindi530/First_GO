@@ -2,14 +2,14 @@ package user
 
 import (
 	"GO1/global"
-	"GO1/models"
+	"GO1/models/user"
 	"GO1/pkg/snowflake"
 	"GO1/service/hash"
 	"fmt"
 	"time"
 )
 
-func Register(register models.ParamRegister) {
+func Register(register user.ParamRegister) {
 
 	userId := snowflake.Snowflake{}.GenID()
 	hashPassword, err := hash.HashPassword(register.Password)
@@ -18,7 +18,7 @@ func Register(register models.ParamRegister) {
 		global.Logger.Error(fmt.Sprintf("%s hash password error: %v", register.Name, err))
 	}
 	time := time.Now()
-	user := models.User{
+	user := user.User{
 		UserID:         userId,
 		UserName:       register.Name,
 		Password:       hashPassword,

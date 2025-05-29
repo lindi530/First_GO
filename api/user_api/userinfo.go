@@ -3,7 +3,7 @@ package user_api
 import (
 	mysql "GO1/database/mysql/user"
 	"GO1/middlewares/response"
-	"GO1/models"
+	"GO1/models/user"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -18,7 +18,7 @@ func (UserAPI) UserInfo(c *gin.Context) {
 	userInfo := mysql.FindUser(mysql.UserIdParam(userId))
 	fmt.Println(userInfo)
 
-	responseUser := models.BuildUserResponse(c, userInfo)
+	responseUser := user.BuildUserResponse(c, userInfo)
 
 	response.OkWithData(responseUser, c)
 }

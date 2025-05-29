@@ -2,7 +2,7 @@ package test
 
 import (
 	"GO1/global"
-	"GO1/models"
+	"GO1/models/user"
 	"GO1/pkg/snowflake"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -16,7 +16,7 @@ func Test(router *gin.RouterGroup) {
 }
 
 func testDB() {
-	var users []models.User
+	var users []user.User
 	global.DB.Find(&users)
 	fmt.Println(users)
 }

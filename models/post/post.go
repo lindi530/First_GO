@@ -1,6 +1,9 @@
-package models
+package post
 
-import "time"
+import (
+	"GO1/models/user"
+	"time"
+)
 
 type Post struct {
 	PostID    int64     `gorm:"primaryKey;column:id"  json:"id,omitempty"`
@@ -11,7 +14,7 @@ type Post struct {
 	CreatedAt time.Time `gorm:"autoCreateTime"             json:"created_at"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime"             json:"updated_at"`
 
-	Author User `gorm:"foreignKey:UserID;references:UserID" json:"-"`
+	Author user.User `gorm:"foreignKey:UserID;references:UserID" json:"-"`
 }
 
 type AuthorInfo struct {

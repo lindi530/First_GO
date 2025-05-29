@@ -1,4 +1,4 @@
-package models
+package user
 
 import (
 	"GO1/database/redis"

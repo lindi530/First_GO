@@ -1,4 +1,4 @@
-package models
+package user
 
 type ParamLogin struct {
 	Username string `json:"username"`

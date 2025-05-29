@@ -1,12 +1,12 @@
 package post
 
 import (
-	"GO1/models"
+	"GO1/models/post"
 )
 
-func CreatePostHandler(p models.CreatePost) models.Post {
+func CreatePostHandler(p post.CreatePost) post.Post {
 	// 转换为Post模型（忽略PostID，由数据库自动生成）
-	post := models.Post{
+	post := post.Post{
 		UserID:    p.UserID,
 		Title:     p.Title,
 		Content:   p.Content,
