@@ -7,7 +7,10 @@ import (
 
 func GetPostByPostId(postId int64) post.Post {
 	post := post.Post{}
-	global.DB.Where("id = ?", postId).First(&post)
+	global.DB.
+		Preload("Author").
+		Where("id = ?", postId).
+		First(&post)
 	return post
 }
 

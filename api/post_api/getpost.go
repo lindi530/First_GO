@@ -6,15 +6,27 @@ import (
 	"GO1/models/post"
 	service "GO1/service/user/post"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func (PostAPI) GetAllPost(c *gin.Context) {
 	// 数据校验
 	// 服务
 	posts, _ := service.GetAllPost()
-
 	// 响应
 	response.OkWithData(posts, c)
+}
+
+func (PostAPI) GetOnePost(c *gin.Context) {
+	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
+
+	result := service.GetOnePost(postId)
+
+	if !result.Ok {
+		response.FailWithMessage(result.Msg, c)
+		return
+	}
+	response.OkWithData(result.Data, c)
 }
 
 func (PostAPI) GetThePagePost(c *gin.Context) {

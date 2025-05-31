@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// GORM 外键绑定 + Preload     评论是用手动查询来写(更推荐)
 type Post struct {
 	PostID    int64     `gorm:"primaryKey;column:id"  json:"id,omitempty"`
 	UserID    int64     `gorm:"index;not null"             json:"user_id"`

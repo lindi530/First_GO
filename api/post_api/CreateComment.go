@@ -13,17 +13,19 @@ func (PostAPI) CreateComment(c *gin.Context) {
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
 
-	var comment Comment.Comment
-	if c.ShouldBindJSON(&comment) != nil {
+	var requestComment Comment.RequestComment
+
+	if c.ShouldBindJSON(&requestComment) != nil {
 		response.FailWithCode(response.BadRequest, c)
 		return
 	}
 
-	result := service_user.CreateComment(userId, postId, &comment)
+	result := service_user.CreateComment(userId, postId, requestComment)
+
 	if result.Ok == false {
 		response.FailWithMessage(result.Msg, c)
 		return
 	}
 
-	response.OkWithData(comment, c)
+	response.OkWithData(result.Data, c)
 }
