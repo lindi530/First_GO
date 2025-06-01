@@ -2,6 +2,7 @@ package user
 
 import (
 	mysql_user "GO1/database/mysql/user"
+	"GO1/global"
 	"GO1/models"
 	"GO1/models/user"
 	"github.com/gin-gonic/gin"
@@ -21,7 +22,8 @@ func ModifyProfile(c *gin.Context, userId int64, profile user.UserProfile) model
 			Ok:  false,
 		}
 	}
-	result := mysql_user.ModifyProfile(user, profile)
+	global.Logger.Info("mysql ModifyProfile")
+	result := mysql_user.ModifyProfile(user.UserID, profile)
 
 	return result
 }
