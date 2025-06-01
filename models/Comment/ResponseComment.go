@@ -2,6 +2,7 @@ package Comment
 
 import (
 	models_user "GO1/models/user"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
@@ -14,7 +15,7 @@ type ResponseComment struct {
 	Author models_user.AuthorInfo `json:"author"`
 }
 
-func BuildResponseComment(comment *Comment, user *models_user.AuthorInfo) ResponseComment {
+func BuildResponseComment(c *gin.Context, comment *Comment, user *models_user.AuthorInfo) ResponseComment {
 	return ResponseComment{
 		ID:        comment.ID,
 		Content:   comment.Content,
@@ -22,7 +23,7 @@ func BuildResponseComment(comment *Comment, user *models_user.AuthorInfo) Respon
 		Author: models_user.AuthorInfo{
 			UserID:   user.UserID,
 			UserName: user.UserName,
-			Avatar:   user.Avatar,
+			Avatar:   models_user.GetAvatarPath(c, user.Avatar),
 		},
 	}
 }

@@ -5,10 +5,11 @@ import (
 	mysql_user "GO1/database/mysql/user"
 	"GO1/models"
 	"GO1/models/Comment"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
-func CreateComment(userId, postId int64, requestComment Comment.RequestComment) models.HandleFuncResp {
+func CreateComment(c *gin.Context, userId, postId int64, requestComment Comment.RequestComment) models.HandleFuncResp {
 	comment := Comment.Comment{
 		PostID:    postId,
 		AuthorID:  userId,
@@ -20,7 +21,7 @@ func CreateComment(userId, postId int64, requestComment Comment.RequestComment) 
 
 	if result.Ok {
 		user := mysql_user.FindAuthorInfo(userId)
-		result.Data = Comment.BuildResponseComment(&comment, user)
+		result.Data = Comment.BuildResponseComment(c, &comment, user)
 	}
 
 	return result

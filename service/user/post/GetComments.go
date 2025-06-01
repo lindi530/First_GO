@@ -5,21 +5,25 @@ import (
 	mysql_user "GO1/database/mysql/user"
 	"GO1/models"
 	"GO1/models/Comment"
+	"github.com/gin-gonic/gin"
 )
 
-func GetComments(userId, postId int64) models.HandleFuncResp {
+func GetComments(c *gin.Context, userId, postId int64) models.HandleFuncResp {
 	var comments []Comment.Comment
 	mysql_comment.GetComments(&comments, postId)
 	author := mysql_user.FindAuthorInfo(userId)
 
-	var responseComments []Comment.ResponseComment
-	for _, comment := range comments {
-		res := Comment.BuildResponseComment(&comment, author)
-		responseComments = append(responseComments, res)
+	responseComments := make([]Comment.ResponseComment, len(comments))
+	for idx, comment := range comments {
+		res := Comment.BuildResponseComment(c, &comment, author)
+		responseComments[idx] = res
 	}
 
 	return models.HandleFuncResp{
-		Data: responseComments,
-		Ok:   true,
+		Data: gin.H{
+			"comments": responseComments,
+			"length":   len(responseComments),
+		},
+		Ok: true,
 	}
 }

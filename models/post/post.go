@@ -2,6 +2,7 @@ package post
 
 import (
 	"GO1/models/user"
+	"github.com/gin-gonic/gin"
 	"time"
 )
 
@@ -19,8 +20,9 @@ type Post struct {
 }
 
 type AuthorInfo struct {
-	UserName string `json:"username"`
-	Email    string `json:"email"`
+	UserId   int64  `json:"user_id"`
+	UserName string `json:"user_name"`
+	Avatar   string `json:"avatar"`
 }
 type PostResponse struct {
 	PostID    int64      `json:"id"`
@@ -41,7 +43,7 @@ type CreatePost struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func BuildPostResponse(p Post) PostResponse {
+func BuildPostResponse(c *gin.Context, p Post) PostResponse {
 	return PostResponse{
 		PostID:    p.PostID,
 		UserID:    p.UserID,
@@ -51,16 +53,17 @@ func BuildPostResponse(p Post) PostResponse {
 		CreatedAt: p.CreatedAt,
 		UpdatedAt: p.UpdatedAt,
 		Author: AuthorInfo{
+			UserId:   p.Author.UserID,
 			UserName: p.Author.UserName,
-			Email:    p.Author.Email,
+			Avatar:   user.GetAvatarPath(c, p.Author.Avatar),
 		},
 	}
 }
 
-func BuildPostsResponse(p []Post) []PostResponse {
+func BuildPostsResponse(c *gin.Context, p []Post) []PostResponse {
 	postsResponse := make([]PostResponse, 0, len(p))
 	for _, post := range p {
-		postsResponse = append(postsResponse, BuildPostResponse(post))
+		postsResponse = append(postsResponse, BuildPostResponse(c, post))
 	}
 	return postsResponse
 }

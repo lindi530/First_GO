@@ -12,7 +12,7 @@ import (
 func (PostAPI) GetAllPost(c *gin.Context) {
 	// 数据校验
 	// 服务
-	posts, _ := service.GetAllPost()
+	posts, _ := service.GetAllPost(c)
 	// 响应
 	response.OkWithData(posts, c)
 }
@@ -20,7 +20,7 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 func (PostAPI) GetOnePost(c *gin.Context) {
 	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
 
-	result := service.GetOnePost(postId)
+	result := service.GetOnePost(c, postId)
 
 	if !result.Ok {
 		response.FailWithMessage(result.Msg, c)
@@ -36,7 +36,7 @@ func (PostAPI) GetThePagePost(c *gin.Context) {
 		return
 	}
 	global.Logger.Infof("GetThePagePost pageInfo: %v", pageInfo)
-	posts, err := service.GetThePagePost(pageInfo)
+	posts, err := service.GetThePagePost(c, pageInfo)
 
 	if err != nil {
 		response.FailWithMessage("数据拉取失败", c)

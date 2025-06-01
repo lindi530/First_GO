@@ -2,13 +2,16 @@ package post
 
 import (
 	mysql "GO1/database/mysql/user"
-	"GO1/models/post"
+	models_post "GO1/models/post"
+	"github.com/gin-gonic/gin"
 )
 
-func CreatePost(p post.CreatePost) post.Post {
+func CreatePost(c *gin.Context, p models_post.CreatePost) models_post.PostResponse {
 	post := CreatePostHandler(p)
 
 	mysql.CreatePost(&post)
 
-	return post
+	responsePost := models_post.BuildPostResponse(c, GetPostByPostId(post.PostID))
+
+	return responsePost
 }
