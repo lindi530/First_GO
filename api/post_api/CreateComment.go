@@ -20,7 +20,7 @@ func (PostAPI) CreateComment(c *gin.Context) {
 		return
 	}
 
-	result := service_user.CreateComment(c, userId, postId, requestComment)
+	result := service_user.CreateComment(c, userId, postId, &requestComment)
 
 	if result.Ok == false {
 		response.FailWithMessage(result.Msg, c)

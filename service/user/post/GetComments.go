@@ -11,11 +11,11 @@ import (
 func GetComments(c *gin.Context, userId, postId int64) models.HandleFuncResp {
 	var comments []Comment.Comment
 	mysql_comment.GetComments(&comments, postId)
-	author := mysql_user.FindAuthorInfo(userId)
 
 	responseComments := make([]Comment.ResponseComment, len(comments))
 	for idx, comment := range comments {
-		res := Comment.BuildResponseComment(c, &comment, author)
+		author := mysql_user.FindAuthorInfo(comment.AuthorID)
+		res := Comment.BuildResponseComment(c, userId, &comment, author)
 		responseComments[idx] = res
 	}
 
