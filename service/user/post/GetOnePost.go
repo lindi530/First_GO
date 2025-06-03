@@ -15,6 +15,7 @@ func GetOnePost(c *gin.Context, postId int64) *models.HandleFuncResp {
 
 	if Resp.Ok {
 		Resp.Data = models_post.BuildPostResponse(c, post)
+		mysql_post.PostViews(post.PostID)
 	} else {
 		Resp.Msg = "获取帖子失败"
 	}

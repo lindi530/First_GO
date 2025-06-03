@@ -12,6 +12,7 @@ type Post struct {
 	UserID    int64     `gorm:"index;not null"             json:"user_id"`
 	Title     string    `gorm:"size:200;not null"          json:"title"`
 	Content   string    `gorm:"type:text;not null"         json:"content"`
+	Views     int64     `gorm:"not null"   json:"views"`
 	Status    int8      `gorm:"default:0"                  json:"status"` // 0=正常，1=删除
 	CreatedAt time.Time `gorm:"autoCreateTime"             json:"created_at"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime"             json:"updated_at"`
@@ -29,6 +30,7 @@ type PostResponse struct {
 	UserID    int64      `json:"user_id"`
 	Title     string     `json:"title"`
 	Content   string     `json:"content"`
+	Views     int64      `json:"views"`
 	Status    int8       `json:"status"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
@@ -49,6 +51,7 @@ func BuildPostResponse(c *gin.Context, p Post) PostResponse {
 		UserID:    p.UserID,
 		Title:     p.Title,
 		Content:   p.Content,
+		Views:     p.Views,
 		Status:    p.Status,
 		CreatedAt: p.CreatedAt,
 		UpdatedAt: p.UpdatedAt,

@@ -5,6 +5,7 @@ import (
 	mysql_user "GO1/database/mysql/user"
 	"GO1/models"
 	"GO1/models/Comment"
+	service_comment "GO1/service/Comment"
 	"github.com/gin-gonic/gin"
 	"time"
 )
@@ -21,7 +22,7 @@ func CreateComment(c *gin.Context, userId, postId int64, requestComment *Comment
 
 	if result.Ok {
 		author := mysql_user.FindAuthorInfo(userId)
-		result.Data = Comment.BuildResponseComment(c, userId, &comment, author)
+		result.Data = service_comment.BuildResponseComment(c, userId, &comment, author)
 	}
 
 	return result

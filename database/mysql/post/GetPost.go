@@ -22,5 +22,6 @@ func GetAllPost() ([]post.Post, error) {
 		Order("created_at DESC").
 		Limit(10).
 		Find(&posts).Error
+
 	return posts, err
 }

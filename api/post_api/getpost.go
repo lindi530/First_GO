@@ -5,6 +5,7 @@ import (
 	"GO1/middlewares/response"
 	"GO1/models/post"
 	service "GO1/service/user/post"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -13,6 +14,7 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 	// 数据校验
 	// 服务
 	posts, _ := service.GetAllPost(c)
+	fmt.Println(posts[0])
 	// 响应
 	response.OkWithData(posts, c)
 }

@@ -9,9 +9,6 @@ type Comment struct {
 	PostID    int64     `json:"post_id"`
 	AuthorID  int64     `json:"author_id"`
 	Content   string    `json:"content"`
+	Likes     int64     `json:"likes"`
 	CreatedAt time.Time `json:"created_at"`
-}
-
-type RequestComment struct {
-	Content string `json:"content"`
 }
