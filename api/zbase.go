@@ -1,6 +1,7 @@
 package api
 
 import (
+	"GO1/api/auth_api"
 	"GO1/api/comment_api"
 	"GO1/api/image_api"
 	"GO1/api/post_api"
@@ -14,6 +15,7 @@ type ApiGroup struct {
 	PostAPI     post_api.PostAPI
 	ImageAPI    image_api.ImageAPI
 	CommentAPI  comment_api.CommentAPI
+	AuthAPI     auth_api.AuthAPI
 }
 
 var ApiGroups = new(ApiGroup)

@@ -39,6 +39,7 @@ func InitRouter() *gin.Engine {
 }
 
 func AddRouter(api *gin.RouterGroup) {
+	AuthRouter(api)
 	SettingsRouter(api)
 	UsersRouter(api)
 	PostsRouter(api)

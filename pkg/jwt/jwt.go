@@ -20,6 +20,7 @@ func GenerateAccessToken(userID int64, userName string) (string, error) {
 	claims := models.CustomClaims{
 		userID,
 		userName, // 自定义字段
+		models.AccessTokenType,
 		"",
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(AccessTokenDuration)),
@@ -35,6 +36,7 @@ func GenerateRefreshToken(userID int64, userName string) (string, string, error)
 	claims := models.CustomClaims{
 		userID,
 		userName,
+		models.RefreshTokenType,
 		jti,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(RefreshTokenDuration)), // 过期时间
