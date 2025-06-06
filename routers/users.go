@@ -11,7 +11,6 @@ func UsersRouter(router *gin.RouterGroup) {
 
 	users.POST("/register", api.ApiGroups.UserAPI.UserAccountAPI.Register)
 	users.POST("/login", api.ApiGroups.UserAPI.UserAccountAPI.Login)
-	users.POST("/refresh", api.ApiGroups.UserAPI.Refresh)
 	users.POST("/logout", api.ApiGroups.UserAPI.UserAccountAPI.Logout)
 
 	users.Use(jwt.JWTAuthMiddleware())
