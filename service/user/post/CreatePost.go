@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreatePost(c *gin.Context, p models_post.CreatePost) models_post.PostResponse {
+func CreatePost(c *gin.Context, userId int64, p models_post.CreatePost) models_post.PostResponse {
 	post := CreatePostHandler(p)
 
 	mysql.CreatePost(&post)
 
-	responsePost := models_post.BuildPostResponse(c, GetPostByPostId(post.PostID))
+	responsePost := BuildPostResponse(c, userId, GetPostByPostId(post.PostID))
 
 	return responsePost
 }

@@ -21,6 +21,7 @@ func main() {
 
 	router := routers.InitRouter()
 	sync.SyncCommentLikes()
+	sync.SyncPostLikes()
 	go StartCronJob()
 
 	//if global.Config.System.Env == "test" {
