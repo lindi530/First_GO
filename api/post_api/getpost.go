@@ -6,7 +6,6 @@ import (
 	"GO1/models/post"
 	"GO1/pkg/jwt"
 	service "GO1/service/user/post"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -16,7 +15,7 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	// 服务
 	posts, _ := service.GetAllPost(c, userId)
-	fmt.Println(posts[0])
+
 	// 响应
 	response.OkWithData(posts, c)
 }

@@ -11,29 +11,21 @@ import (
 	"GO1/pkg/translator"
 	"GO1/pkg/validator"
 	"GO1/routers"
+	"GO1/service/ws"
 	"fmt"
 	"github.com/robfig/cron/v3"
 )
 
 func main() {
-	Start()
-	Define()
-
-	router := routers.InitRouter()
-	sync.SyncCommentLikes()
-	sync.SyncPostLikes()
-	go StartCronJob()
-
-	//if global.Config.System.Env == "test" {
-	//	test.Test(api)
-	//}
-	addr := global.Config.System.Addr()
-
-	global.Logger.Info(fmt.Sprintf("Gin 运行在：%s", addr))
-	router.Run(addr)
+	initDependencies()    //初始化依赖
+	initCustomValidator() // 注册自定义验证器
+	go ws.WsHub.Run()     // go 协程
+	go startCronJob()     // 定时作业
+	go syncInitialData()  // 初始同步数据
+	startHTTPServer()
 }
 
-func Start() {
+func initDependencies() {
 	conf.InitConfig()
 	logger.InitLogger()
 	gorm.InitGorm()
@@ -43,13 +35,27 @@ func Start() {
 	redis.InitRedisClient()
 }
 
-func Define() {
+func initCustomValidator() {
 	validator.DefinedValidator()
 }
 
-func StartCronJob() {
+func startCronJob() {
 	c := cron.New()
 	// 每天凌晨 3 点执行
 	c.AddFunc("0 3 * * *", sync.SyncCommentLikes)
 	c.Start()
+}
+
+func syncInitialData() {
+	sync.SyncCommentLikes()
+	sync.SyncPostLikes()
+}
+
+func startHTTPServer() {
+	router := routers.InitRouter()
+	addr := global.Config.System.Addr()
+	global.Logger.Info(fmt.Sprintf("Gin 运行在：%s", addr))
+	if err := router.Run(addr); err != nil {
+		global.Logger.Fatalf("服务器启动失败: %v", err)
+	}
 }
