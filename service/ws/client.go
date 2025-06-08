@@ -1,6 +1,8 @@
 package ws
 
 import (
+	"GO1/database/mysql/messages"
+	"GO1/models/ws"
 	"encoding/json"
 	"github.com/gorilla/websocket"
 )
@@ -16,7 +18,7 @@ func (c *Client) ReadLoop(hub *Hub) {
 		if err != nil {
 			break
 		}
-		var msg Message
+		var msg ws.Message
 
 		if err := json.Unmarshal(message, &msg); err != nil {
 			continue // 无效消息
@@ -29,6 +31,8 @@ func (c *Client) ReadLoop(hub *Hub) {
 func (c *Client) WriteLoop() {
 	for msg := range c.Send {
 		err := c.Conn.WriteMessage(websocket.TextMessage, msg)
+
+		messages.MessageSave(msg)
 		if err != nil {
 			break
 		}

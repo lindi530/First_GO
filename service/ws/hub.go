@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"GO1/models/ws"
 	"encoding/json"
 )
 
@@ -43,6 +44,6 @@ func (h *Hub) UnregisterClient(client *Client) {
 	h.unregister <- client
 }
 
-func (h *Hub) Broadcast(message *Message) { // 广播
+func (h *Hub) Broadcast(message *ws.Message) { // 广播
 	h.privateMsg <- message
 }

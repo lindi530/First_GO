@@ -17,6 +17,7 @@ const (
 	NoAuthority
 	DeleteFail
 	UploadFail
+	FindMessagesFail
 	NotFound = 404
 )
 
@@ -36,5 +37,6 @@ var (
 		ServiceError:        "服务器繁忙",
 		NoAuthority:         "没有操作权限",
 		UploadFail:          "上传失败",
+		FindMessagesFail:    "消息查询失败",
 	}
 )
