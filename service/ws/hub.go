@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"GO1/database/mysql/messages"
 	"GO1/models/ws"
 	"encoding/json"
 )
@@ -22,11 +23,15 @@ func (h *Hub) Run() {
 		case msg := <-h.privateMsg:
 			h.mu.RLock()
 			if msg.Type == "chat" {
-				receiver, ok := h.clients[msg.To]
-				if ok {
+				if receiver, ok := h.clients[msg.To]; ok {
+					msg.State = false
+					messages.MessageSave(msg)
 					// 你可以用 json.Marshal 来编码成 []byte
 					data, _ := json.Marshal(msg)
 					receiver.Send <- data
+				} else {
+					msg.State = true
+					messages.MessageSave(msg)
 				}
 			}
 
@@ -45,5 +50,6 @@ func (h *Hub) UnregisterClient(client *Client) {
 }
 
 func (h *Hub) Broadcast(message *ws.Message) { // 广播
+
 	h.privateMsg <- message
 }

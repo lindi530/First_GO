@@ -31,10 +31,18 @@ func (c *Client) ReadLoop(hub *Hub) {
 func (c *Client) WriteLoop() {
 	for msg := range c.Send {
 		err := c.Conn.WriteMessage(websocket.TextMessage, msg)
-
-		messages.MessageSave(msg)
 		if err != nil {
 			break
 		}
 	}
+}
+
+func (c *Client) WriteOfflineMsg(hub *Hub, userId int64) {
+	var msgs = []ws.Message{}
+	messages.GetOfflineMsg(userId, &msgs)
+
+	for _, msg := range msgs {
+		hub.Broadcast(&msg)
+	}
+	messages.ModifyOfflineMsg(msgs)
 }
