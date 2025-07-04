@@ -39,6 +39,13 @@ func GetOnlineState(c *gin.Context, userId int64) bool {
 }
 
 func DeleteOnlineState(c *gin.Context, userId int64) {
+
 	key := onlineStatePrefix + strconv.FormatInt(userId, 10)
-	global.RedisClient.Del(c, key)
+
+	res, err := global.RedisClient.Del(c, key).Result()
+	if err != nil {
+		global.Logger.Error("Redis 删除失败:", err)
+	} else {
+		global.Logger.Infof("Redis 删除成功，删除了 %d 个 key", res)
+	}
 }

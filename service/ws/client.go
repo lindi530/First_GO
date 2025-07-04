@@ -23,6 +23,7 @@ func (c *Client) ReadLoop(hub *Hub) {
 		if err := json.Unmarshal(message, &msg); err != nil {
 			continue // 无效消息
 		}
+		msg.State = false
 
 		hub.Broadcast(&msg)
 	}
@@ -44,5 +45,5 @@ func (c *Client) WriteOfflineMsg(hub *Hub, userId int64) {
 	for _, msg := range msgs {
 		hub.Broadcast(&msg)
 	}
-	messages.ModifyOfflineMsg(msgs)
+	messages.FinishOfflineMsg(&msgs)
 }

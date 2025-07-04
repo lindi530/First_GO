@@ -7,7 +7,10 @@ import (
 )
 
 func MessageSave(message *ws.Message) {
-
+	if message.Id != 0 {
+		return
+	}
+	
 	message.SendTime = time.Now()
 	global.DB.Create(&message)
 }

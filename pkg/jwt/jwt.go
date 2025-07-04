@@ -63,8 +63,15 @@ func ParseToken(tokenString string) (*models.CustomClaims, error) {
 }
 
 func GetUserIdFromToken(authHeader string) int64 {
-	accessToken := strings.TrimPrefix(authHeader, "Bearer ")
-	claims, _ := ParseToken(accessToken)
-
+	claims, err := GetUserClaims(authHeader)
+	if err != nil {
+		return 0
+	}
 	return claims.UserId
+}
+
+func GetUserClaims(authHeader string) (*models.CustomClaims, error) {
+	accessToken := strings.TrimPrefix(authHeader, "Bearer ")
+	claims, err := ParseToken(accessToken)
+	return claims, err
 }

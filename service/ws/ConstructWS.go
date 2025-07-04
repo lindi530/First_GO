@@ -1,7 +1,6 @@
 package ws
 
 import (
-	"GO1/global"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -28,7 +27,6 @@ func ConstructWS(c *gin.Context, userId int64) {
 
 	WsHub.RegisterClient(client)
 
-	global.Logger.Info("WriteOfflineMsg")
 	client.WriteOfflineMsg(WsHub, userId)
 	go client.WriteLoop()
 	go client.ReadLoop(WsHub)

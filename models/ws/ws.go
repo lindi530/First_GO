@@ -3,6 +3,7 @@ package ws
 import "time"
 
 type Message struct {
+	Id       int64     `json:"id"`
 	From     int64     `json:"from"`    // 发送者ID
 	To       int64     `json:"to"`      // 接收者ID
 	Content  string    `json:"content"` // 内容
