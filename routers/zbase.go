@@ -28,6 +28,7 @@ func InitRouter() *gin.Engine {
 		MaxAge:           12 * time.Hour,
 	}))
 	AddRouter(router.Group(""))
+
 	router.NoRoute(func(c *gin.Context) {
 		global.Logger.Infof("404 <UNK>")
 		c.JSON(404, gin.H{
@@ -47,4 +48,5 @@ func AddRouter(api *gin.RouterGroup) {
 	CommentRouter(api)
 	MessageRouter(api)
 	WSRouter(api)
+	FollowRouter(api)
 }
