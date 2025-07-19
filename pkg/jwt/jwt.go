@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"GO1/models"
+	"errors"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"strings"
@@ -9,8 +10,13 @@ import (
 )
 
 const (
-	AccessTokenDuration  = time.Hour * 1
-	RefreshTokenDuration = time.Hour * 8
+	AccessTokenDuration  = time.Minute * 10
+	RefreshTokenDuration = time.Hour * 48
+)
+
+var (
+	ErrTokenExpired = errors.New("token is expired")
+	ErrTokenInvalid = errors.New("token is invalid")
 )
 
 var jwtSecret = []byte("生产队的代码驴")
@@ -49,17 +55,25 @@ func GenerateRefreshToken(userID int64, userName string) (string, string, error)
 }
 
 // 解析 JWT
-func ParseToken(tokenString string) (*models.CustomClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &models.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+func ParseToken(tokenStr string) (*models.CustomClaims, error) {
+	claims := &models.CustomClaims{}
+
+	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
 	if err != nil {
+		// 直接用 errors.Is 判断是否为 token 过期错误
+		if errors.Is(err, jwt.ErrTokenExpired) {
+			return nil, ErrTokenExpired
+		}
 		return nil, err
 	}
-	if claims, ok := token.Claims.(*models.CustomClaims); ok && token.Valid {
-		return claims, nil
+
+	if !token.Valid {
+		return nil, ErrTokenInvalid
 	}
-	return nil, err
+
+	return claims, nil
 }
 
 func GetUserIdFromToken(authHeader string) int64 {

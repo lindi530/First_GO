@@ -6,6 +6,7 @@ const (
 	SettingsError ErrorCode = 1000 * iota
 	BadRequest
 	NeedLogin
+	ExpiredAccessToken
 	InvalidAccessToken
 	InvalidRefreshToken
 	InvalidLoginInfo
@@ -38,5 +39,6 @@ var (
 		NoAuthority:         "没有操作权限",
 		UploadFail:          "上传失败",
 		FindMessagesFail:    "消息查询失败",
+		ExpiredAccessToken:  "access_token已过期",
 	}
 )

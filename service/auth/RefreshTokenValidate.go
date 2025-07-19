@@ -20,7 +20,7 @@ func RefreshTokenValidate(c *gin.Context, RefreshToken string) (resp models.Hand
 		return
 	}
 	//2) 删除旧 jti （一次性使用）
-	redis.DeleteJWTId(c, jti)
+	//redis.DeleteJWTId(c, jti)
 
 	// 3) 签发新的令牌对           只签发accessToken
 	accessToken, _ := jwt.GenerateAccessToken(userID, userName)
@@ -29,7 +29,7 @@ func RefreshTokenValidate(c *gin.Context, RefreshToken string) (resp models.Hand
 	//redis.SaveJWTId(c, userID, newJti)
 	resp.Ok = true
 	resp.Data = gin.H{
-		"access_token": accessToken,
+		"accessToken": accessToken,
 	}
 	return
 }

@@ -1,9 +1,11 @@
 package jwt
 
 import (
+	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/pkg/jwt"
 	"GO1/service/context"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"strings"
 )
@@ -20,7 +22,12 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 		claims, err := jwt.ParseToken(tokenStr)
 		if err != nil {
-			response.FailWithCode(response.InvalidAccessToken, c)
+			if errors.Is(err, jwt.ErrTokenExpired) {
+				global.Logger.Error("accessToken 过期")
+				response.FailWithCode(response.ExpiredAccessToken, c)
+			} else {
+				response.FailWithCode(response.InvalidAccessToken, c)
+			}
 			c.Abort()
 			return
 		}

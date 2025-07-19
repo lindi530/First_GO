@@ -12,6 +12,8 @@ func UsersRouter(router *gin.RouterGroup) {
 	users.POST("/register", api.ApiGroups.UserAPI.UserAccountAPI.Register)
 	users.POST("/login", api.ApiGroups.UserAPI.UserAccountAPI.Login)
 
+	users.POST("/online", api.ApiGroups.UserAPI.RefreshOnlineState)
+
 	users.Use(jwt.JWTAuthMiddleware())
 	{
 		users.POST("/logout", api.ApiGroups.UserAPI.UserAccountAPI.Logout)
@@ -23,8 +25,6 @@ func UsersRouter(router *gin.RouterGroup) {
 		users.POST("/:user_id/posts/create", api.ApiGroups.UserAPI.CreateUserPost)
 		users.POST("/:user_id/modify_avatar", api.ApiGroups.UserAPI.ModifyAvatar)
 		users.PATCH("/:user_id/profile", api.ApiGroups.UserAPI.ModifyProfile)
-
-		users.POST("/online", api.ApiGroups.UserAPI.RefreshOnlineState)
 
 		users.GET("/:user_id/is_following", api.ApiGroups.UserAPI.UserFollowAPI.CheckFollows)
 		users.POST("/:user_id/follow", api.ApiGroups.UserAPI.UserFollowAPI.FollowUser)

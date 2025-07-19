@@ -7,6 +7,7 @@ import (
 
 type Response struct {
 	Code    int `json:"code"`
+	ErrCode int `json:"err_code"`
 	Data    any `json:"data"`
 	Message any `json:"message"`
 }
@@ -16,35 +17,36 @@ const (
 	FAIL    = 1
 )
 
-func Result(code int, data interface{}, message interface{}, c *gin.Context) {
+func Result(code int, errCode int, data interface{}, message interface{}, c *gin.Context) {
 	c.JSON(http.StatusOK, Response{
 		Code:    code,
+		ErrCode: errCode,
 		Data:    data,
 		Message: message,
 	})
 }
 
 func Ok(data any, message any, c *gin.Context) {
-	Result(SUCCESS, data, message, c)
+	Result(SUCCESS, 0, data, message, c)
 }
 func OkWithData(data any, c *gin.Context) {
-	Result(SUCCESS, data, "成功", c)
+	Result(SUCCESS, 0, data, "成功", c)
 }
 func OkWithMessage(message any, c *gin.Context) {
-	Result(SUCCESS, map[string]any{}, message, c)
+	Result(SUCCESS, 0, map[string]any{}, message, c)
 }
 
 func Fail(data any, message any, c *gin.Context) {
-	Result(FAIL, data, message, c)
+	Result(FAIL, 0, data, message, c)
 }
 func FailWithMessage(message any, c *gin.Context) {
-	Result(FAIL, map[string]any{}, message, c)
+	Result(FAIL, 0, map[string]any{}, message, c)
 }
 func FailWithCode(errorCode ErrorCode, c *gin.Context) {
 	message, ok := ErrorMap[errorCode]
 	if !ok {
-		Result(FAIL, errorCode, "未知错误", c)
+		Result(FAIL, int(errorCode), errorCode, "未知错误", c)
 		return
 	}
-	Result(FAIL, map[string]any{}, message, c)
+	Result(FAIL, int(errorCode), map[string]any{}, message, c)
 }
