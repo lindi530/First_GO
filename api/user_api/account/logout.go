@@ -2,7 +2,6 @@ package account
 
 import (
 	"GO1/database/redis"
-	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/pkg/jwt"
 	"github.com/gin-gonic/gin"
@@ -15,10 +14,13 @@ func (UserAccountAPI) Logout(c *gin.Context) {
 		RefreshToken string `json:"refresh_token"`
 	}
 
-	if err := c.ShouldBindJSON(&req); err != nil || req.RefreshToken == "" {
+	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithCode(response.BadRequest, c)
 	}
-	global.Logger.Info(req.RefreshToken)
+	if req.RefreshToken == "" {
+
+	}
+
 	claims, err := jwt.ParseToken(req.RefreshToken)
 	if err != nil {
 		response.FailWithCode(response.InvalidRefreshToken, c)

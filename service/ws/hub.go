@@ -26,13 +26,14 @@ func (h *Hub) Run() {
 			if msg.Type == "chat" {
 				if receiver, ok := h.clients[msg.To]; ok {
 					// 你可以用 json.Marshal 来编码成 []byte
+					global.Logger.Warn("online", msg)
 					data, _ := json.Marshal(msg)
 					receiver.Send <- data
 
-					messages.MessageSave(msg)
 				} else {
 					msg.State = true
 				}
+				messages.MessageSave(msg)
 			}
 
 			h.mu.RUnlock()

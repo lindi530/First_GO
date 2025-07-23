@@ -2,6 +2,7 @@ package ws
 
 import (
 	"GO1/database/mysql/messages"
+	"GO1/global"
 	"GO1/models/ws"
 	"encoding/json"
 	"github.com/gorilla/websocket"
@@ -10,7 +11,9 @@ import (
 func (c *Client) ReadLoop(hub *Hub) {
 	defer func() {
 		hub.UnregisterClient(c)
-		c.Conn.Close()
+		if err := c.Conn.Close(); err != nil {
+			global.Logger.Error("Close error: %v", err)
+		}
 	}()
 
 	for {
@@ -24,7 +27,7 @@ func (c *Client) ReadLoop(hub *Hub) {
 			continue // 无效消息
 		}
 		msg.State = false
-
+		global.Logger.Warn("online", msg)
 		hub.Broadcast(&msg)
 	}
 }
@@ -41,6 +44,7 @@ func (c *Client) WriteLoop() {
 func (c *Client) WriteOfflineMsg(hub *Hub, userId int64) {
 	var msgs = []ws.Message{}
 	messages.GetOfflineMsg(userId, &msgs)
+	global.Logger.Warn("offline", msgs)
 
 	for _, msg := range msgs {
 		hub.Broadcast(&msg)

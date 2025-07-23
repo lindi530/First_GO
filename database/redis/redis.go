@@ -9,7 +9,7 @@ import (
 func SaveJWTId(c *gin.Context, userId int64, jti string) {
 	keyPrefix := global.Config.RedisClient.KeyPrefix
 	key := keyPrefix + jti
-	global.RedisClient.Set(c, key, userId, 7*24*time.Hour)
+	global.RedisClient.Set(c, key, userId, 24*time.Hour)
 }
 
 func DeleteJWTId(c *gin.Context, jti string) {
