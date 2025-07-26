@@ -7,6 +7,7 @@ import (
 	"GO1/api/image_api"
 	"GO1/api/message_api"
 	"GO1/api/post_api"
+	"GO1/api/problem_api"
 	"GO1/api/settings_api"
 	"GO1/api/user_api"
 )
@@ -20,6 +21,7 @@ type ApiGroup struct {
 	AuthAPI     auth_api.AuthAPI
 	ChatAPI     chat_api.ChatAPI
 	MessageAPI  message_api.MessageAPI
+	ProblemAPI  problem_api.ProblemAPI
 }
 
 var ApiGroups = new(ApiGroup)
