@@ -1,4 +1,4 @@
-package problem
+package problem_model
 
 type Example struct {
 	Input  string `json:"input"`
