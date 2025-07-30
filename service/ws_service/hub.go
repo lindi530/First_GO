@@ -1,10 +1,7 @@
-package ws
+package ws_service
 
 import (
-	"GO1/database/mysql/messages"
-	"GO1/global"
-	"GO1/models/ws"
-	"encoding/json"
+	"GO1/models/ws_model"
 )
 
 func (h *Hub) Run() {
@@ -23,17 +20,15 @@ func (h *Hub) Run() {
 			h.mu.Unlock()
 		case msg := <-h.privateMsg:
 			h.mu.RLock()
-			if msg.Type == "chat" {
-				if receiver, ok := h.clients[msg.To]; ok {
-					// 你可以用 json.Marshal 来编码成 []byte
-					global.Logger.Warn("online", msg)
-					data, _ := json.Marshal(msg)
-					receiver.Send <- data
-
-				} else {
-					msg.State = true
-				}
-				messages.MessageSave(msg)
+			switch msg.Type {
+			case "chat":
+				h.ChatWs(msg)
+				break
+			case "code_state":
+				h.CodeStateWs(msg)
+				break
+			default:
+				break
 			}
 
 			h.mu.RUnlock()
@@ -50,8 +45,6 @@ func (h *Hub) UnregisterClient(client *Client) {
 	h.unregister <- client
 }
 
-func (h *Hub) Broadcast(message *ws.Message) { // 广播
-
-	global.Logger.Info(message)
+func (h *Hub) Broadcast(message *ws_model.MessageWs) { // 广播
 	h.privateMsg <- message
 }

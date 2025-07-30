@@ -1,8 +1,9 @@
 package problem_service
 
 import (
-	"GO1/global"
 	"GO1/models/problem_model"
+	"GO1/models/ws_model"
+	"GO1/service/ws_service"
 	"bytes"
 	"fmt"
 	"os"
@@ -11,10 +12,11 @@ import (
 	"strings"
 )
 
-func RunCode(code, language, input, expected string) problem_model.RunResult {
+func RunCode(userid int64, code, language string, testcases *[]problem_model.Example, message *ws_model.MessageWs) []problem_model.RunResult {
+
 	tempDir, err := os.MkdirTemp("", "ojcode-*")
 	if err != nil {
-		return problem_model.RunResult{Passed: false, Error: "Cannot create temp directory"}
+		return []problem_model.RunResult{{Passed: false, Error: "Cannot create temp directory"}}
 	}
 	defer os.RemoveAll(tempDir)
 
@@ -24,43 +26,53 @@ func RunCode(code, language, input, expected string) problem_model.RunResult {
 	case "cpp":
 		codeFileName = "code.cpp"
 		compileCmd = "g++ /app/code.cpp -o /app/a.out"
-		runCmd = "/app/a.out < /app/input.txt > /app/output.txt"
+		runCmd = "/app/a.out"
 		image = "gcc:15"
 	case "python":
 		codeFileName = "code.py"
-		compileCmd = "" // 无需编译
-		runCmd = "python3 /app/code.py < /app/input.txt > /app/output.txt"
+		runCmd = "python3 /app/code.py"
 		image = "python:3.12"
 	case "java":
 		codeFileName = "Main.java"
 		compileCmd = "javac /app/Main.java"
-		runCmd = "java -cp /app Main < /app/input.txt > /app/output.txt"
+		runCmd = "java -cp /app Main"
 		image = "openjdk:latest"
 	case "go":
 		codeFileName = "code.go"
 		compileCmd = "go build -o /app/a.out /app/code.go"
-		runCmd = "/app/a.out < /app/input.txt > /app/output.txt"
+		runCmd = "/app/a.out"
 		image = "golang:latest"
 	default:
-		return problem_model.RunResult{Passed: false, Error: "Unsupported language"}
+		return []problem_model.RunResult{{Passed: false, Error: "Unsupported language"}}
 	}
 
+	// 写入代码文件
 	codePath := filepath.Join(tempDir, codeFileName)
-	inputPath := filepath.Join(tempDir, "input.txt")
-	outputPath := filepath.Join(tempDir, "output.txt")
-
-	// 写入代码和输入
 	err = os.WriteFile(codePath, []byte(code), 0644)
 	if err != nil {
-		return problem_model.RunResult{Passed: false, Error: "Cannot write code file"}
+		return []problem_model.RunResult{{Passed: false, Error: "Cannot write code file"}}
 	}
 
-	err = os.WriteFile(inputPath, []byte(input), 0644)
+	// 写入所有样例的输入文件
+	for i, tc := range *testcases {
+		inputPath := filepath.Join(tempDir, fmt.Sprintf("input%d.txt", i))
+		err := os.WriteFile(inputPath, []byte(tc.Input), 0644)
+		if err != nil {
+			return []problem_model.RunResult{{Passed: false, Error: fmt.Sprintf("Cannot write input %d", i)}}
+		}
+	}
+
+	// 写入运行脚本 run.sh
+	runScript := "#!/bin/sh\nset -e\n"
+	for i := range *testcases {
+		runScript += fmt.Sprintf("%s < /app/input%d.txt > /app/output%d.txt\n", runCmd, i, i)
+	}
+	err = os.WriteFile(filepath.Join(tempDir, "run.sh"), []byte(runScript), 0755)
 	if err != nil {
-		return problem_model.RunResult{Passed: false, Error: "Cannot write input file"}
+		return []problem_model.RunResult{{Passed: false, Error: "Cannot write run.sh"}}
 	}
 
-	// 构建 docker 命令
+	// 构建 Docker 命令
 	var dockerCmd []string
 	if compileCmd != "" {
 		dockerCmd = []string{
@@ -68,7 +80,7 @@ func RunCode(code, language, input, expected string) problem_model.RunResult {
 			"-v", fmt.Sprintf("%s:/app", tempDir),
 			image,
 			"sh", "-c",
-			fmt.Sprintf("%s && %s", compileCmd, runCmd),
+			fmt.Sprintf("%s && sh /app/run.sh", compileCmd),
 		}
 	} else {
 		dockerCmd = []string{
@@ -76,31 +88,41 @@ func RunCode(code, language, input, expected string) problem_model.RunResult {
 			"-v", fmt.Sprintf("%s:/app", tempDir),
 			image,
 			"sh", "-c",
-			runCmd,
+			"sh /app/run.sh",
 		}
 	}
-	global.Logger.Info(dockerCmd)
+	message.Content = "Running"
+	ws_service.WsHub.CodeStateWs(message)
+	// 执行 Docker 命令
 	cmd := exec.Command("docker", dockerCmd...)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	err = cmd.Run()
 	if err != nil {
-		return problem_model.RunResult{Passed: false, Error: stderr.String()}
+		return []problem_model.RunResult{{Passed: false, Error: stderr.String()}}
 	}
 
-	outBytes, err := os.ReadFile(outputPath)
-	if err != nil {
-		return problem_model.RunResult{Passed: false, Error: "Cannot read output"}
+	// 读取每个样例的输出并比较
+	results := make([]problem_model.RunResult, len(*testcases))
+	for i, tc := range *testcases {
+		outPath := filepath.Join(tempDir, fmt.Sprintf("output%d.txt", i))
+		outBytes, err := os.ReadFile(outPath)
+		if err != nil {
+			results[i] = problem_model.RunResult{
+				Passed: false,
+				Error:  fmt.Sprintf("Cannot read output%d.txt", i),
+			}
+			continue
+		}
+		output := strings.TrimSpace(string(outBytes))
+		expected := strings.TrimSpace(tc.Output)
+		results[i] = problem_model.RunResult{
+			Passed:   output == expected,
+			Output:   output,
+			Expected: expected,
+			Error:    "", // stderr 已清空
+		}
 	}
 
-	outStr := strings.TrimSpace(string(outBytes))
-	expected = strings.TrimSpace(expected)
-	passed := outStr == expected
-
-	return problem_model.RunResult{
-		Passed:   passed,
-		Output:   outStr,
-		Expected: expected,
-		Error:    stderr.String(),
-	}
+	return results
 }

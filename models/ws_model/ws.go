@@ -1,8 +1,8 @@
-package ws
+package ws_model
 
 import "time"
 
-type Message struct {
+type MessageWs struct {
 	Id       int64     `json:"id"`
 	From     int64     `json:"from"`    // 发送者ID
 	To       int64     `json:"to"`      // 接收者ID

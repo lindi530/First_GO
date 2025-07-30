@@ -4,6 +4,8 @@ import (
 	"GO1/database/mysql/problem_mysql"
 	"GO1/middlewares/response"
 	"GO1/models/problem_model"
+	"GO1/models/ws_model"
+	"GO1/service/ws_service"
 )
 
 func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp response.Response) {
@@ -11,15 +13,25 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 
 	problem_mysql.GetProblemExamples(codeSubmission.ProblemID, &examples)
 
+	message := ws_model.MessageWs{
+		From:    userid,
+		To:      userid,
+		Content: "Pending",
+		Type:    "submit_code",
+	}
+	ws_service.WsHub.CodeStateWs(&message)
 	resp.Code = 0
-	var runResult []problem_model.RunResult
-	for _, example := range examples {
-		res := RunCode(codeSubmission.Code, codeSubmission.Language, example.Input, example.Output)
-		runResult = append(runResult, res)
-		if !res.Passed {
+	runResult := RunCode(userid, codeSubmission.Code, codeSubmission.Language, &examples, &message)
+
+	message.Content = "Accepted"
+	for _, result := range runResult {
+		if !result.Passed {
 			resp.Code = 1
+			message.Content = "Wrong Answer"
+			break
 		}
 	}
+	ws_service.WsHub.CodeStateWs(&message)
 	resp.Data = runResult
 	return
 }

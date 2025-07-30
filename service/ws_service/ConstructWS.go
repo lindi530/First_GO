@@ -1,4 +1,4 @@
-package ws
+package ws_service
 
 import (
 	"github.com/gin-gonic/gin"

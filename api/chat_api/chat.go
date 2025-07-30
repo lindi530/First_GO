@@ -1,9 +1,10 @@
 package chat_api
 
 import (
+	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/pkg/jwt"
-	"GO1/service/ws"
+	"GO1/service/ws_service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,6 +19,6 @@ func (ChatAPI) ChatHandler(c *gin.Context) {
 		response.FailWithCode(response.InvalidAccessToken, c)
 		return
 	}
-
-	ws.ConstructWS(c, claims.UserId)
+	global.Logger.Warn("chathandler2: ", token)
+	ws_service.ConstructWS(c, claims.UserId)
 }
