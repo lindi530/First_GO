@@ -9,9 +9,10 @@ import (
 func ProblemsRouter(router *gin.RouterGroup) {
 	problems := router.Group("/problems")
 	problems.GET("/:problemID", api.ApiGroups.ProblemAPI.GetProblemDetail)
-	problems.POST("/submit", api.ApiGroups.ProblemAPI.SubmitCode)
+
 	problems.Use(jwt.JWTAuthMiddleware())
 	{
-
+		problems.POST("/submit", api.ApiGroups.ProblemAPI.SubmitCode)
+		problems.POST("/submit/example", api.ApiGroups.ProblemAPI.SubmitExample)
 	}
 }

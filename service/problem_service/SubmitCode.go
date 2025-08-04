@@ -16,22 +16,22 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 	message := ws_model.MessageWs{
 		From:    userid,
 		To:      userid,
-		Content: "Pending",
+		Content: "",
 		Type:    "submit_code",
 	}
-	ws_service.WsHub.CodeStateWs(&message)
+	ws_service.WsHub.CodeStateWs(&message, "Pending")
 	resp.Code = 0
 	runResult := RunCode(userid, codeSubmission.Code, codeSubmission.Language, &examples, &message)
 
-	message.Content = "Accepted"
+	msgContent := "Accepted"
 	for _, result := range runResult {
 		if !result.Passed {
 			resp.Code = 1
-			message.Content = "Wrong Answer"
+			msgContent = "Wrong Answer"
 			break
 		}
 	}
-	ws_service.WsHub.CodeStateWs(&message)
+	ws_service.WsHub.CodeStateWs(&message, msgContent)
 	resp.Data = runResult
 	return
 }

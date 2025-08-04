@@ -8,19 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (ProblemAPI) SubmitCode(c *gin.Context) {
-	var codeSubmission problem_model.CodeSubmission
-	if err := c.ShouldBindJSON(&codeSubmission); err != nil {
+func (ProblemAPI) SubmitExample(c *gin.Context) {
+	var exampleSubmit problem_model.ExampleSubmit
+	if err := c.ShouldBindJSON(&exampleSubmit); err != nil {
 		response.FailWithMessage("解析信息失败", c)
 		return
 	}
-	if ok := isSafeCode(codeSubmission.Code, codeSubmission.Language); !ok {
+	if ok := isSafeCode(exampleSubmit.Code, exampleSubmit.Language); !ok {
 		response.FailWithMessage("不安全代码", c)
 		return
 	}
+
 	userid := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 
-	resp := problem_service.SubmitCode(userid, codeSubmission)
+	resp := problem_service.SubmitExample(userid, exampleSubmit)
 
 	if resp.Code == 1 {
 		response.FailWithMessage(resp.Message, c)

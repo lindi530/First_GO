@@ -24,8 +24,7 @@ func (h *Hub) Run() {
 			case "chat":
 				h.ChatWs(msg)
 				break
-			case "code_state":
-				h.CodeStateWs(msg)
+			case "submit_code":
 				break
 			default:
 				break
