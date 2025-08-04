@@ -8,7 +8,7 @@ import (
 )
 
 func (ProblemAPI) GetProblemDetail(c *gin.Context) {
-	problemID, _ := strconv.ParseInt(c.Param("problemID"), 10, 64)
+	problemID, _ := strconv.ParseInt(c.Param("problem_id"), 10, 64)
 
 	resp := problem_service.GetProblemDetails(problemID)
 

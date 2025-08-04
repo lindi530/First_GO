@@ -8,11 +8,11 @@ import (
 
 func ProblemsRouter(router *gin.RouterGroup) {
 	problems := router.Group("/problems")
-	problems.GET("/:problemID", api.ApiGroups.ProblemAPI.GetProblemDetail)
+	problems.GET("/:problem_id", api.ApiGroups.ProblemAPI.GetProblemDetail)
 
 	problems.Use(jwt.JWTAuthMiddleware())
 	{
-		problems.POST("/submit", api.ApiGroups.ProblemAPI.SubmitCode)
-		problems.POST("/submit/example", api.ApiGroups.ProblemAPI.SubmitExample)
+		problems.POST("/:problem_id/submit", api.ApiGroups.ProblemAPI.SubmitCode)
+		problems.POST("/:problem_id/submit/example", api.ApiGroups.ProblemAPI.SubmitExample)
 	}
 }

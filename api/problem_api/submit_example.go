@@ -6,6 +6,7 @@ import (
 	"GO1/pkg/jwt"
 	"GO1/service/problem_service"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func (ProblemAPI) SubmitExample(c *gin.Context) {
@@ -19,9 +20,15 @@ func (ProblemAPI) SubmitExample(c *gin.Context) {
 		return
 	}
 
-	userid := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
+	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
+	problemIDStr := c.Param("problem_id")
 
-	resp := problem_service.SubmitExample(userid, exampleSubmit)
+	problemID64, err := strconv.ParseInt(problemIDStr, 10, 64)
+	if err != nil {
+		response.FailWithMessage("无效的题目ID", c)
+		return
+	}
+	resp := problem_service.SubmitExample(userId, problemID64, exampleSubmit)
 
 	if resp.Code == 1 {
 		response.FailWithMessage(resp.Message, c)

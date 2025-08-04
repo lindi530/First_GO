@@ -5,14 +5,16 @@ import (
 	"GO1/models/ws_model"
 	"GO1/service/ws_service"
 	"bytes"
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
-func RunExample(code string, language string, input string, message *ws_model.MessageWs) problem_model.RunResult {
+func RunExample(code, language, input string, memoryLimit, timeLimit int, message *ws_model.MessageWs) problem_model.RunResult {
 	ws_service.WsHub.CodeStateWs(message, "Pending")
 	tempDir, err := os.MkdirTemp("", "ojcode-*")
 	if err != nil {
@@ -63,33 +65,30 @@ func RunExample(code string, language string, input string, message *ws_model.Me
 	}
 
 	// 构建 docker 命令
-	var dockerCmd []string
-	if compileCmd != "" {
-		dockerCmd = []string{
-			"run", "--rm",
-			"-v", fmt.Sprintf("%s:/app", tempDir),
-			image,
-			"sh", "-c",
-			fmt.Sprintf("%s && %s", compileCmd, runCmd),
-		}
-	} else {
-		dockerCmd = []string{
-			"run", "--rm",
-			"-v", fmt.Sprintf("%s:/app", tempDir),
-			image,
-			"sh", "-c",
-			runCmd,
-		}
-	}
 
+	dockerCmd := buildDockerCmd(image, tempDir, compileCmd, runCmd, memoryLimit, timeLimit)
 	ws_service.WsHub.CodeStateWs(message, "Running")
 
-	cmd := exec.Command("docker", dockerCmd...)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeLimit)*time.Second)
+	defer cancel()
+
+	cmd := exec.CommandContext(ctx, "docker", dockerCmd...)
+
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	err = cmd.Run()
+
+	if ctx.Err() == context.DeadlineExceeded {
+		return problem_model.RunResult{Passed: false, Error: "Time Limit Exceeded"}
+	}
+
 	if err != nil {
-		return problem_model.RunResult{Passed: false, Error: stderr.String()}
+		errStr := stderr.String()
+		// 你也可以在这里加上额外的错误码判断，比如 exit status 137（内存爆）
+		if strings.Contains(errStr, "exit status 137") {
+			return problem_model.RunResult{Passed: false, Error: "Memory Limit Exceeded"}
+		}
+		return problem_model.RunResult{Passed: false, Error: errStr}
 	}
 
 	outBytes, err := os.ReadFile(outputPath)
@@ -100,5 +99,26 @@ func RunExample(code string, language string, input string, message *ws_model.Me
 	outStr := strings.TrimSpace(string(outBytes))
 	return problem_model.RunResult{
 		Output: outStr,
+	}
+}
+
+func buildDockerCmd(image, tempDir, compileCmd, runCmd string, memoryLimit, timeLimit int) []string {
+	memLimit := fmt.Sprintf("--memory=%dm", memoryLimit)
+	timeoutCmd := fmt.Sprintf("timeout %ds %s", timeLimit, runCmd)
+
+	var fullCmd string
+	if compileCmd != "" {
+		fullCmd = fmt.Sprintf("%s && %s", compileCmd, timeoutCmd)
+	} else {
+		fullCmd = timeoutCmd
+	}
+
+	return []string{
+		"run", "--rm",
+		memLimit,
+		"-v", fmt.Sprintf("%s:/app", tempDir),
+		image,
+		"sh", "-c",
+		fullCmd,
 	}
 }
