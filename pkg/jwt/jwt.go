@@ -9,20 +9,9 @@ import (
 	"time"
 )
 
-const (
-	AccessTokenDuration  = time.Minute * 15
-	RefreshTokenDuration = time.Hour * 48
-)
-
-var (
-	ErrTokenExpired = errors.New("token is expired")
-	ErrTokenInvalid = errors.New("token is invalid")
-)
-
-var jwtSecret = []byte("生产队的代码驴")
-
 // 生成 JWT
 func GenerateAccessToken(userID int64, userName string) (string, error) {
+
 	claims := models.CustomClaims{
 		userID,
 		userName, // 自定义字段
@@ -38,6 +27,7 @@ func GenerateAccessToken(userID int64, userName string) (string, error) {
 }
 
 func GenerateRefreshToken(userID int64, userName string) (string, string, error) {
+
 	jti := uuid.NewString() // 唯一标识
 	claims := models.CustomClaims{
 		userID,

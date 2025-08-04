@@ -11,6 +11,7 @@ type Config struct {
 	System      System            `mapstructure:"system"`
 	Snowflake   Snowflake         `mapstructure:"snowflake"`
 	RedisClient RedisClient       `mapstructure:"redis"`
+	JWT         JWT               `mapstructure:"jwt"`
 	Upload      upload.Upload     `mapstructure:"upload"`
 	Settings    settings.Settings `mapstructure:"settings"`
 }

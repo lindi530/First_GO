@@ -35,6 +35,9 @@ upload:
     image:
         path: "upload/images"
         size: 2
+jwt:
+    access_duration: 15
+    refresh_duration: 24
 settings:
     user:
         avatar: "02d2b2b795d6b88dfc787bb71bfa7d41"

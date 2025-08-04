@@ -5,6 +5,7 @@ import (
 	"GO1/global"
 	"GO1/pkg/conf"
 	"GO1/pkg/gorm"
+	"GO1/pkg/jwt"
 	"GO1/pkg/logger"
 	"GO1/pkg/redis"
 	"GO1/pkg/snowflake"
@@ -33,6 +34,7 @@ func initDependencies() {
 	validator.InitValidator()
 	translator.InitTrans("zh")
 	redis.InitRedisClient()
+	jwt.InitJwt()
 }
 
 func initCustomValidator() {
