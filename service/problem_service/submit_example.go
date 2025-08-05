@@ -6,6 +6,7 @@ import (
 	"GO1/middlewares/response"
 	"GO1/models/problem_model"
 	"GO1/models/ws_model"
+	"GO1/service/ws_service"
 	"time"
 )
 
@@ -26,11 +27,12 @@ func SubmitExample(userid, problemId int64, exampleSubmit problem_model.ExampleS
 		resp.Message = err.Error()
 		return
 	}
-
+	ws_service.WsHub.CodeStateWs(&messageWs, "Pending")
 	resp.Code = 0
 	runResult := RunExample(exampleSubmit.Code, exampleSubmit.Language,
 		exampleSubmit.Input, constraints.MemoryLimit, constraints.TimeLimit, &messageWs)
 	global.Logger.Info("constraints: ", constraints)
+	ws_service.WsHub.CodeStateWs(&messageWs, runResult.Error)
 	resp.Data = runResult
 	return resp
 }

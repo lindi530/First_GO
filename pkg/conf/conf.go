@@ -25,7 +25,5 @@ func InitConfig() {
 		fmt.Println("Error unmarshalling config file:", viper.ConfigFileUsed())
 		return
 	}
-	fmt.Printf("Snowflake Config: %+v\n", cfg.JWT)
-
 	global.Config = cfg
 }

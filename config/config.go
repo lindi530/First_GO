@@ -1,6 +1,7 @@
 package config
 
 import (
+	"GO1/config/language"
 	"GO1/config/settings"
 	"GO1/config/upload"
 )
@@ -14,4 +15,5 @@ type Config struct {
 	JWT         JWT               `mapstructure:"jwt"`
 	Upload      upload.Upload     `mapstructure:"upload"`
 	Settings    settings.Settings `mapstructure:"settings"`
+	Language    language.Language `mapstructure:"language"`
 }

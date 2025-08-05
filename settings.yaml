@@ -43,3 +43,26 @@ settings:
         avatar: "02d2b2b795d6b88dfc787bb71bfa7d41"
         quote: "无~"
         gender: "female"
+language:
+    cpp:
+        compile_cmd: [ "g++", "code.cpp", "-o", "a.out" ]
+        run_cmd: [ "./a.out" ]
+        source_file: "code.cpp"
+        executable: "a.out"
+        output_file: "output.txt"
+        language: "cpp"
+        need_compile: true
+    python:
+        run_cmd: [ "python3", "code.py" ]
+        source_file: "code.py"
+        output_file: "output.txt"
+        language: "python"
+        need_compile: false
+    go:
+        compile_cmd: [ "go", "build", "-o", "main", "main.go" ]
+        run_cmd: [ "./main" ]
+        source_file: "main.go"
+        executable: "main"
+        output_file: "output.txt"
+        language: "go"
+        need_compile: true

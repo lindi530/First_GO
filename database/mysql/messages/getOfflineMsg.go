@@ -10,7 +10,6 @@ func GetOfflineMsg(to int64, msgs *[]ws_model.MessageWs) {
 }
 
 func FinishOfflineMsg(msgs *[]ws_model.MessageWs) {
-	global.Logger.Info("ModifyOfflineMsg: ", msgs)
 
 	ids := make([]int64, 0, len(*msgs))
 	for _, msg := range *msgs {
