@@ -13,6 +13,7 @@ import (
 	"GO1/pkg/translator"
 	"GO1/pkg/validator"
 	"GO1/routers"
+	"GO1/service/match_service"
 	"GO1/service/ws_service"
 	"fmt"
 	"github.com/robfig/cron/v3"
@@ -24,7 +25,7 @@ func main() {
 	go ws_service.WsHub.Run() // go 协程
 	go startCronJob()         // 定时作业
 	go syncInitialData()      // 初始同步数据
-	startHTTPServer()
+	startServer()
 }
 
 func initDependencies() {
@@ -53,6 +54,11 @@ func startCronJob() {
 func syncInitialData() {
 	sync.SyncCommentLikes()
 	sync.SyncPostLikes()
+}
+
+func startServer() {
+	match_service.StartMatchConsumer()
+	startHTTPServer() // 必须在最后
 }
 
 func startHTTPServer() {

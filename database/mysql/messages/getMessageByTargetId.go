@@ -5,12 +5,11 @@ import (
 	"GO1/models/ws_model"
 )
 
-func GetMessageByTargetId(from, to int64) ([]ws_model.MessageWs, error) {
-	var msg []ws_model.MessageWs
+func GetMessageByTargetId(msg *[]ws_model.Chat, from, to int64) error {
 	err := global.DB.
 		Where("(`from` = ? AND `to` = ?) OR (`from` = ? AND `to` = ?)", from, to, to, from).
 		Order("send_time ASC").
-		Find(&msg).Error
+		Find(msg).Error
 
-	return msg, err
+	return err
 }

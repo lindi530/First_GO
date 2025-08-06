@@ -11,17 +11,20 @@ import (
 func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp response.Response) {
 	var examples []problem_model.Example
 
-	problem_mysql.GetProblemExamples(codeSubmission.ProblemID, &examples)
-
-	message := ws_model.MessageWs{
-		From:    userid,
-		To:      userid,
-		Content: "",
-		Type:    "submit_code",
+	err := problem_mysql.GetProblemExamples(codeSubmission.ProblemID, &examples)
+	if err != nil {
+		resp.Code = 1
+		resp.Message = "判定失败，请重试"
+		return
 	}
-	ws_service.WsHub.CodeStateWs(&message, "Pending")
+
+	message := &ws_model.MessageWs{
+		Type: ws_model.MessageTypeEditStatus,
+		To:   userid,
+	}
+	ws_service.WsHub.CodeStateWs(message, "Pending")
 	resp.Code = 0
-	runResult := RunCode(userid, codeSubmission.Code, codeSubmission.Language, &examples, &message)
+	runResult := RunCode(userid, codeSubmission.Code, codeSubmission.Language, &examples, message)
 
 	msgContent := "Accepted"
 	for _, result := range runResult {
@@ -31,7 +34,7 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 			break
 		}
 	}
-	ws_service.WsHub.CodeStateWs(&message, msgContent)
+	ws_service.WsHub.CodeStateWs(message, msgContent)
 	resp.Data = runResult
 	return
 }

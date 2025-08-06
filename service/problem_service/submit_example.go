@@ -7,19 +7,14 @@ import (
 	"GO1/models/problem_model"
 	"GO1/models/ws_model"
 	"GO1/service/ws_service"
-	"time"
 )
 
 func SubmitExample(userid, problemId int64, exampleSubmit problem_model.ExampleSubmit) (resp response.Response) {
-	messageWs := ws_model.MessageWs{
-		Id:       0,
-		From:     userid,
-		To:       userid,
-		Content:  "Pending",
-		Type:     "submit_code",
-		State:    false,
-		SendTime: time.Time{},
+	messageWs := &ws_model.MessageWs{
+		Type: ws_model.MessageTypeEditStatus,
+		To:   userid,
 	}
+	ws_service.WsHub.CodeStateWs(messageWs, "Pending")
 	var constraints problem_model.ProblemConstraint
 	err := problem_mysql.GetProblemConstraints(problemId, exampleSubmit.Language, &constraints)
 	if err != nil {
@@ -27,12 +22,12 @@ func SubmitExample(userid, problemId int64, exampleSubmit problem_model.ExampleS
 		resp.Message = err.Error()
 		return
 	}
-	ws_service.WsHub.CodeStateWs(&messageWs, "Pending")
+
 	resp.Code = 0
 	runResult := RunExample(exampleSubmit.Code, exampleSubmit.Language,
-		exampleSubmit.Input, constraints.MemoryLimit, constraints.TimeLimit, &messageWs)
+		exampleSubmit.Input, constraints.MemoryLimit, constraints.TimeLimit, messageWs)
 	global.Logger.Info("constraints: ", constraints)
-	ws_service.WsHub.CodeStateWs(&messageWs, runResult.Error)
+	ws_service.WsHub.CodeStateWs(messageWs, runResult.Error)
 	resp.Data = runResult
 	return resp
 }

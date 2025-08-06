@@ -22,7 +22,7 @@ func (UserAccountAPI) Login(c *gin.Context) {
 		response.FailWithCode(response.BadRequest, c)
 		return
 	}
-	global.Logger.Info(input)
+
 	user := mysql_user.FindUser(mysql_user.UserNameParam(input.UserName))
 
 	if user.UserID == 0 {

@@ -50,4 +50,5 @@ func AddRouter(api *gin.RouterGroup) {
 	WSRouter(api)
 	FollowRouter(api)
 	ProblemsRouter(api)
+	MatchRouter(api)
 }

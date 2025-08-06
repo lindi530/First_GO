@@ -5,6 +5,7 @@ import (
 	"GO1/api/chat_api"
 	"GO1/api/comment_api"
 	"GO1/api/image_api"
+	"GO1/api/match_api"
 	"GO1/api/message_api"
 	"GO1/api/post_api"
 	"GO1/api/problem_api"
@@ -22,6 +23,7 @@ type ApiGroup struct {
 	ChatAPI     chat_api.ChatAPI
 	MessageAPI  message_api.MessageAPI
 	ProblemAPI  problem_api.ProblemAPI
+	MatchAPI    match_api.MatchAPI
 }
 
 var ApiGroups = new(ApiGroup)

@@ -3,14 +3,15 @@ package messages
 import (
 	"GO1/global"
 	"GO1/models/ws_model"
-	"time"
 )
 
-func MessageSave(message *ws_model.MessageWs) {
-	if message.Id != 0 {
+func ChatSave(msg *ws_model.MessageWs) {
+	if msg.Data.(*ws_model.ChatWS).ID != 0 {
 		return
 	}
 
-	message.SendTime = time.Now()
-	global.DB.Create(message)
+	chatData := &ws_model.Chat{}
+	msg.WsToDB(chatData)
+
+	global.DB.Create(chatData)
 }

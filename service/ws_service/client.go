@@ -4,7 +4,6 @@ import (
 	"GO1/database/mysql/messages"
 	"GO1/global"
 	"GO1/models/ws_model"
-	"encoding/json"
 	"github.com/gorilla/websocket"
 )
 
@@ -17,18 +16,21 @@ func (c *Client) ReadLoop(hub *Hub) {
 	}()
 
 	for {
-		_, message, err := c.Conn.ReadMessage()
+		_, messageWs, err := c.Conn.ReadMessage()
 		if err != nil {
 			break
 		}
-		var msg ws_model.MessageWs
 
-		if err := json.Unmarshal(message, &msg); err != nil {
+		msg := ws_model.DecodeWs(messageWs)
+		if msg == nil {
 			continue // 无效消息
 		}
-		msg.State = false
-		global.Logger.Warn("online", msg)
-		hub.Broadcast(&msg)
+
+		if data, ok := msg.Data.(*ws_model.ChatWS); ok {
+			data.State = false
+		}
+
+		hub.Broadcast(msg)
 	}
 }
 
@@ -42,11 +44,13 @@ func (c *Client) WriteLoop() {
 }
 
 func (c *Client) WriteOfflineMsg(hub *Hub, userId int64) {
-	var msgs = []ws_model.MessageWs{}
+	var msgs []ws_model.Chat
 	messages.GetOfflineMsg(userId, &msgs)
 
 	for _, msg := range msgs {
-		hub.Broadcast(&msg)
+		msgWs := &ws_model.MessageWs{}
+		msg.DBToWs(msgWs)
+		hub.Broadcast(msgWs)
 	}
 	messages.FinishOfflineMsg(&msgs)
 }

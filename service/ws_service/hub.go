@@ -22,7 +22,7 @@ func (h *Hub) Run() {
 			h.mu.RLock()
 			switch msg.Type {
 			case "chat":
-				h.ChatWs(msg)
+				h.SendData(msg)
 				break
 			case "submit_code":
 				break
