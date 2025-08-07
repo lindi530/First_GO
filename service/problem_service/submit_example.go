@@ -2,7 +2,6 @@ package problem_service
 
 import (
 	"GO1/database/mysql/problem_mysql"
-	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models/problem_model"
 	"GO1/models/ws_model"
@@ -10,7 +9,7 @@ import (
 )
 
 func SubmitExample(userid, problemId int64, exampleSubmit problem_model.ExampleSubmit) (resp response.Response) {
-	messageWs := &ws_model.MessageWs{
+	messageWs := &ws_model.EditStatus{
 		Type: ws_model.MessageTypeEditStatus,
 		To:   userid,
 	}
@@ -26,8 +25,11 @@ func SubmitExample(userid, problemId int64, exampleSubmit problem_model.ExampleS
 	resp.Code = 0
 	runResult := RunExample(exampleSubmit.Code, exampleSubmit.Language,
 		exampleSubmit.Input, constraints.MemoryLimit, constraints.TimeLimit, messageWs)
-	global.Logger.Info("constraints: ", constraints)
-	ws_service.WsHub.CodeStateWs(messageWs, runResult.Error)
+
+	if !runResult.Passed {
+		ws_service.WsHub.CodeStateWs(messageWs, runResult.Error)
+	}
+	
 	resp.Data = runResult
 	return resp
 }

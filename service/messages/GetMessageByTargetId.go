@@ -8,15 +8,10 @@ import (
 
 func GetMessageByTargetId(from, to int64) (resp models.HandleFuncResp) {
 
-	data := []ws_model.Chat{}
-	err := messages.GetMessageByTargetId(&data, from, to)
+	msg := []ws_model.Chat{}
+	err := messages.GetMessageByTargetId(&msg, from, to)
 
-	msg := make([]ws_model.MessageWs, len(data), len(data))
-	for idx, d := range data {
-		d.DBToWs(&msg[idx])
-	}
-
-	resp.Data = msg
+	resp.Data = &msg
 	resp.Ok = err == nil
 
 	return resp

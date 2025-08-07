@@ -1,7 +1,8 @@
 package ws_service
 
 import (
-	"GO1/models/ws_model"
+	"GO1/global"
+	"github.com/buger/jsonparser"
 )
 
 func (h *Hub) Run() {
@@ -20,15 +21,8 @@ func (h *Hub) Run() {
 			h.mu.Unlock()
 		case msg := <-h.privateMsg:
 			h.mu.RLock()
-			switch msg.Type {
-			case "chat":
-				h.SendData(msg)
-				break
-			case "submit_code":
-				break
-			default:
-				break
-			}
+
+			h.sendMessage(msg)
 
 			h.mu.RUnlock()
 		}
@@ -41,9 +35,28 @@ func (h *Hub) RegisterClient(client *Client) {
 }
 
 func (h *Hub) UnregisterClient(client *Client) {
+	global.Logger.Info("unregister client")
 	h.unregister <- client
 }
 
-func (h *Hub) Broadcast(message *ws_model.MessageWs) { // 广播
+func (h *Hub) Broadcast(message []byte) { // 广播
 	h.privateMsg <- message
+}
+
+func (h *Hub) sendMessage(msg []byte) {
+	msgType, err := jsonparser.GetString(msg, "type")
+	if err != nil {
+		global.Logger.Error("数据提取失败")
+		return
+	}
+
+	switch msgType {
+	case "chat":
+		h.SendData(msg)
+		break
+	case "submit_code":
+		break
+	default:
+		break
+	}
 }

@@ -19,27 +19,24 @@ func startGame(user1, user2 *match_model.MatchUser) {
 	}
 	global.Logger.Info("匹配成功！！！")
 	// 发送 WebSocket 通知双方进入房间
-	notifyUser(&ws_model.MessageWs{
-		Type: ws_model.MessageTypeMatchSuccess,
-		To:   user1.UserID,
-		Data: &ws_model.MatchSuccess{
-			RoomID:    room.RoomID,
-			ProblemID: room.ProblemID,
-			Opponent:  user2.Username,
-		},
+	notifyUser(&ws_model.MatchSuccess{
+		Type:      ws_model.MessageTypeMatchSuccess,
+		To:        user1.UserID,
+		RoomID:    room.RoomID,
+		ProblemID: room.ProblemID,
+		Opponent:  user2.Username,
 	})
 
-	notifyUser(&ws_model.MessageWs{
+	notifyUser(&ws_model.MatchSuccess{
 		Type: ws_model.MessageTypeMatchSuccess,
 		To:   user2.UserID,
-		Data: &ws_model.MatchSuccess{
-			RoomID:    room.RoomID,
-			ProblemID: room.ProblemID,
-			Opponent:  user1.Username,
-		},
+
+		RoomID:    room.RoomID,
+		ProblemID: room.ProblemID,
+		Opponent:  user1.Username,
 	})
 }
 
-func notifyUser(msg *ws_model.MessageWs) {
+func notifyUser(msg *ws_model.MatchSuccess) {
 	global.Logger.Info("~~~")
 }

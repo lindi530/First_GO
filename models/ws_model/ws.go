@@ -6,9 +6,3 @@ var (
 	MessageTypeChat         = "chat"
 	MessageTypeError        = "error"
 )
-
-type MessageWs struct {
-	Type string      `json:"type"`
-	To   int64       `json:"to"`
-	Data interface{} `json:"data"`
-}

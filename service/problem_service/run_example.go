@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-func RunExample(code, language, input string, memoryLimit, timeLimit int, message *ws_model.MessageWs) problem_model.RunResult {
+func RunExample(code, language, input string, memoryLimit, timeLimit int, message *ws_model.EditStatus) problem_model.RunResult {
 	ws_service.WsHub.CodeStateWs(message, "Pending")
 
 	// 1. 创建临时目录

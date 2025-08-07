@@ -18,7 +18,7 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 		return
 	}
 
-	message := &ws_model.MessageWs{
+	message := &ws_model.EditStatus{
 		Type: ws_model.MessageTypeEditStatus,
 		To:   userid,
 	}

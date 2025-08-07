@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 )
 
-func (h *Hub) CodeStateWs(msg *ws_model.MessageWs, content string) {
-	msg.Data = ws_model.EditStatus{Content: content}
+func (h *Hub) CodeStateWs(msg *ws_model.EditStatus, content string) {
+	msg.Content = content
+	
 	if receiver, ok := h.clients[msg.To]; ok {
 		data, _ := json.Marshal(msg)
 		receiver.Send <- data
