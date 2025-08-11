@@ -12,7 +12,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func ConstructWS(c *gin.Context, userId int64) {
+func ConstructWS(c *gin.Context, userid int64) {
 
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
@@ -20,14 +20,19 @@ func ConstructWS(c *gin.Context, userId int64) {
 	}
 
 	client := &Client{
-		ID:   userId,
+		ID:   userid,
 		Conn: conn,
 		Send: make(chan []byte, 256),
 	}
 
-	WsHub.RegisterClient(client)
+	start(userid, client)
+}
 
-	client.WriteOfflineMsg(WsHub, userId)
+func start(userid int64, client *Client) {
+	WsHub.RegisterClient(client)
+	WsHub.SendOnlineData(userid, true)
+	client.WriteOfflineMsg(WsHub, userid)
+
 	go client.WriteLoop()
 	go client.ReadLoop(WsHub)
 }

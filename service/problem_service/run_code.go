@@ -92,7 +92,7 @@ func RunCode(userid int64, code, language string, testcases *[]problem_model.Exa
 			"sh /app/run.sh",
 		}
 	}
-	ws_service.WsHub.CodeStateWs(message, "Running")
+	ws_service.WsHub.SendEditData(message, "Running")
 	// 执行 Docker 命令
 	cmd := exec.Command("docker", dockerCmd...)
 	var stderr bytes.Buffer

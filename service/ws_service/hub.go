@@ -14,10 +14,7 @@ func (h *Hub) Run() {
 			h.mu.Unlock()
 		case msg := <-h.unregister:
 			h.mu.Lock()
-			if _, ok := h.clients[msg.ID]; ok {
-				delete(h.clients, msg.ID)
-				close(msg.Send)
-			}
+			h.unregisterHandle(msg)
 			h.mu.Unlock()
 		case msg := <-h.privateMsg:
 			h.mu.RLock()
@@ -35,12 +32,20 @@ func (h *Hub) RegisterClient(client *Client) {
 }
 
 func (h *Hub) UnregisterClient(client *Client) {
-	global.Logger.Info("unregister client")
 	h.unregister <- client
 }
 
 func (h *Hub) Broadcast(message []byte) { // 广播
 	h.privateMsg <- message
+}
+
+func (h *Hub) unregisterHandle(msg *Client) {
+	if _, ok := h.clients[msg.ID]; ok {
+		delete(h.clients, msg.ID)
+		close(msg.Send)
+	}
+
+	h.SendOnlineData(msg.ID, false)
 }
 
 func (h *Hub) sendMessage(msg []byte) {
@@ -52,7 +57,7 @@ func (h *Hub) sendMessage(msg []byte) {
 
 	switch msgType {
 	case "chat":
-		h.SendData(msg)
+		h.SendChatData(msg)
 		break
 	case "submit_code":
 		break

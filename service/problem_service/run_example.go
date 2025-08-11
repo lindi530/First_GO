@@ -14,7 +14,7 @@ import (
 )
 
 func RunExample(code, language, input string, memoryLimit, timeLimit int, message *ws_model.EditStatus) problem_model.RunResult {
-	ws_service.WsHub.CodeStateWs(message, "Pending")
+	ws_service.WsHub.SendEditData(message, "Pending")
 
 	// 1. 创建临时目录
 	tempDir, err := os.MkdirTemp("", "ojcode-*")
@@ -64,7 +64,7 @@ func RunExample(code, language, input string, memoryLimit, timeLimit int, messag
 	// 4. 构建 docker 命令
 	dockerCmd := buildDockerCmd(image, tempDir, compileCmd, runCmd, memoryLimit, timeLimit)
 	global.Logger.Info("docker command: ", dockerCmd)
-	ws_service.WsHub.CodeStateWs(message, "Running")
+	ws_service.WsHub.SendEditData(message, "Running")
 
 	// 5. 执行命令（无 context）
 	cmd := exec.Command("docker", dockerCmd...)
@@ -97,7 +97,7 @@ func RunExample(code, language, input string, memoryLimit, timeLimit int, messag
 		return problem_model.RunResult{Passed: false, Error: "Cannot read output"}
 	}
 
-	ws_service.WsHub.CodeStateWs(message, "Finished")
+	ws_service.WsHub.SendEditData(message, "Finished")
 
 	return problem_model.RunResult{
 		Passed: true,

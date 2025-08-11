@@ -2,6 +2,7 @@ package redis
 
 import (
 	"GO1/global"
+	"context"
 	"github.com/gin-gonic/gin"
 	"strconv"
 	"time"
@@ -28,9 +29,20 @@ func RefreshOnlineState(c *gin.Context, userId int64) {
 	}
 }
 
-func GetOnlineState(c *gin.Context, userId int64) bool {
+func GetOnlineState(ctx interface{}, userId int64) bool {
 	key := onlineStatePrefix + strconv.FormatInt(userId, 10)
-	result, err := global.RedisClient.Exists(c, key).Result()
+	var redisCtx context.Context
+
+	switch c := ctx.(type) {
+	case *gin.Context:
+		redisCtx = c.Request.Context()
+	case context.Context:
+		redisCtx = c
+	default:
+		global.Logger.Error("无效的上下文类型")
+		return false
+	}
+	result, err := global.RedisClient.Exists(redisCtx, key).Result()
 	if err != nil {
 		global.Logger.Error("Redis 链接失败")
 		return false

@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 )
 
-func (h *Hub) SendData(data []byte) {
+func (h *Hub) SendChatData(data []byte) {
 
 	var chatData ws_model.Chat
 	if err := json.Unmarshal(data, &chatData); err != nil {

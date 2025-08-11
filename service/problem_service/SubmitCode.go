@@ -22,7 +22,7 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 		Type: ws_model.MessageTypeEditStatus,
 		To:   userid,
 	}
-	ws_service.WsHub.CodeStateWs(message, "Pending")
+	ws_service.WsHub.SendEditData(message, "Pending")
 	resp.Code = 0
 	runResult := RunCode(userid, codeSubmission.Code, codeSubmission.Language, &examples, message)
 
@@ -34,7 +34,7 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 			break
 		}
 	}
-	ws_service.WsHub.CodeStateWs(message, msgContent)
+	ws_service.WsHub.SendEditData(message, msgContent)
 	resp.Data = runResult
 	return
 }
