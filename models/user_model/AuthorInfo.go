@@ -1,4 +1,4 @@
-package user
+package user_model
 
 type AuthorInfo struct {
 	UserID   int64  `json:"user_id"`

@@ -4,7 +4,6 @@ import (
 	"GO1/database/redis"
 	"GO1/global"
 	"GO1/models/match_model"
-	"GO1/models/ws_model"
 )
 
 func startGame(user1, user2 *match_model.MatchUser) {
@@ -18,25 +17,7 @@ func startGame(user1, user2 *match_model.MatchUser) {
 		return
 	}
 	global.Logger.Info("匹配成功！！！")
+
 	// 发送 WebSocket 通知双方进入房间
-	notifyUser(&ws_model.MatchSuccess{
-		Type:      ws_model.MessageTypeMatchSuccess,
-		To:        user1.UserID,
-		RoomID:    room.RoomID,
-		ProblemID: room.ProblemID,
-		Opponent:  user2.Username,
-	})
-
-	notifyUser(&ws_model.MatchSuccess{
-		Type: ws_model.MessageTypeMatchSuccess,
-		To:   user2.UserID,
-
-		RoomID:    room.RoomID,
-		ProblemID: room.ProblemID,
-		Opponent:  user1.Username,
-	})
-}
-
-func notifyUser(msg *ws_model.MatchSuccess) {
-	global.Logger.Info("~~~")
+	responseMatch(user1, user2, room.RoomID, problemID)
 }

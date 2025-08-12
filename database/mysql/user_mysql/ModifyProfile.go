@@ -1,19 +1,19 @@
-package user
+package user_mysql
 
 import (
 	"GO1/global"
 	"GO1/models"
-	models_user "GO1/models/user"
+	"GO1/models/user_model"
 )
 
-func ModifyProfile(userId int64, profile models_user.UserProfile) (resp models.HandleFuncResp) {
+func ModifyProfile(userId int64, profile user_model.UserProfile) (resp models.HandleFuncResp) {
 	updates := map[string]interface{}{
 		"user_name": profile.UserName,
 		"email":     profile.Email,
 		"quote":     profile.Quote,
 	}
 
-	err := global.DB.Model(&models_user.User{}).
+	err := global.DB.Model(&user_model.User{}).
 		Where("user_id = ?", userId).
 		Updates(updates).Error
 

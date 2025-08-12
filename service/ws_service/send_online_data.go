@@ -22,7 +22,6 @@ func (h *Hub) SendOnlineData(userId int64, onlineState bool) {
 
 	onlineStateBytes, _ := json.Marshal(onlineStatus)
 
-	global.Logger.Info(len(users))
 	for _, user := range users {
 		if receiver, ok := h.clients[user]; ok {
 			receiver.Send <- onlineStateBytes

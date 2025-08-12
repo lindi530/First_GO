@@ -1,7 +1,7 @@
 package user_api
 
 import (
-	mysql "GO1/database/mysql/user"
+	mysql "GO1/database/mysql/user_mysql"
 	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models/post"

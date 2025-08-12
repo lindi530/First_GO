@@ -1,21 +1,15 @@
 package match_api
 
 import (
-	"GO1/middlewares/response"
-	"GO1/models/match_model"
+	"GO1/pkg/jwt"
 	"GO1/service/match_service"
 	"github.com/gin-gonic/gin"
 )
 
-func (MatchAPI) GetMatch(c *gin.Context) {
+func (MatchAPI) MatchRequest(c *gin.Context) {
+	userid := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 
-	matchUser := match_model.MatchUser{}
-	if err := c.ShouldBindJSON(&matchUser); err != nil {
-		response.FailWithCode(response.BadRequest, c)
-		return
-	}
-
-	err := match_service.SendMatchRequest(matchUser)
+	err := match_service.SendMatchRequest(userid)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 	} else {

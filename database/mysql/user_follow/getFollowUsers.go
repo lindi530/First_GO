@@ -2,17 +2,17 @@ package user_follow
 
 import (
 	"GO1/global"
-	modelsUser "GO1/models/user"
+	"GO1/models/user_model"
 )
 
-func GetFollowUsers(userId int64) ([]modelsUser.User, error) {
+func GetFollowUsers(userId int64) ([]user_model.User, error) {
 	followUsersId, err1 := GetFollowUsersId(userId)
 	userInfo, err2 := GetFollowUsersInfo(followUsersId)
 	if err1 != nil {
-		return []modelsUser.User{}, err1
+		return []user_model.User{}, err1
 	}
 	if err2 != nil {
-		return []modelsUser.User{}, err2
+		return []user_model.User{}, err2
 	}
 	return userInfo, nil
 }
@@ -29,12 +29,12 @@ func GetFollowUsersId(userId int64) ([]int64, error) {
 	return followUsersId, err
 }
 
-func GetFollowUsersInfo(userId []int64) ([]modelsUser.User, error) {
+func GetFollowUsersInfo(userId []int64) ([]user_model.User, error) {
 	if len(userId) == 0 {
-		return []modelsUser.User{}, nil
+		return []user_model.User{}, nil
 	}
 
-	followUserList := []modelsUser.User{}
+	followUserList := []user_model.User{}
 	err := global.DB.
 		Where("user_id in (?)", userId).
 		Find(&followUserList).

@@ -1,4 +1,4 @@
-package user
+package user_model
 
 type UserProfile struct {
 	UserName string `json:"user_name" binding:"required"`

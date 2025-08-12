@@ -1,7 +1,7 @@
 package account
 
 import (
-	mysql "GO1/database/mysql/user"
+	mysql "GO1/database/mysql/user_mysql"
 	"GO1/middlewares/response"
 	"github.com/gin-gonic/gin"
 	"strconv"

@@ -2,13 +2,13 @@ package user_follow
 
 import (
 	"GO1/global"
-	"GO1/models/user"
+	"GO1/models/user_model"
 	"gorm.io/gorm"
 )
 
 func UpdateFollowUserCount(followerID, followeeID int64) (result bool) {
 
-	if err := global.DB.Model(&user.User{}).
+	if err := global.DB.Model(&user_model.User{}).
 		Where("user_id = ?", followerID).
 		Update("following_count", gorm.Expr("following_count + ?", 1)).
 		Error; err != nil {
@@ -17,7 +17,7 @@ func UpdateFollowUserCount(followerID, followeeID int64) (result bool) {
 	}
 	global.Logger.Info("UpdateFollowUserCount: following_count 成功")
 
-	if err := global.DB.Model(&user.User{}).
+	if err := global.DB.Model(&user_model.User{}).
 		Where("user_id = ?", followeeID).
 		Update("follower_count", gorm.Expr("follower_count + ?", 1)).
 		Error; err != nil {
@@ -30,14 +30,14 @@ func UpdateFollowUserCount(followerID, followeeID int64) (result bool) {
 }
 
 func UpdateUnFollowUserCount(followerID, followeeID int64) (result bool) {
-	if err := global.DB.Model(&user.User{}).
+	if err := global.DB.Model(&user_model.User{}).
 		Where("user_id = ?", followerID).
 		UpdateColumn("following_count",
 			gorm.Expr("following_count - 1")).
 		Error; err != nil {
 		return false
 	}
-	if err := global.DB.Model(&user.User{}).
+	if err := global.DB.Model(&user_model.User{}).
 		Where("user_id = ?", followeeID).
 		UpdateColumn("follower_count",
 			gorm.Expr("follower_count - 1")).

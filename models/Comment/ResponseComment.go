@@ -1,7 +1,7 @@
 package Comment
 
 import (
-	models_user "GO1/models/user"
+	"GO1/models/user_model"
 	"time"
 )
 
@@ -13,5 +13,5 @@ type ResponseComment struct {
 	Like      bool      `json:"like"`
 	CreatedAt time.Time `json:"created_at"`
 
-	Author models_user.AuthorInfo `json:"author"`
+	Author user_model.AuthorInfo `json:"author"`
 }

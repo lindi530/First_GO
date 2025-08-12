@@ -2,7 +2,7 @@ package post
 
 import (
 	database_comment "GO1/database/mysql/comment"
-	mysql_user "GO1/database/mysql/user"
+	"GO1/database/mysql/user_mysql"
 	"GO1/models"
 	"GO1/models/Comment"
 	service_comment "GO1/service/Comment"
@@ -21,7 +21,7 @@ func CreateComment(c *gin.Context, userId, postId int64, requestComment *Comment
 	result := database_comment.CreateComment(&comment)
 
 	if result.Ok {
-		author := mysql_user.FindAuthorInfo(userId)
+		author := user_mysql.FindAuthorInfo(userId)
 		result.Data = service_comment.BuildResponseComment(c, userId, &comment, author)
 	}
 

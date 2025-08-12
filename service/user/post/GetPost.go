@@ -2,7 +2,7 @@ package post
 
 import (
 	mysql_post "GO1/database/mysql/post"
-	mysql_user "GO1/database/mysql/user"
+	"GO1/database/mysql/user_mysql"
 	"GO1/global"
 	"GO1/models/post"
 	"fmt"
@@ -11,7 +11,7 @@ import (
 
 func GetUserPosts(c *gin.Context, userId int64) ([]post.PostResponse, error) {
 
-	posts, err := mysql_user.GetUserPost(userId)
+	posts, err := user_mysql.GetUserPost(userId)
 	if err != nil {
 		return nil, err
 	}

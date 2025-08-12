@@ -1,11 +1,11 @@
 package account
 
 import (
-	mysql_user "GO1/database/mysql/user"
+	mysql_user "GO1/database/mysql/user_mysql"
 	"GO1/database/redis"
 	"GO1/global"
 	"GO1/middlewares/response"
-	models_user "GO1/models/user"
+	"GO1/models/user_model"
 	"GO1/service/hash"
 	service "GO1/service/user"
 	"github.com/gin-gonic/gin"
@@ -41,7 +41,7 @@ func (UserAccountAPI) Login(c *gin.Context) {
 	redis.SaveJWTId(c, user.UserID, jti)
 	redis.SaveOnlineState(c, user.UserID)
 
-	responseUser := models_user.BuildUserResponse(c, user)
+	responseUser := user_model.BuildUserResponse(c, user)
 	// 返回结果
 	response.Ok(gin.H{
 		"accessToken":  accessToken,

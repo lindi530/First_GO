@@ -1,8 +1,8 @@
-package user
+package user_mysql
 
 import (
 	"GO1/global"
-	"GO1/models/user"
+	"GO1/models/user_model"
 )
 
 func CheckUser(i interface{}) bool {
@@ -20,21 +20,21 @@ func CheckUser(i interface{}) bool {
 }
 
 func CheckUserByUserName(username string) bool {
-	user := user.User{}
+	user := user_model.User{}
 
 	err := global.DB.Where("user_name = ?", username).First(&user).Error
 	if err != nil {
 		global.Logger.Error(err)
 		return false
 	}
-	//if user.UserID {
+	//if user_mysql.UserID {
 	//	return true
 	//}
 	return user.UserID != 0
 }
 
 func CheckUserByUserId(userid int64) bool {
-	user := user.User{}
+	user := user_model.User{}
 	global.DB.Where("user_id = ?", userid).First(&user)
 	if user.UserID != 0 {
 		return true

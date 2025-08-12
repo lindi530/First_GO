@@ -1,13 +1,19 @@
 package match_service
 
 import (
+	"GO1/database/mysql/match_mysql"
 	"GO1/global"
 	"GO1/models/match_model"
 	"encoding/json"
 	"github.com/streadway/amqp"
 )
 
-func SendMatchRequest(user match_model.MatchUser) error {
+func SendMatchRequest(userid int64) error {
+	user := match_model.MatchUser{
+		UserID: userid,
+	}
+	match_mysql.GetMatchUser(&user)
+
 	body, err := json.Marshal(user)
 	if err != nil {
 		return err

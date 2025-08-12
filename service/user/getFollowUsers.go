@@ -3,7 +3,7 @@ package user
 import (
 	"GO1/database/mysql/user_follow"
 	"GO1/middlewares/response"
-	models_user "GO1/models/user"
+	"GO1/models/user_model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,9 +20,9 @@ func GetFollowUsers(c *gin.Context, userId int64) response.Response {
 		resp.Message = "关注列表获取成功"
 	}
 
-	followUserListResp := make([]models_user.UserResponse, 0, len(followUserList))
+	followUserListResp := make([]user_model.UserResponse, 0, len(followUserList))
 	for _, user := range followUserList {
-		followUserListResp = append(followUserListResp, models_user.BuildUserResponse(c, user))
+		followUserListResp = append(followUserListResp, user_model.BuildUserResponse(c, user))
 	}
 
 	resp.Data = gin.H{

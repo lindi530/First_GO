@@ -1,4 +1,4 @@
-package user
+package user_mysql
 
 import (
 	"GO1/global"

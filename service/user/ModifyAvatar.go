@@ -2,10 +2,10 @@ package user
 
 import (
 	mysql_image "GO1/database/mysql/image"
-	mysql_user "GO1/database/mysql/user"
+	"GO1/database/mysql/user_mysql"
 	"GO1/global"
 	models_upload "GO1/models/upload"
-	"GO1/models/user"
+	"GO1/models/user_model"
 	"GO1/pkg/md5"
 	"github.com/gin-gonic/gin"
 	"io"
@@ -75,8 +75,8 @@ func ModifyAvatar(c *gin.Context, userId int64, avatar *multipart.FileHeader) gi
 			}
 		}
 	}
-	mysql_user.ModifyAvatar(userId, fileMD5)
-	avatarPath := user.GetAvatarPath(c, fileMD5)
+	user_mysql.ModifyAvatar(userId, fileMD5)
+	avatarPath := user_model.GetAvatarPath(c, fileMD5)
 	return gin.H{
 		"avatar": avatarPath,
 		"msg":    "上传成功",

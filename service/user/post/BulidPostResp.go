@@ -3,7 +3,7 @@ package post
 import (
 	"GO1/database/mysql/post_likes"
 	models_post "GO1/models/post"
-	"GO1/models/user"
+	"GO1/models/user_model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,7 +22,7 @@ func BuildPostResponse(c *gin.Context, userId int64, p models_post.Post) models_
 		Author: models_post.AuthorInfo{
 			UserId:   p.Author.UserID,
 			UserName: p.Author.UserName,
-			Avatar:   user.GetAvatarPath(c, p.Author.Avatar),
+			Avatar:   user_model.GetAvatarPath(c, p.Author.Avatar),
 		},
 	}
 }
