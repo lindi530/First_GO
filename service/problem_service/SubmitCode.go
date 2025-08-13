@@ -2,6 +2,7 @@ package problem_service
 
 import (
 	"GO1/database/mysql/problem_mysql"
+	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models/problem_model"
 	"GO1/models/ws_model"
@@ -10,7 +11,7 @@ import (
 
 func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp response.Response) {
 	var examples []problem_model.Example
-
+	global.Logger.Error("SubmitCode:", codeSubmission.ProblemID)
 	err := problem_mysql.GetProblemExamples(codeSubmission.ProblemID, &examples)
 	if err != nil {
 		resp.Code = 1
@@ -34,6 +35,12 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 			break
 		}
 	}
+	if msgContent == "Accepted" {
+		problem_mysql.SaveAcState(userid, codeSubmission.ProblemID)
+		problem_mysql.UpdateAcCount(codeSubmission.ProblemID)
+	}
+	problem_mysql.UpdateSubmitCount(codeSubmission.ProblemID)
+
 	ws_service.WsHub.SendEditData(message, msgContent)
 	resp.Data = runResult
 	return

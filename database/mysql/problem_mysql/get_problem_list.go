@@ -3,15 +3,16 @@ package problem_mysql
 import (
 	"GO1/global"
 	"GO1/models/problem_model"
+	"math"
 )
 
-func GetProblemList() ([]problem_model.ProblemListResponse, error) {
+func GetProblemList() ([]problem_model.ProblemList, error) {
 
-	var problems []problem_model.ProblemListResponse
+	var problems []problem_model.ProblemList
 
 	// 查询所有题目信息
 	err := global.DB.Table("problems").
-		Select("id, title, level").
+		Select("id, title, level, submit_count, ac_count").
 		Find(&problems).Error
 
 	if err != nil {
@@ -32,6 +33,8 @@ func GetProblemList() ([]problem_model.ProblemListResponse, error) {
 			continue
 		}
 		problems[i].Tags = tags
+		rate := float64(problems[i].AcCount) / float64(problems[i].SubmitCount)
+		problems[i].PassRate = math.Round(rate*10000) / 100
 	}
 
 	return problems, nil

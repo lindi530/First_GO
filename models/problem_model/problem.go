@@ -25,8 +25,10 @@ type Problem struct {
 	Description string `json:"description"`
 	InputDesc   string `json:"input_desc"`
 	OutputDesc  string `json:"output_desc"`
-	TimeLimit   int    `gorm:"column:time_limit"`   // 单位秒
-	MemoryLimit int    `gorm:"column:memory_limit"` // 单位 MB
+	TimeLimit   int    `json:"time_limit"`   // 单位秒
+	MemoryLimit int    `json:"memory_limit"` // 单位 MB
+	SubmitCount int    `json:"submit_count"`
+	AcCount     int    `json:"ac_count"`
 
 	Tags     []string  `json:"tags" gorm:"-"`
 	Examples []Example `json:"examples" gorm:"-"`

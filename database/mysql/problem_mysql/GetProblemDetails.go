@@ -5,7 +5,7 @@ import (
 	model "GO1/models/problem_model"
 )
 
-func GetProblemDetails(id int64, problemDetail *model.Problem) error {
+func GetProblemDetails(id uint, problemDetail *model.Problem) error {
 
 	err := global.DB.First(problemDetail, "ID=?", id).Error
 

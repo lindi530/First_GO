@@ -6,7 +6,7 @@ import (
 	models "GO1/models/problem_model"
 )
 
-func GetProblemDetails(id int64) (resp response.Response) {
+func GetProblemDetails(id uint) (resp response.Response) {
 	var problemDetail models.Problem
 
 	if err := mysql.GetProblemDetails(id, &problemDetail); err != nil {

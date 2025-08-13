@@ -5,7 +5,7 @@ import (
 	"GO1/models/problem_model"
 )
 
-func GetProblemExamples(problemId int64, examples *[]problem_model.Example) error {
+func GetProblemExamples(problemId uint, examples *[]problem_model.Example) error {
 
 	if err := global.DB.
 		Model(&problem_model.ProblemExample{}).

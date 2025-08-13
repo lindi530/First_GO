@@ -1,11 +1,13 @@
 package problem_api
 
 import (
+	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models/problem_model"
 	"GO1/pkg/jwt"
 	"GO1/service/problem_service"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func (ProblemAPI) SubmitCode(c *gin.Context) {
@@ -14,6 +16,16 @@ func (ProblemAPI) SubmitCode(c *gin.Context) {
 		response.FailWithMessage("解析信息失败", c)
 		return
 	}
+
+	problemIDStr := c.Param("problem_id") // 返回 string
+	problemID, err := strconv.ParseUint(problemIDStr, 10, 64)
+	if err != nil {
+		response.FailWithMessage("解析信息失败", c)
+		return
+	}
+	
+	codeSubmission.ProblemID = uint(problemID)
+	global.Logger.Info("SubmitCode:", codeSubmission.ProblemID)
 	if ok := isSafeCode(codeSubmission.Code, codeSubmission.Language); !ok {
 		response.FailWithMessage("不安全代码", c)
 		return

@@ -8,9 +8,9 @@ import (
 )
 
 func (ProblemAPI) GetProblemDetail(c *gin.Context) {
-	problemID, _ := strconv.ParseInt(c.Param("problem_id"), 10, 64)
+	problemID, _ := strconv.ParseUint(c.Param("problem_id"), 10, 10)
 
-	resp := problem_service.GetProblemDetails(problemID)
+	resp := problem_service.GetProblemDetails(uint(problemID))
 
 	if resp.Code == 1 {
 		response.FailWithMessage("获取题目失败", c)

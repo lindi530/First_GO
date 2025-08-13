@@ -20,7 +20,10 @@ func InitRouter() *gin.Engine {
 		c.Next()
 	})
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:8080"}, // 允许前端地址
+		AllowOrigins: []string{
+			"http://localhost:8080",
+			"http://192.168.1.17:8080",
+		}, // 允许前端地址
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},

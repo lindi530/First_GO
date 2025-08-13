@@ -5,7 +5,7 @@ import (
 	model "GO1/models/problem_model"
 )
 
-func GetProblemTags(id int64, problemTags *[]string) error {
+func GetProblemTags(id uint, problemTags *[]string) error {
 
 	if err := global.DB.Model(&model.ProblemTag{}).
 		Where("problem_id=?", id).
