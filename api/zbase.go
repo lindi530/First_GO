@@ -9,6 +9,7 @@ import (
 	"GO1/api/message_api"
 	"GO1/api/post_api"
 	"GO1/api/problem_api"
+	"GO1/api/saber_api"
 	"GO1/api/settings_api"
 	"GO1/api/user_api"
 )
@@ -24,6 +25,7 @@ type ApiGroup struct {
 	MessageAPI  message_api.MessageAPI
 	ProblemAPI  problem_api.ProblemAPI
 	MatchAPI    match_api.MatchAPI
+	SaberAPI    saber_api.SaberAPI
 }
 
 var ApiGroups = new(ApiGroup)
