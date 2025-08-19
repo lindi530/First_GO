@@ -76,7 +76,7 @@ func ModifyAvatar(c *gin.Context, userId int64, avatar *multipart.FileHeader) gi
 		}
 	}
 	user_mysql.ModifyAvatar(userId, fileMD5)
-	avatarPath := user_model.GetAvatarPath(c, fileMD5)
+	avatarPath := user_model.GetAvatarPath(fileMD5)
 	return gin.H{
 		"avatar": avatarPath,
 		"msg":    "上传成功",

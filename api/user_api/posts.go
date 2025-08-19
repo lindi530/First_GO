@@ -16,7 +16,7 @@ func (UserAPI) GetUserPosts(c *gin.Context) {
 	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
 
 	// 通过server获得帖子信息
-	posts, err := service.GetUserPosts(c, userId)
+	posts, err := service.GetUserPosts(userId)
 	if err != nil {
 		response.FailWithMessage("出错", c)
 		return

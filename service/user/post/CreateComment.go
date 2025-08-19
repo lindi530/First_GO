@@ -22,7 +22,7 @@ func CreateComment(c *gin.Context, userId, postId int64, requestComment *Comment
 
 	if result.Ok {
 		author := user_mysql.FindAuthorInfo(userId)
-		result.Data = service_comment.BuildResponseComment(c, userId, &comment, author)
+		result.Data = service_comment.BuildResponseComment(userId, &comment, author)
 	}
 
 	return result

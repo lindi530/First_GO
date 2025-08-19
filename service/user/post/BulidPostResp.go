@@ -4,10 +4,9 @@ import (
 	"GO1/database/mysql/post_likes"
 	models_post "GO1/models/post"
 	"GO1/models/user_model"
-	"github.com/gin-gonic/gin"
 )
 
-func BuildPostResponse(c *gin.Context, userId int64, p models_post.Post) models_post.PostResponse {
+func BuildPostResponse(userId int64, p models_post.Post) models_post.PostResponse {
 	return models_post.PostResponse{
 		PostID:    p.PostID,
 		UserID:    p.UserID,
@@ -22,15 +21,15 @@ func BuildPostResponse(c *gin.Context, userId int64, p models_post.Post) models_
 		Author: models_post.AuthorInfo{
 			UserId:   p.Author.UserID,
 			UserName: p.Author.UserName,
-			Avatar:   user_model.GetAvatarPath(c, p.Author.Avatar),
+			Avatar:   user_model.GetAvatarPath(p.Author.Avatar),
 		},
 	}
 }
 
-func BuildPostsResponse(c *gin.Context, userId int64, p []models_post.Post) []models_post.PostResponse {
+func BuildPostsResponse(userId int64, p []models_post.Post) []models_post.PostResponse {
 	postsResponse := make([]models_post.PostResponse, 0, len(p))
 	for _, post := range p {
-		postsResponse = append(postsResponse, BuildPostResponse(c, userId, post))
+		postsResponse = append(postsResponse, BuildPostResponse(userId, post))
 	}
 	return postsResponse
 }

@@ -41,7 +41,7 @@ func BuildUserResponse(c *gin.Context, u User) UserResponse {
 	user := UserResponse{
 		UserID:         u.UserID,
 		UserName:       u.UserName,
-		AvatarPath:     GetAvatarPath(c, u.Avatar),
+		AvatarPath:     GetAvatarPath(u.Avatar),
 		Quote:          u.Quote,
 		FollowingCount: u.FollowingCount,
 		FollowerCount:  u.FollowerCount,
@@ -57,14 +57,14 @@ func getOnlineState(c *gin.Context, userId int64) bool {
 	return redis.GetOnlineState(c, userId)
 }
 
-func GetAvatarPath(c *gin.Context, md5Avatar string) string {
+func GetAvatarPath(md5Avatar string) string {
 
 	var path string
 	global.DB.Model(models_upload.Image{}).Where("md5 = ?", md5Avatar).Select("path").First(&path)
 	idx := strings.LastIndex(path, "/")
 	pathHead, pathTail := path[:idx], path[idx+1:]
 	scheme := "http"
-	host := c.Request.Host // 如 127.0.0.1:8000 或 192.168.1.10:8000
+	host := "localhost:8000" // 如 127.0.0.1:8000 或 192.168.1.10:8000
 	imageURL := scheme + "://" + host + mapping.GetRealPath(pathHead) + "/" + pathTail
 
 	return imageURL

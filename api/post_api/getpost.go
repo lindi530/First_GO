@@ -14,7 +14,7 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 	// 数据校验
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	// 服务
-	posts, _ := service.GetAllPost(c, userId)
+	posts, _ := service.GetAllPost(userId)
 
 	// 响应
 	response.OkWithData(posts, c)
@@ -40,7 +40,7 @@ func (PostAPI) GetThePagePost(c *gin.Context) {
 		return
 	}
 	global.Logger.Infof("GetThePagePost pageInfo: %v", pageInfo)
-	posts, err := service.GetThePagePost(c, userId, pageInfo)
+	posts, err := service.GetThePagePost(userId, pageInfo)
 
 	if err != nil {
 		response.FailWithMessage("数据拉取失败", c)

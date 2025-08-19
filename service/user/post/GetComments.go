@@ -16,7 +16,7 @@ func GetComments(c *gin.Context, userId, postId int64) models.HandleFuncResp {
 	responseComments := make([]Comment.ResponseComment, len(comments))
 	for idx, comment := range comments {
 		author := user_mysql.FindAuthorInfo(comment.AuthorID)
-		res := service_comment.BuildResponseComment(c, userId, &comment, author)
+		res := service_comment.BuildResponseComment(userId, &comment, author)
 		responseComments[idx] = res
 	}
 

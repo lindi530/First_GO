@@ -11,7 +11,7 @@ func CreatePost(c *gin.Context, userId int64, p models_post.CreatePost) models_p
 
 	user_mysql.CreatePost(&post)
 
-	responsePost := BuildPostResponse(c, userId, GetPostByPostId(post.PostID))
+	responsePost := BuildPostResponse(userId, GetPostByPostId(post.PostID))
 
 	return responsePost
 }

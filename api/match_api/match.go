@@ -9,6 +9,8 @@ import (
 )
 
 func (MatchAPI) MatchRequest(c *gin.Context) {
+
+	global.Logger.Info("host: ", c.Request.Host)
 	userid := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	global.Logger.Infof("userid is %v", userid)
 	err := match_service.SendMatchRequest(userid)

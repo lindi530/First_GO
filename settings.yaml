@@ -21,8 +21,9 @@ logger:
 
 system:
     host: "0.0.0.0"
+    scheme: ""
     port: 8000
-    env: release   # test  debug
+    env: release   # testDebug
 snowflake:
     start_time: "2025-05-08"
     machine_id: 1

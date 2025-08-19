@@ -5,17 +5,7 @@ import "GO1/models/match_model"
 type MatchResponse struct {
 	Type      string                 `json:"type"`
 	To        int64                  `json:"to"`
-	RoomID    string                 `json:"roomId"`
-	ProblemID uint                   `json:"problemId"`
+	RoomID    string                 `json:"room_id"`
+	ProblemID uint                   `json:"problem_id"`
 	Opponent  *match_model.MatchUser `json:"opponent"`
-	Info      MatchInfo              `json:"info"`
-}
-
-type MatchInfo struct {
-	Avatar       string `json:"avatar"`
-	Name         string `json:"name"`
-	Rating       int    `json:"rating"`
-	Level        string `json:"level"`
-	Wins         int    `json:"wins"`
-	TotalMatches int    `json:"total_matches"`
 }
