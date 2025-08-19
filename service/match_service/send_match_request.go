@@ -9,6 +9,11 @@ import (
 )
 
 func SendMatchRequest(userid int64) error {
+
+	if waitingUser != nil && userid == waitingUser.UserID {
+		return nil
+	}
+
 	user := match_model.MatchUser{}
 	match_mysql.GetMatchUser(&user, userid)
 

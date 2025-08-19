@@ -8,9 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (MatchAPI) MatchRequest(c *gin.Context) {
+func (MatchAPI) SendMatchRequest(c *gin.Context) {
 
-	global.Logger.Info("host: ", c.Request.Host)
 	userid := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	global.Logger.Infof("userid is %v", userid)
 	err := match_service.SendMatchRequest(userid)

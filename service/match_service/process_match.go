@@ -19,6 +19,10 @@ func processMatch(user *match_model.MatchUser) { // 匹配逻辑
 		global.Logger.Errorf("User %s waiting for match_model", user.UserName)
 		waitingUser = user
 	} else {
+
+		global.Logger.Error("waitingUser : ", waitingUser)
+		global.Logger.Error("user : ", user)
+
 		global.Logger.Errorf("Matched %s vs %s!\n", waitingUser.UserName, user.UserName)
 		startGame(waitingUser, user)
 		waitingUser = nil

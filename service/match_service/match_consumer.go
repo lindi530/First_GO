@@ -22,7 +22,6 @@ func StartMatchConsumer() { // 监听匹配信息
 				global.Logger.Error("Invalid match_model message:", err)
 				continue
 			}
-
 			processMatch(&user) // 进行匹配
 		}
 	}()
