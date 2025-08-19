@@ -7,10 +7,11 @@ import (
 )
 
 func (h *Hub) SendMatchData(msg *ws_model.MatchResponse) {
+	global.Logger.Info("msgInfo: ", msg.To)
 	if receiver, ok := h.clients[msg.To]; ok {
 		data, _ := json.Marshal(msg)
 		receiver.Send <- data
 	} else {
-		global.Logger.Error("消息解析失败")
+		global.Logger.Error("")
 	}
 }

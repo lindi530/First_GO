@@ -8,4 +8,14 @@ type MatchResponse struct {
 	RoomID    string                 `json:"roomId"`
 	ProblemID uint                   `json:"problemId"`
 	Opponent  *match_model.MatchUser `json:"opponent"`
+	Info      MatchInfo              `json:"info"`
+}
+
+type MatchInfo struct {
+	Avatar       string `json:"avatar"`
+	Name         string `json:"name"`
+	Rating       int    `json:"rating"`
+	Level        string `json:"level"`
+	Wins         int    `json:"wins"`
+	TotalMatches int    `json:"total_matches"`
 }

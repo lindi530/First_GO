@@ -1,6 +1,8 @@
 package match_api
 
 import (
+	"GO1/global"
+	"GO1/middlewares/response"
 	"GO1/pkg/jwt"
 	"GO1/service/match_service"
 	"github.com/gin-gonic/gin"
@@ -8,11 +10,10 @@ import (
 
 func (MatchAPI) MatchRequest(c *gin.Context) {
 	userid := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
-
+	global.Logger.Infof("userid is %v", userid)
 	err := match_service.SendMatchRequest(userid)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-	} else {
-		c.JSON(200, gin.H{"status": "queued for match_model"})
+		response.FailWithMessage("发生匹配请求失败！", c)
 	}
+	response.OkWithMessage("发生匹配请求成功！", c)
 }

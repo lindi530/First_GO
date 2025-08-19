@@ -9,10 +9,8 @@ import (
 )
 
 func SendMatchRequest(userid int64) error {
-	user := match_model.MatchUser{
-		UserID: userid,
-	}
-	match_mysql.GetMatchUser(&user)
+	user := match_model.MatchUser{}
+	match_mysql.GetMatchUser(&user, userid)
 
 	body, err := json.Marshal(user)
 	if err != nil {

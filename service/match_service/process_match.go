@@ -16,10 +16,10 @@ func processMatch(user *match_model.MatchUser) { // 匹配逻辑
 	defer matchLock.Unlock()
 
 	if waitingUser == nil {
-		global.Logger.Errorf("User %s waiting for match_model", user.Username)
+		global.Logger.Errorf("User %s waiting for match_model", user.UserName)
 		waitingUser = user
 	} else {
-		global.Logger.Errorf("Matched %s vs %s!\n", waitingUser.Username, user.Username)
+		global.Logger.Errorf("Matched %s vs %s!\n", waitingUser.UserName, user.UserName)
 		startGame(waitingUser, user)
 		waitingUser = nil
 	}

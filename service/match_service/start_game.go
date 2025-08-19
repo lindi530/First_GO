@@ -8,8 +8,10 @@ import (
 
 func startGame(user1, user2 *match_model.MatchUser) {
 	// TODO: 创建房间，分配题目，通知双方 WebSocket（或 HTTP 回调）
-	global.Logger.Errorf("Start Game: %s vs %s", user1.Username, user2.Username)
-	problemID := SelectProblemID(user1.Rank, user2.Rank)
+	global.Logger.Errorf("Start Game: %s vs %s", user1.UserName, user2.UserName)
+
+	problemID := SelectProblemID(user1.Rating, user2.Rating)
+
 	room, err := redis.CreateRoom(user1.UserID, user2.UserID, problemID)
 	if err != nil {
 		// ws 通知客户端
