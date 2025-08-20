@@ -1,7 +1,6 @@
 package problem_service
 
 import (
-	"GO1/global"
 	"GO1/models/problem_model"
 	"GO1/models/ws_model"
 	"GO1/service/ws_service"
@@ -20,7 +19,7 @@ func RunCode(userid int64, code, language string, testcases *[]problem_model.Exa
 		return []problem_model.RunResult{{Passed: false, Error: "Cannot create temp directory"}}
 	}
 	defer os.RemoveAll(tempDir)
-	global.Logger.Info("code: ", code)
+
 	var codeFileName, compileCmd, runCmd, image string
 
 	switch language {

@@ -61,6 +61,8 @@ func (h *Hub) sendMessage(msg []byte) {
 		break
 	case "submit_code":
 		break
+	case "saber_result":
+		break
 	default:
 		break
 	}

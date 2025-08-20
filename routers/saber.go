@@ -11,6 +11,7 @@ func SaberRouter(router *gin.RouterGroup) {
 
 	saber.Use(jwt.JWTAuthMiddleware())
 	{
-		saber.GET("info", api.ApiGroups.SaberAPI.GetSaberStat)
+		saber.GET("/info", api.ApiGroups.SaberAPI.GetSaberStat)
+		saber.POST("/submit", api.ApiGroups.SaberAPI.SaberSubmit)
 	}
 }
