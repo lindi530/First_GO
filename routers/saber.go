@@ -20,5 +20,6 @@ func SaberRouter(router *gin.RouterGroup) {
 	rooms.Use(jwt.JWTAuthMiddleware())
 	{
 		rooms.POST("/expire/:room_id", api.ApiGroups.SaberAPI.ExpireRoom)
+		rooms.POST("/join/:room_id", api.ApiGroups.SaberAPI.JoinRoom)
 	}
 }

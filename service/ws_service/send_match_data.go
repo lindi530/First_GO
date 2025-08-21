@@ -12,6 +12,6 @@ func (h *Hub) SendMatchData(msg *ws_model.MatchResponse) {
 		data, _ := json.Marshal(msg)
 		receiver.Send <- data
 	} else {
-		global.Logger.Error("")
+		global.Logger.Error("发送数据错误")
 	}
 }
