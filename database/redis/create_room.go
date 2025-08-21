@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func CreateRoom(user1ID, user2ID int64, problemID uint) (*match_model.Room, error) {
+func CreateMatchRoom(user1ID, user2ID int64, problemID uint) (*match_model.Room, error) {
 	roomID := "room_" + strconv.FormatInt(time.Now().UnixNano(), 10)
 
 	room := match_model.Room{
@@ -20,16 +20,42 @@ func CreateRoom(user1ID, user2ID int64, problemID uint) (*match_model.Room, erro
 		Status:    "waiting",
 	}
 
-	jsonData, err := json.Marshal(room)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx := context.Background()
-	err = global.RedisClient.Set(ctx, roomID, jsonData, 30*time.Minute).Err()
+	err := redisCreateRoom(&room)
 	if err != nil {
 		return nil, err
 	}
 
 	return &room, nil
+}
+
+func CreateInviteRoom(userid int64) (*match_model.Room, error) {
+	roomID := "room_" + strconv.FormatInt(time.Now().UnixNano(), 10)
+
+	room := match_model.Room{
+		RoomID:  roomID,
+		User1ID: userid,
+		Status:  "waiting",
+	}
+
+	err := redisCreateRoom(&room)
+	if err != nil {
+		return nil, err
+	}
+
+	return &room, nil
+}
+
+func redisCreateRoom(room *match_model.Room) error {
+	jsonData, err := json.Marshal(room)
+	if err != nil {
+		return err
+	}
+
+	ctx := context.Background()
+	err = global.RedisClient.Set(ctx, room.RoomID, jsonData, 30*time.Minute).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -12,7 +12,7 @@ func startGame(user1, user2 *match_model.MatchUser) {
 
 	problemID := SelectProblemID(user1.Rating, user2.Rating)
 
-	room, err := redis.CreateRoom(user1.UserID, user2.UserID, problemID)
+	room, err := redis.CreateMatchRoom(user1.UserID, user2.UserID, problemID)
 	if err != nil {
 		// ws 通知客户端
 		global.Logger.Error("服务器创建房间失败！！！")
