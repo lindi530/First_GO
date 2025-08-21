@@ -6,7 +6,7 @@ import (
 	"GO1/service/ws_service"
 )
 
-func responseMatch(user1, user2 *match_model.MatchUser, roomID string, problemID uint) {
+func ResponseMatch(user1, user2 *match_model.MatchUser, roomID string, problemID uint) {
 
 	resp1 := &ws_model.MatchResponse{
 		Type:      ws_model.MessageTypeMatchSuccess,

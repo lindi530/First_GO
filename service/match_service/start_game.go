@@ -21,5 +21,5 @@ func startGame(user1, user2 *match_model.MatchUser) {
 	global.Logger.Info("匹配成功！！！")
 
 	// 发送 WebSocket 通知双方进入房间
-	responseMatch(user1, user2, room.RoomID, problemID)
+	ResponseMatch(user1, user2, room.RoomID, problemID)
 }
