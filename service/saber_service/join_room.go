@@ -9,20 +9,27 @@ import (
 )
 
 func JoinRoom(roomId string, userId int64) (resp response.Response) {
-	room, err := redis.JoinRoom(roomId, userId)
+	room, err := redis.GetJoinRoom(roomId, userId)
 
 	if err != nil {
 		resp.Code = 1
-		resp.Message = "加入房间失败！"
+		resp.Message = "房间获取失败！"
 		return
 	}
 
 	user1 := match_model.MatchUser{}
 	match_mysql.GetMatchUser(&user1, room.User1ID)
 	user2 := match_model.MatchUser{}
-	match_mysql.GetMatchUser(&user2, room.User2ID)
+	match_mysql.GetMatchUser(&user2, userId)
 
 	problemId := match_service.SelectProblemID(user1.Rating, user2.Rating)
+
+	err = redis.JoinRoom(room, userId, problemId)
+	if err != nil {
+		resp.Code = 1
+		resp.Message = "加入房间失败！"
+		return
+	}
 
 	match_service.ResponseMatch(&user1, &user2, roomId, problemId)
 

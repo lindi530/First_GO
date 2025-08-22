@@ -1,6 +1,7 @@
 package saber_api
 
 import (
+	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models/saber_model"
 	"GO1/pkg/jwt"
@@ -14,6 +15,7 @@ func (SaberAPI) SaberSubmit(c *gin.Context) {
 		response.FailWithMessage("提交数据格式失败", c)
 		return
 	}
+	global.Logger.Error("roomId ", data)
 	userid := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 
 	resp := saber_service.SaberSubmit(userid, &data)
@@ -22,6 +24,6 @@ func (SaberAPI) SaberSubmit(c *gin.Context) {
 		response.FailWithMessage(resp.Message, c)
 		return
 	}
-	
+
 	response.OkWithMessage(resp.Message, c)
 }
