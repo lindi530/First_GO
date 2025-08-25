@@ -8,7 +8,7 @@ import (
 
 func GetProblemConstraints(problemId64 int64, language string, constraint *problem_model.ProblemConstraint) error {
 	problemId := uint(problemId64)
-	if err := global.DB.Where("id = ?	AND language = ?", problemId, language).First(constraint).Error; err != nil {
+	if err := global.DB.Where("problem_id = ?	AND language = ?", problemId, language).First(constraint).Error; err != nil {
 		return errors.New("查询题目限制失败")
 	}
 	return nil
