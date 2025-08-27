@@ -4,7 +4,7 @@ import (
 	"GO1/database/redis"
 	"GO1/global"
 	"GO1/mapping"
-	models_upload "GO1/models/upload"
+	"GO1/models/upload_model"
 	"github.com/gin-gonic/gin"
 	"strings"
 	"time"
@@ -60,7 +60,7 @@ func getOnlineState(c *gin.Context, userId int64) bool {
 func GetAvatarPath(md5Avatar string) string {
 
 	var path string
-	global.DB.Model(models_upload.Image{}).Where("md5 = ?", md5Avatar).Select("path").First(&path)
+	global.DB.Model(upload_model.Image{}).Where("md5 = ?", md5Avatar).Select("path").First(&path)
 	idx := strings.LastIndex(path, "/")
 	pathHead, pathTail := path[:idx], path[idx+1:]
 	scheme := "http"

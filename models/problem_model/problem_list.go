@@ -8,5 +8,5 @@ type ProblemList struct {
 	AcCount     int      `json:"ac_count"`
 	Accepted    bool     `json:"accepted"`
 	Tags        []string `json:"tags" gorm:"-"`
-	PassRate    float64  `json:"pass_rate" gorm:"-"`
+	PassRate    float64  `json:"pass_rate"`
 }

@@ -1,9 +1,9 @@
-package images
+package upload_service
 
 import (
 	"GO1/database/mysql/image"
 	"GO1/global"
-	models_upload "GO1/models/upload"
+	"GO1/models/upload_model"
 	"GO1/pkg/md5"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-func UploadImage(c *gin.Context, file []*multipart.FileHeader, rsp *[]models_upload.ResponseUploadImages) {
+func UploadImage(c *gin.Context, file []*multipart.FileHeader, rsp *[]upload_model.ResponseUploadImages) {
 	dirPath := global.Config.Upload.Image.Path
 	imageLimitSize := float64(global.Config.Upload.Image.Size)
 	ensureDir(dirPath)
@@ -83,7 +83,7 @@ func ensureDir(dirPath string) {
 
 func inWriteList(ext string) bool {
 	ext = strings.ToLower(ext)
-	for _, EXT := range models_upload.WriteImageList {
+	for _, EXT := range upload_model.WriteImageList {
 		if EXT == ext {
 			return true
 		}
@@ -91,8 +91,8 @@ func inWriteList(ext string) bool {
 	return false
 }
 
-func addResponse(rsp *[]models_upload.ResponseUploadImages, filename string, result string, msg string) {
-	*rsp = append(*rsp, models_upload.ResponseUploadImages{
+func addResponse(rsp *[]upload_model.ResponseUploadImages, filename string, result string, msg string) {
+	*rsp = append(*rsp, upload_model.ResponseUploadImages{
 		FileName: filename,
 		Result:   result,
 		Msg:      msg,

@@ -50,3 +50,19 @@ func FailWithCode(errorCode ErrorCode, c *gin.Context) {
 	}
 	Result(FAIL, int(errorCode), map[string]any{}, message, c)
 }
+
+func MessageAndMessage(resp *Response, c *gin.Context) {
+	if resp.Code == 1 {
+		FailWithMessage(resp.Message, c)
+		return
+	}
+	OkWithMessage(resp.Message, c)
+}
+
+func DataAndMessage(resp *Response, c *gin.Context) {
+	if resp.Code == 1 {
+		FailWithMessage(resp.Message, c)
+		return
+	}
+	OkWithData(resp.Data, c)
+}

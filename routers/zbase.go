@@ -55,4 +55,5 @@ func AddRouter(api *gin.RouterGroup) {
 	ProblemsRouter(api)
 	MatchRouter(api)
 	SaberRouter(api)
+	UploadRouter(api)
 }

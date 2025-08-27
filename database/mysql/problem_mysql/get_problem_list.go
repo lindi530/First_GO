@@ -3,38 +3,54 @@ package problem_mysql
 import (
 	"GO1/global"
 	"GO1/models/problem_model"
-	"math"
+	lo "github.com/samber/lo"
 )
 
-func GetProblemList() ([]problem_model.ProblemList, error) {
+func GetProblemList(userID int64) ([]problem_model.ProblemList, error) {
 
 	var problems []problem_model.ProblemList
 
 	// 查询所有题目信息
-	err := global.DB.Table("problems").
-		Select("id, title, level, submit_count, ac_count").
-		Find(&problems).Error
-
+	err := global.DB.Table("problems p").
+		Select(`
+			p.id, 
+			p.title, 
+			p.level, 
+			p.submit_count, 
+			p.ac_count,
+			CASE 
+				WHEN p.submit_count = 0 THEN 0
+				ELSE ROUND(p.ac_count * 1.0 / p.submit_count * 100, 2)
+			END AS pass_rate,
+			CASE 
+				WHEN uap.problem_id IS NULL THEN false 
+				ELSE true 
+			END AS accepted
+		`).
+		Joins("LEFT JOIN user_ac_problems uap ON uap.problem_id = p.id AND uap.user_id = ?", userID).
+		Scan(&problems).Error
+	global.Logger.Error(problems)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(problems) == 0 {
-		return problems, nil
+	var tagRows []struct {
+		ProblemID uint
+		Tag       string
 	}
+	err = global.DB.Table("problem_tags").
+		Where("problem_id IN (?)", lo.Map(problems, func(p problem_model.ProblemList, _ int) uint {
+			return p.ID
+		})).
+		Find(&tagRows).Error
 
-	//遍历题目，查询对应标签
+	// 用 map 聚合
+	tagMap := make(map[uint][]string)
+	for _, row := range tagRows {
+		tagMap[row.ProblemID] = append(tagMap[row.ProblemID], row.Tag)
+	}
 	for i := range problems {
-		var tags []string
-		err = global.DB.Table("problem_tags").
-			Where("problem_id = ?", problems[i].ID).
-			Pluck("tag", &tags).Error
-		if err != nil {
-			continue
-		}
-		problems[i].Tags = tags
-		rate := float64(problems[i].AcCount) / float64(problems[i].SubmitCount)
-		problems[i].PassRate = math.Round(rate*10000) / 100
+		problems[i].Tags = tagMap[problems[i].ID]
 	}
 
 	return problems, nil

@@ -1,4 +1,4 @@
-package upload
+package upload_model
 
 import (
 	"GO1/global"

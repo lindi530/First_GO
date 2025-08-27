@@ -11,6 +11,7 @@ import (
 	"GO1/api/problem_api"
 	"GO1/api/saber_api"
 	"GO1/api/settings_api"
+	"GO1/api/upload_api"
 	"GO1/api/user_api"
 )
 
@@ -26,6 +27,7 @@ type ApiGroup struct {
 	ProblemAPI  problem_api.ProblemAPI
 	MatchAPI    match_api.MatchAPI
 	SaberAPI    saber_api.SaberAPI
+	UploadAPI   upload_api.UploadAPI
 }
 
 var ApiGroups = new(ApiGroup)

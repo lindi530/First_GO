@@ -3,7 +3,7 @@ package image_api
 import (
 	"GO1/middlewares/response"
 	"GO1/models"
-	"GO1/models/upload"
+	"GO1/models/upload_model"
 	"GO1/service"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,7 @@ func (ImageAPI) DeleteImages(c *gin.Context) {
 		return
 	}
 
-	err := service.DeleteList(deleteList.IdList, upload.Image{})
+	err := service.DeleteList(deleteList.IdList, upload_model.Image{})
 	if err != nil {
 		response.FailWithCode(response.DeleteFail, c)
 	}

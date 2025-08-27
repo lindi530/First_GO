@@ -4,7 +4,7 @@ import (
 	mysql_image "GO1/database/mysql/image"
 	"GO1/database/mysql/user_mysql"
 	"GO1/global"
-	models_upload "GO1/models/upload"
+	"GO1/models/upload_model"
 	"GO1/models/user_model"
 	"GO1/pkg/md5"
 	"github.com/gin-gonic/gin"
@@ -99,7 +99,7 @@ func ensureDir(dirPath string) {
 
 func inWriteList(ext string) bool {
 	ext = strings.ToLower(ext)
-	for _, EXT := range models_upload.WriteImageList {
+	for _, EXT := range upload_model.WriteImageList {
 		if EXT == ext {
 			return true
 		}
