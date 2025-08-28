@@ -1,7 +1,6 @@
 package problem_api
 
 import (
-	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models/problem_model"
 	"GO1/pkg/jwt"
@@ -23,9 +22,9 @@ func (ProblemAPI) SubmitCode(c *gin.Context) {
 		response.FailWithMessage("解析信息失败", c)
 		return
 	}
-	
+
 	codeSubmission.ProblemID = uint(problemID)
-	global.Logger.Info("SubmitCode:", codeSubmission.ProblemID)
+
 	if ok := isSafeCode(codeSubmission.Code, codeSubmission.Language); !ok {
 		response.FailWithMessage("不安全代码", c)
 		return

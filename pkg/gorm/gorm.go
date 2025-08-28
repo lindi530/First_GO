@@ -33,5 +33,4 @@ func InitGorm() {
 	sqlDB.SetConnMaxLifetime(time.Hour * 4)
 
 	global.DB = db
-
 }
