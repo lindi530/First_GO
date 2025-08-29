@@ -6,11 +6,11 @@ import (
 	"GO1/models/problem_model"
 )
 
-func GetProblemSubmissions(userId int64, problemId uint) (resp response.Response) {
+func GetProblemSubmissionList(userId int64, problemId uint) (resp response.Response) {
 
 	var submissions []problem_model.ProblemSubmission
 
-	if err := problem_mysql.GetProblemSubmissions(userId, problemId, &submissions); err != nil {
+	if err := problem_mysql.GetProblemSubmissionList(userId, problemId, &submissions); err != nil {
 		resp.Code = 1
 		resp.Message = "提交记录查询失败"
 		return

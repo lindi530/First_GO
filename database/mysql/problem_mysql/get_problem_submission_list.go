@@ -5,11 +5,10 @@ import (
 	"GO1/models/problem_model"
 )
 
-func GetProblemSubmissions(userId int64, problemId uint, submissions *[]problem_model.ProblemSubmission) error {
+func GetProblemSubmissionList(userId int64, problemId uint, submissions *[]problem_model.ProblemSubmission) error {
 
 	err := global.DB.Table("problem_submissions AS s").
-		Select("s.*, u.user_name").
-		Joins("LEFT JOIN users u ON s.user_id = u.user_id").
+		Select("s.id, s.problem_id, s.language, s.created_at, s.score, s.exec_time, s.memory_usage, s.state").
 		Where("s.user_id = ? AND s.problem_id = ?", userId, problemId).
 		Order("s.created_at DESC").
 		Find(submissions).Error

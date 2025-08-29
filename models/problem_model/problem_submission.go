@@ -13,5 +13,9 @@ type ProblemSubmission struct {
 	MemoryUsage int       `json:"memory_usage"`
 	Score       float64   `json:"score"`
 	CreatedAt   time.Time `json:"created_at"`
-	UserName    string    `json:"user_name" gorm:"-"`
+}
+
+type ProblemSubmissionDTO struct {
+	ProblemSubmission        // 嵌入原始表字段
+	UserName          string `json:"user_name"`
 }

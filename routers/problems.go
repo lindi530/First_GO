@@ -14,6 +14,7 @@ func ProblemsRouter(router *gin.RouterGroup) {
 	{
 		problems.POST("/:problem_id/submit", api.ApiGroups.ProblemAPI.SubmitCode)
 		problems.POST("/:problem_id/submit/example", api.ApiGroups.ProblemAPI.SubmitExample)
-		problems.GET("/:problem_id/submissions", api.ApiGroups.ProblemAPI.GetProblemSubmissions)
+		problems.GET("/:problem_id/submissions", api.ApiGroups.ProblemAPI.GetProblemSubmissionList)
+		problems.GET("/submissions/:submission_id", api.ApiGroups.ProblemAPI.GetSubmissionDetail)
 	}
 }

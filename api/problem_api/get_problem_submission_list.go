@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func (ProblemAPI) GetProblemSubmissions(c *gin.Context) {
+func (ProblemAPI) GetProblemSubmissionList(c *gin.Context) {
 	problemIdStr := c.Param("problem_id")
 	problemId, err := strconv.ParseUint(problemIdStr, 10, 64)
 	if err != nil {
@@ -16,7 +16,7 @@ func (ProblemAPI) GetProblemSubmissions(c *gin.Context) {
 	}
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 
-	resp := problem_service.GetProblemSubmissions(userId, uint(problemId))
+	resp := problem_service.GetProblemSubmissionList(userId, uint(problemId))
 
 	response.DataAndMessage(&resp, c)
 }
