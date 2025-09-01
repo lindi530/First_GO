@@ -1,4 +1,4 @@
-package comment
+package comment_mysql
 
 import (
 	"GO1/global"

@@ -1,4 +1,4 @@
-package CommentLike
+package comment_like_model
 
 import "time"
 

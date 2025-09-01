@@ -1,4 +1,4 @@
-package comment
+package comment_mysql
 
 import (
 	"GO1/global"
@@ -6,8 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func CommentUnLike(commentId int64) {
+func CommentLike(commentId int64) {
 	global.DB.Model(&Comment.Comment{}).
 		Where("id = ?", commentId).
-		UpdateColumn("likes", gorm.Expr("likes + ?", -1))
+		UpdateColumn("likes", gorm.Expr("likes + ?", 1))
 }

@@ -43,11 +43,8 @@ func (UserAPI) CreateUserPost(c *gin.Context) {
 		return
 	}
 
-	responsePost := service.CreatePost(c, userId, post)
-	if !result {
-		response.FailWithCode(response.ServiceError, c)
-		return
-	}
+	responsePost := service.CreatePost(userId, post)
+
 	response.OkWithData(gin.H{
 		"post": responsePost,
 	}, c)

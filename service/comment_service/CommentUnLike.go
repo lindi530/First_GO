@@ -1,4 +1,4 @@
-package Comment
+package comment_service
 
 import (
 	database_comment_like "GO1/database/mysql/comment_like"

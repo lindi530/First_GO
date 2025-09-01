@@ -1,13 +1,13 @@
 package comment_like
 
 import (
-	mysql_comment "GO1/database/mysql/comment"
+	"GO1/database/mysql/comment_mysql"
 	"GO1/global"
-	model_CommentLike "GO1/models/CommentLike"
+	"GO1/models/comment_like_model"
 )
 
 func CommentLike(userId, commentId int64) error {
-	like := model_CommentLike.CommentLike{
+	like := comment_like_model.CommentLike{
 		UserID:    userId,
 		CommentID: commentId,
 	}
@@ -16,7 +16,7 @@ func CommentLike(userId, commentId int64) error {
 		FirstOrCreate(&like).Error
 
 	if result == nil {
-		mysql_comment.CommentLike(commentId)
+		comment_mysql.CommentLike(commentId)
 	}
 	return result
 }

@@ -17,3 +17,12 @@ func FindAuthorInfo(userId int64) *user_model.AuthorInfo {
 	}
 	return &author
 }
+
+func FindAuthorsInfo(authors *[]user_model.AuthorInfo, authorIDs []int64) error {
+	err := global.DB.
+		Model(&user_model.User{}).
+		Select("user_id", "user_name", "avatar").
+		Where("user_id in ?", authorIDs).
+		Find(&authors).Error
+	return err
+}

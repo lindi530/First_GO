@@ -13,7 +13,7 @@ func (PostAPI) GetComments(c *gin.Context) {
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
 
-	result := service_post.GetComments(c, userId, postId)
+	result := service_post.GetComments(userId, postId)
 
 	if !result.Ok {
 		response.FailWithMessage(result.Msg, c)
