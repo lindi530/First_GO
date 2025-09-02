@@ -22,7 +22,7 @@ func SyncPostLikes() {
 	for _, r := range results {
 		global.DB.Model(&post.Post{}).
 			Where("id = ?", r.PostId).
-			Update("likes", r.Likes)
+			UpdateColumn("likes", r.Likes)
 	}
 
 	global.Logger.Info("帖子点赞数同步完成，共更新", len(results), "条记录")

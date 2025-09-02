@@ -14,8 +14,8 @@ type Post struct {
 	Likes     int64     `json:"likes"`
 	Views     int64     `gorm:"not null"   json:"views"`
 	Status    int8      `gorm:"default:0"                  json:"status"` // 0=正常，1=删除
-	CreatedAt time.Time `gorm:"autoCreateTime"             json:"created_at"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime"             json:"updated_at"`
+	CreatedAt time.Time `gorm:"autoUpdateTime:false" json:"created_at"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime:false" json:"updated_at"`
 
 	Author user_model.User `gorm:"foreignKey:UserID;references:UserID" json:"-"`
 }

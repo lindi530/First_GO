@@ -29,7 +29,7 @@ func GetProblemList(userID int64) ([]problem_model.ProblemList, error) {
 		`).
 		Joins("LEFT JOIN user_ac_problems uap ON uap.problem_id = p.id AND uap.user_id = ?", userID).
 		Scan(&problems).Error
-	global.Logger.Error(problems)
+
 	if err != nil {
 		return nil, err
 	}

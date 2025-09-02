@@ -17,11 +17,14 @@ func (h *Hub) Run() {
 			h.unregisterHandle(msg)
 			h.mu.Unlock()
 		case msg := <-h.privateMsg:
-			h.mu.RLock()
+			//h.mu.RLock()     // 读锁 只能读不能写入任何的client，现在看起来没有问题，但是高并发会出现数据竞争
+
+			h.mu.Lock()
 
 			h.sendMessage(msg)
-
-			h.mu.RUnlock()
+			
+			h.mu.Unlock()
+			//h.mu.RUnlock()
 		}
 	}
 }

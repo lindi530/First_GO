@@ -5,13 +5,12 @@ import (
 	"GO1/models/post"
 )
 
-func GetPostByPostId(postId int64) post.Post {
-	post := post.Post{}
-	global.DB.
+func GetPostByPostId(postId int64, post *post.Post) error {
+	err := global.DB.
 		Preload("Author").
 		Where("id = ?", postId).
-		First(&post)
-	return post
+		First(post).Error
+	return err
 }
 
 func GetAllPost() ([]post.Post, error) {

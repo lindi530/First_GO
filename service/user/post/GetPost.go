@@ -29,7 +29,10 @@ func GetAllPost(userId int64) ([]post.PostResponse, error) {
 }
 
 func GetPostByPostId(postId int64) post.Post {
-	post := mysql_post.GetPostByPostId(postId)
+	var post post.Post
+	err := mysql_post.GetPostByPostId(postId, &post)
+	if err != nil {
+	}
 	return post
 }
 

@@ -6,7 +6,10 @@ import (
 )
 
 func PostCheckByPostID(postId int64) bool {
-	var p post.Post
-	err := global.DB.Select("id").First(&p, postId).Error //First(&p, postId)：等价于 WHERE id = postId LIMIT 1；
+	var exists bool
+	err := global.DB.Model(&post.Post{}).
+		Select("count(1) > 0").
+		Where("id = ?", postId).
+		Scan(&exists).Error
 	return err == nil
 }

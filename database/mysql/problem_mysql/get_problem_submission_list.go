@@ -2,10 +2,10 @@ package problem_mysql
 
 import (
 	"GO1/global"
-	"GO1/models/problem_model"
+	"GO1/models/problem_submission_model"
 )
 
-func GetProblemSubmissionList(userId int64, problemId uint, submissions *[]problem_model.ProblemSubmission) error {
+func GetProblemSubmissionList(userId int64, problemId uint, submissions *[]problem_submission_model.ProblemSubmission) error {
 
 	err := global.DB.Table("problem_submissions AS s").
 		Select("s.id, s.problem_id, s.language, s.created_at, s.score, s.exec_time, s.memory_usage, s.state").

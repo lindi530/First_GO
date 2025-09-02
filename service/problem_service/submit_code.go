@@ -4,6 +4,7 @@ import (
 	"GO1/database/mysql/problem_mysql"
 	"GO1/middlewares/response"
 	"GO1/models/problem_model"
+	"GO1/models/problem_submission_model"
 	"GO1/models/ws_model"
 	"GO1/service/ws_service"
 	"math"
@@ -43,7 +44,7 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 		problem_mysql.UpdateAcCount(codeSubmission.ProblemID)
 	}
 	problem_mysql.UpdateSubmitCount(codeSubmission.ProblemID)
-	problem_mysql.SaveSubmission(&problem_model.ProblemSubmission{
+	problem_mysql.SaveSubmission(&problem_submission_model.ProblemSubmission{
 		UserId:    userid,
 		ProblemId: codeSubmission.ProblemID,
 		Code:      codeSubmission.Code,

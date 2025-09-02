@@ -7,7 +7,11 @@ import (
 )
 
 func PostViews(postId int64) {
-	global.DB.Model(&post.Post{}).
+	global.DB.
+		Model(&post.Post{}).
 		Where("id = ?", postId).
-		UpdateColumn("Views", gorm.Expr("views + ?", 1))
+		UpdateColumns(map[string]interface{}{
+			"views":      gorm.Expr("views + ?", 1),
+			"updated_at": gorm.Expr("updated_at"),
+		})
 }

@@ -3,12 +3,12 @@ package problem_service
 import (
 	"GO1/database/mysql/problem_mysql"
 	"GO1/middlewares/response"
-	"GO1/models/problem_model"
+	"GO1/models/problem_submission_model"
 )
 
 func GetSubmissionDetail(submissionId int64) (resp response.Response) {
 
-	var submissionDetail problem_model.ProblemSubmissionDTO
+	var submissionDetail problem_submission_model.ProblemSubmissionDTO
 	if err := problem_mysql.GetSubmissionDetail(submissionId, &submissionDetail); err != nil {
 		resp.Code = 1
 		resp.Message = "查询详细记录失败！"

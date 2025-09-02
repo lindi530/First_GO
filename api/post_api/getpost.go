@@ -23,7 +23,7 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 func (PostAPI) GetOnePost(c *gin.Context) {
 	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
-	result := service.GetOnePost(c, userId, postId)
+	result := service.GetOnePost(userId, postId)
 
 	if !result.Ok {
 		response.FailWithMessage(result.Msg, c)

@@ -10,7 +10,7 @@ func UpdateFollowUserCount(followerID, followeeID int64) (result bool) {
 
 	if err := global.DB.Model(&user_model.User{}).
 		Where("user_id = ?", followerID).
-		Update("following_count", gorm.Expr("following_count + ?", 1)).
+		UpdateColumn("following_count", gorm.Expr("following_count + ?", 1)).
 		Error; err != nil {
 		global.Logger.Error("更新 following_count 失败:", err)
 		return false
@@ -19,7 +19,7 @@ func UpdateFollowUserCount(followerID, followeeID int64) (result bool) {
 
 	if err := global.DB.Model(&user_model.User{}).
 		Where("user_id = ?", followeeID).
-		Update("follower_count", gorm.Expr("follower_count + ?", 1)).
+		UpdateColumn("follower_count", gorm.Expr("follower_count + ?", 1)).
 		Error; err != nil {
 		global.Logger.Error("更新 follower_count 失败:", err)
 		return false

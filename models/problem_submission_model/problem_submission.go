@@ -1,4 +1,4 @@
-package problem_model
+package problem_submission_model
 
 import "time"
 
@@ -18,4 +18,6 @@ type ProblemSubmission struct {
 type ProblemSubmissionDTO struct {
 	ProblemSubmission        // 嵌入原始表字段
 	UserName          string `json:"user_name"`
+	Title             string `json:"title"`
+	Description       string `json:"description"`
 }
