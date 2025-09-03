@@ -1,4 +1,4 @@
-package post
+package post_model
 
 type PageInfo struct {
 	Page  int `form:"page" json:"page"`

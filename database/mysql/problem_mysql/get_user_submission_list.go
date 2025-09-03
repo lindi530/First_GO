@@ -12,8 +12,8 @@ func GetUserSubmissionList(submissions *[]problem_submission_model.UserSubmissio
 		Joins("LEFT JOIN problems p ON s.problem_id = p.id").
 		Where("s.user_id = ?", userId).
 		Order("id desc"). // 按 id 降序，最新的排前面
-		Offset(offset). // 跳过前 offset 条
-		Limit(limit). // 取 limit 条
+		Offset(offset).   // 跳过前 offset 条
+		Limit(limit).     // 取 limit 条
 		Find(submissions).Error
 	return err
 }

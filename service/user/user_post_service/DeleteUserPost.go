@@ -1,7 +1,6 @@
-package post
+package user_post_service
 
 import (
-	mysql "GO1/database/mysql/post"
 	service_user "GO1/service/user"
 	"github.com/gin-gonic/gin"
 )
@@ -12,15 +11,15 @@ func DeleteUserPost(c *gin.Context, postId int64, userId int64) bool {
 		return false
 	}
 
-	post := GetPostByPostId(postId)
-	if post.PostID == 0 {
-		return false
-	}
+	//post := CheckPostExit(postId)
+	//if post.PostID == 0 {
+	//	return false
+	//}
+	//
+	//if post.UserID != userId {
+	//	return false
+	//}
 
-	if post.UserID != userId {
-		return false
-	}
-
-	mysql.DeletePost(post)
+	//mysql.DeletePost(post)
 	return true
 }

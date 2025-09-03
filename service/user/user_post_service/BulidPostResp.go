@@ -1,8 +1,8 @@
-package post
+package user_post_service
 
 import (
 	"GO1/database/mysql/post_likes"
-	models_post "GO1/models/post"
+	models_post "GO1/models/post_model"
 	"GO1/models/user_model"
 )
 
@@ -14,7 +14,7 @@ func BuildPostResponse(userId int64, p models_post.Post) models_post.PostRespons
 		Content:   p.Content,
 		Views:     p.Views,
 		Likes:     p.Likes,
-		Like:      post_likes.PostLikeCheck(userId, p.PostID),
+		Liked:     post_likes.PostLikeCheck(userId, p.PostID),
 		Status:    p.Status,
 		CreatedAt: p.CreatedAt,
 		UpdatedAt: p.UpdatedAt,
@@ -27,9 +27,9 @@ func BuildPostResponse(userId int64, p models_post.Post) models_post.PostRespons
 }
 
 func BuildPostsResponse(userId int64, p []models_post.Post) []models_post.PostResponse {
-	postsResponse := make([]models_post.PostResponse, 0, len(p))
-	for _, post := range p {
-		postsResponse = append(postsResponse, BuildPostResponse(userId, post))
+	postsResponse := make([]models_post.PostResponse, len(p), len(p))
+	for i, post := range p {
+		postsResponse[i] = BuildPostResponse(userId, post)
 	}
 	return postsResponse
 }

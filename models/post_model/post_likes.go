@@ -1,4 +1,4 @@
-package post
+package post_model
 
 import "time"
 

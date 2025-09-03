@@ -3,15 +3,14 @@ package post_api
 import (
 	"GO1/global"
 	"GO1/middlewares/response"
-	"GO1/models/post"
+	"GO1/models/post_model"
 	"GO1/pkg/jwt"
-	service "GO1/service/user/post"
+	service "GO1/service/user/user_post_service"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
 func (PostAPI) GetAllPost(c *gin.Context) {
-	// 数据校验
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	// 服务
 	posts, _ := service.GetAllPost(userId)
@@ -21,8 +20,8 @@ func (PostAPI) GetAllPost(c *gin.Context) {
 }
 
 func (PostAPI) GetOnePost(c *gin.Context) {
-	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
+	postId, _ := strconv.ParseInt(c.Param("post_id"), 10, 64)
 	result := service.GetOnePost(userId, postId)
 
 	if !result.Ok {
@@ -34,7 +33,7 @@ func (PostAPI) GetOnePost(c *gin.Context) {
 
 func (PostAPI) GetThePagePost(c *gin.Context) {
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
-	var pageInfo post.PageInfo
+	var pageInfo post_model.PageInfo
 	if err := c.ShouldBind(&pageInfo); err != nil {
 		response.FailWithCode(response.BadRequest, c)
 		return

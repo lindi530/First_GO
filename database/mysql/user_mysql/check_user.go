@@ -34,10 +34,14 @@ func CheckUserByUserName(username string) bool {
 }
 
 func CheckUserByUserId(userid int64) bool {
-	user := user_model.User{}
-	global.DB.Where("user_id = ?", userid).First(&user)
-	if user.UserID != 0 {
-		return true
+
+	var count int64
+	err := global.DB.
+		Model(&user_model.User{}).
+		Where("user_id = ?", userid).
+		Count(&count).Error
+	if err != nil {
+		return false
 	}
-	return false
+	return count > 0
 }

@@ -22,7 +22,7 @@ func UsersRouter(router *gin.RouterGroup) {
 		users.GET("/:user_id", api.ApiGroups.UserAPI.UserInfo)
 		users.GET("/userlist", api.ApiGroups.UserAPI.GetUserList)
 		users.GET("/:user_id/posts", api.ApiGroups.UserAPI.GetUserPosts)
-		users.POST("/:user_id/posts/create", api.ApiGroups.UserAPI.CreateUserPost)
+		users.POST("/posts/create", api.ApiGroups.UserAPI.CreateUserPost)
 		users.POST("/:user_id/modify_avatar", api.ApiGroups.UserAPI.ModifyAvatar)
 		users.PATCH("/:user_id/profile", api.ApiGroups.UserAPI.ModifyProfile)
 

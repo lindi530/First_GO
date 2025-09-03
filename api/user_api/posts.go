@@ -4,8 +4,9 @@ import (
 	mysql "GO1/database/mysql/user_mysql"
 	"GO1/global"
 	"GO1/middlewares/response"
-	"GO1/models/post"
-	service "GO1/service/user/post"
+	"GO1/models/post_model"
+	"GO1/pkg/jwt"
+	service "GO1/service/user/user_post_service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"strconv"
@@ -30,10 +31,11 @@ func (UserAPI) GetUserPosts(c *gin.Context) {
 
 func (UserAPI) CreateUserPost(c *gin.Context) {
 	// 数据校验
-	post := post.CreatePost{}
-	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	post := post_model.CreatePost{}
+	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	if err := c.ShouldBindJSON(&post); err != nil || userId != post.UserID {
-		global.Logger.Error("<UNK>", zap.Error(err))
+		global.Logger.Error("<UNK>", zap.Any("err", err))
+
 		response.FailWithCode(response.BadRequest, c)
 		return
 	}
@@ -46,7 +48,8 @@ func (UserAPI) CreateUserPost(c *gin.Context) {
 	responsePost := service.CreatePost(userId, post)
 
 	response.OkWithData(gin.H{
-		"post": responsePost,
+		"post":    responsePost,
+		"message": "发帖成功",
 	}, c)
 }
 

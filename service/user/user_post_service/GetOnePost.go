@@ -1,21 +1,21 @@
-package post
+package user_post_service
 
 import (
-	mysql_post "GO1/database/mysql/post"
+	"GO1/database/mysql/post_mysql"
 	"GO1/models"
-	"GO1/models/post"
+	"GO1/models/post_model"
 )
 
 func GetOnePost(userId, postId int64) *models.HandleFuncResp {
 	var Resp models.HandleFuncResp
 
-	var post post.Post
-	err := mysql_post.GetPostByPostId(postId, &post)
+	var post post_model.Post
+	err := post_mysql.GetPostByPostId(postId, &post)
 
 	Resp.Ok = err == nil
 
 	if Resp.Ok {
-		mysql_post.PostViews(post.PostID)
+		post_mysql.PostViews(post.PostID)
 		Resp.Data = BuildPostResponse(userId, post)
 	} else {
 		Resp.Msg = "获取帖子失败"

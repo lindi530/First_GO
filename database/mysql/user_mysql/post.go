@@ -2,11 +2,11 @@ package user_mysql
 
 import (
 	"GO1/global"
-	"GO1/models/post"
+	"GO1/models/post_model"
 )
 
-func GetUserPost(userID int64) ([]post.Post, error) {
-	var posts []post.Post
+func GetUserPost(userID int64) ([]post_model.Post, error) {
+	var posts []post_model.Post
 	err := global.DB.
 		Preload("Author").
 		Where("user_id = ? AND status = 0", userID).
@@ -15,7 +15,7 @@ func GetUserPost(userID int64) ([]post.Post, error) {
 	return posts, err
 }
 
-func CreatePost(post *post.Post) {
+func CreatePost(post *post_model.Post) {
 	global.DB.Create(post) // create 固定执行插入操作
 	//global.DB.Save(&post)     // save 先判断主键，主键存在则修改该信息，不存在进行插入操作
 }

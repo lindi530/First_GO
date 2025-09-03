@@ -2,7 +2,7 @@ package sync
 
 import (
 	"GO1/global"
-	"GO1/models/post"
+	"GO1/models/post_model"
 )
 
 func SyncPostLikes() {
@@ -20,7 +20,7 @@ func SyncPostLikes() {
 
 	// 遍历更新到 comments 表中
 	for _, r := range results {
-		global.DB.Model(&post.Post{}).
+		global.DB.Model(&post_model.Post{}).
 			Where("id = ?", r.PostId).
 			UpdateColumn("likes", r.Likes)
 	}

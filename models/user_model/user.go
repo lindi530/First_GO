@@ -34,6 +34,7 @@ type UserResponse struct {
 	FollowerCount  int64     `json:"follower_count"`
 	Gender         string    `json:"gender"`
 	OnlineState    bool      `json:"online_state"`
+	CreateTime     time.Time `json:"create_time"`
 	UpdateTime     time.Time `json:"update_time"`
 }
 
@@ -49,6 +50,7 @@ func BuildUserResponse(c *gin.Context, u User) UserResponse {
 		Gender:         u.Gender,
 		OnlineState:    getOnlineState(c, u.UserID),
 		UpdateTime:     u.UpdateTime,
+		CreateTime:     u.CreateTime,
 	}
 	return user
 }

@@ -3,7 +3,7 @@ package post_api
 import (
 	"GO1/middlewares/response"
 	"GO1/pkg/jwt"
-	service_post "GO1/service/user/post"
+	service_post "GO1/service/user/user_post_service"
 	"github.com/gin-gonic/gin"
 
 	"strconv"

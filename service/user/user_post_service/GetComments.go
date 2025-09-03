@@ -1,4 +1,4 @@
-package post
+package user_post_service
 
 import (
 	"GO1/database/mysql/comment_like"
