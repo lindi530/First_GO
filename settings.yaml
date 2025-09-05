@@ -22,7 +22,7 @@ logger:
 system:
     host: "0.0.0.0"
     scheme: ""
-    port: 8000
+    port: 8080
     env: release   # testDebug
 snowflake:
     start_time: "2025-05-08"

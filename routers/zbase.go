@@ -43,6 +43,11 @@ func InitRouter() *gin.Engine {
 }
 
 func AddRouter(api *gin.RouterGroup) {
+
+	api.GET("/healthz", func(c *gin.Context) {
+		c.JSON(200, gin.H{})
+	})
+
 	AuthRouter(api)
 	SettingsRouter(api)
 	UsersRouter(api)

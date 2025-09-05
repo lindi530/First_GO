@@ -66,7 +66,7 @@ func GetAvatarPath(md5Avatar string) string {
 	idx := strings.LastIndex(path, "/")
 	pathHead, pathTail := path[:idx], path[idx+1:]
 	scheme := "http"
-	host := "localhost:8000" // 如 127.0.0.1:8000 或 192.168.1.10:8000
+	host := "localhost:8080" // 如 127.0.0.1:8080 或 192.168.1.10:8080
 	imageURL := scheme + "://" + host + mapping.GetRealPath(pathHead) + "/" + pathTail
 
 	return imageURL
