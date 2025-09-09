@@ -1,8 +1,9 @@
 package user_api
 
 import (
+	"GO1/global"
 	"GO1/middlewares/response"
-	service "GO1/service/user"
+	service "GO1/service/user_service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +13,7 @@ func (UserAPI) GetUserList(c *gin.Context) {
 	// 服务
 	userList := service.GetUserList(c)
 	// 相应
+	global.Logger.Info("UserList", userList)
 
 	response.OkWithData(gin.H{
 		"userList": userList,

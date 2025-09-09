@@ -26,6 +26,8 @@ func UsersRouter(router *gin.RouterGroup) {
 		users.POST("/:user_id/modify_avatar", api.ApiGroups.UserAPI.ModifyAvatar)
 		users.PATCH("/:user_id/profile", api.ApiGroups.UserAPI.ModifyProfile)
 
+		users.GET("/:user_id/submissions", api.ApiGroups.UserAPI.GetUserSubmissionList)
+
 		users.GET("/:user_id/is_following", api.ApiGroups.UserAPI.UserFollowAPI.CheckFollows)
 		users.POST("/:user_id/follow", api.ApiGroups.UserAPI.UserFollowAPI.FollowUser)
 		users.DELETE("/:user_id/follow", api.ApiGroups.UserAPI.UserFollowAPI.UnFollowUser)

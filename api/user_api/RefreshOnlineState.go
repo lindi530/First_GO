@@ -2,7 +2,7 @@ package user_api
 
 import (
 	"GO1/middlewares/response"
-	service_user "GO1/service/user"
+	service_user "GO1/service/user_service"
 	"github.com/gin-gonic/gin"
 	"strings"
 )

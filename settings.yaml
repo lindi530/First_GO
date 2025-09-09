@@ -23,7 +23,7 @@ system:
     host: "0.0.0.0"
     scheme: ""
     port: 8080
-    env: release   # testDebug
+    env: debug   #    release 生产环境（发布）     debug 开发环境    test 测试模式
 snowflake:
     start_time: "2025-05-08"
     machine_id: 1
@@ -39,6 +39,13 @@ upload:
 jwt:
     access_duration: 15
     refresh_duration: 24
+run_code_path:
+    local:
+        base_dir: ""
+        prefix: "ojcode-*"
+    service:
+        base_dir: "/home/lin/project/temp"
+        prefix: "ojcode-*"
 settings:
     user:
         avatar: "02d2b2b795d6b88dfc787bb71bfa7d41"

@@ -13,8 +13,10 @@ import (
 )
 
 func RunCode(userid int64, code, language string, testcases *[]problem_model.Example, message *ws_model.EditStatus) []problem_model.RunResult {
+	var dir, pattern string
+	getRunPath(&dir, &pattern)
 
-	tempDir, err := os.MkdirTemp("", "ojcode-*")
+	tempDir, err := os.MkdirTemp(dir, pattern)
 	if err != nil {
 		return []problem_model.RunResult{{Passed: false, Error: "Cannot create temp directory"}}
 	}
@@ -67,7 +69,8 @@ func RunCode(userid int64, code, language string, testcases *[]problem_model.Exa
 	for i := range *testcases {
 		runScript += fmt.Sprintf("%s < /app/input%d.txt > /app/output%d.txt\n", runCmd, i, i)
 	}
-	err = os.WriteFile(filepath.Join(tempDir, "run.sh"), []byte(runScript), 0755)
+	runScriptPath := filepath.Join(tempDir, "run.sh")
+	err = os.WriteFile(runScriptPath, []byte(runScript), 0755)
 	if err != nil {
 		return []problem_model.RunResult{{Passed: false, Error: "Cannot write run.sh"}}
 	}
@@ -109,7 +112,7 @@ func RunCode(userid int64, code, language string, testcases *[]problem_model.Exa
 		if err != nil {
 			results[i] = problem_model.RunResult{
 				Passed: false,
-				Error:  fmt.Sprintf("Cannot read output%d.txt", i),
+				Error:  fmt.Sprintf("Cannot read output%d.txt: %s", i, err.Error()),
 			}
 			continue
 		}
@@ -119,7 +122,7 @@ func RunCode(userid int64, code, language string, testcases *[]problem_model.Exa
 			Passed:   output == expected,
 			Output:   output,
 			Expected: expected,
-			Error:    "", // stderr 已清空
+			Error:    "Wrong Answer", // stderr 已清空
 		}
 	}
 

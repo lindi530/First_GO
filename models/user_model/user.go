@@ -6,6 +6,7 @@ import (
 	"GO1/mapping"
 	"GO1/models/upload_model"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -25,7 +26,7 @@ type User struct {
 }
 
 type UserResponse struct {
-	UserID         int64     `json:"user_id"`
+	UserID         string    `json:"user_id"`
 	UserName       string    `json:"user_name"`
 	AvatarPath     string    `json:"avatar"`
 	Quote          string    `json:"quote"`
@@ -40,7 +41,7 @@ type UserResponse struct {
 
 func BuildUserResponse(c *gin.Context, u User) UserResponse {
 	user := UserResponse{
-		UserID:         u.UserID,
+		UserID:         strconv.FormatInt(u.UserID, 10),
 		UserName:       u.UserName,
 		AvatarPath:     GetAvatarPath(u.Avatar),
 		Quote:          u.Quote,

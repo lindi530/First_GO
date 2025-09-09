@@ -6,7 +6,7 @@ import (
 	"GO1/middlewares/response"
 	"GO1/models/post_model"
 	"GO1/pkg/jwt"
-	service "GO1/service/user/user_post_service"
+	service "GO1/service/user_service/user_post_service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"strconv"

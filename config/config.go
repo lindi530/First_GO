@@ -13,6 +13,7 @@ type Config struct {
 	Snowflake   Snowflake         `mapstructure:"snowflake"`
 	RedisClient RedisClient       `mapstructure:"redis"`
 	JWT         JWT               `mapstructure:"jwt"`
+	RunCode     RunCodePath       `mapstructure:"run_code_path"`
 	Upload      upload.Upload     `mapstructure:"upload"`
 	Settings    settings.Settings `mapstructure:"settings"`
 	Language    language.Language `mapstructure:"language"`

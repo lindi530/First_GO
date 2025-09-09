@@ -11,7 +11,16 @@ import (
 	"time"
 )
 
-func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp response.Response) {
+func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission, message *ws_model.EditStatus) (resp response.Response) {
+
+	if message == nil {
+		message = &ws_model.EditStatus{
+			Type: ws_model.MessageTypeEditStatus,
+			To:   userid,
+		}
+		ws_service.WsHub.SendEditData(message, "Pending")
+	}
+
 	var examples []problem_model.Example
 
 	err := problem_mysql.GetProblemExamples(codeSubmission.ProblemID, &examples)
@@ -21,14 +30,8 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 		return
 	}
 
-	message := &ws_model.EditStatus{
-		Type: ws_model.MessageTypeEditStatus,
-		To:   userid,
-	}
-	ws_service.WsHub.SendEditData(message, "Pending")
 	resp.Code = 0
 	runResult := RunCode(userid, codeSubmission.Code, codeSubmission.Language, &examples, message)
-
 	msgContent := "Accepted"
 	totalCount := len(runResult)
 	acCount := totalCount
@@ -39,6 +42,7 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 			acCount--
 		}
 	}
+
 	if totalCount == acCount {
 		problem_mysql.SaveAcState(userid, codeSubmission.ProblemID)
 		problem_mysql.UpdateAcCount(codeSubmission.ProblemID)
@@ -56,5 +60,6 @@ func SubmitCode(userid int64, codeSubmission problem_model.CodeSubmission) (resp
 
 	ws_service.WsHub.SendEditData(message, msgContent)
 	resp.Data = runResult
+
 	return
 }

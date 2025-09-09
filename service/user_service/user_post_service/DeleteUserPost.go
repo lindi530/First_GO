@@ -1,7 +1,7 @@
 package user_post_service
 
 import (
-	service_user "GO1/service/user"
+	service_user "GO1/service/user_service"
 	"github.com/gin-gonic/gin"
 )
 

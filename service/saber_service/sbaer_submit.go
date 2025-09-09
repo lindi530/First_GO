@@ -12,6 +12,13 @@ import (
 )
 
 func SaberSubmit(userid int64, submit *saber_model.SaberSubmit) (resp response.Response) {
+
+	message := &ws_model.EditStatus{
+		Type: ws_model.MessageTypeEditStatus,
+		To:   userid,
+	}
+	ws_service.WsHub.SendEditData(message, "Pending")
+
 	room, err := redis.GetSaberRoom(submit.RoomId)
 	if err != nil {
 		resp.Code = 1
@@ -25,7 +32,7 @@ func SaberSubmit(userid int64, submit *saber_model.SaberSubmit) (resp response.R
 		ProblemID: room.ProblemID,
 	}
 
-	resp = problem_service.SubmitCode(userid, codeSubmission)
+	resp = problem_service.SubmitCode(userid, codeSubmission, message)
 
 	if resp.Code == 0 {
 		responseSaberResult(userid, room)

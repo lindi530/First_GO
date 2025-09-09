@@ -3,7 +3,7 @@ package user_api
 import (
 	"GO1/global"
 	"GO1/middlewares/response"
-	"GO1/service/user"
+	"GO1/service/user_service"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -16,7 +16,7 @@ func (UserAPI) ModifyAvatar(c *gin.Context) {
 		response.FailWithCode(response.BadRequest, c)
 		return
 	}
-	result := user.ModifyAvatar(c, userId, avatar)
+	result := user_service.ModifyAvatar(c, userId, avatar)
 
 	global.Logger.Info(result)
 

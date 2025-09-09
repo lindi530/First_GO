@@ -7,7 +7,7 @@ import (
 	"GO1/middlewares/response"
 	"GO1/models/user_model"
 	"GO1/service/hash"
-	service "GO1/service/user"
+	service "GO1/service/user_service"
 	"github.com/gin-gonic/gin"
 )
 

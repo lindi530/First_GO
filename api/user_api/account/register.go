@@ -4,7 +4,7 @@ import (
 	"GO1/global"
 	"GO1/middlewares/response"
 	"GO1/models/user_model"
-	service "GO1/service/user"
+	service "GO1/service/user_service"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

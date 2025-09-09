@@ -4,7 +4,7 @@ import (
 	"GO1/middlewares/response"
 	"GO1/models/Comment"
 	"GO1/pkg/jwt"
-	service_user "GO1/service/user/user_post_service"
+	service_user "GO1/service/user_service/user_post_service"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )

@@ -31,7 +31,7 @@ func (ProblemAPI) SubmitCode(c *gin.Context) {
 	}
 	userid := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 
-	resp := problem_service.SubmitCode(userid, codeSubmission)
+	resp := problem_service.SubmitCode(userid, codeSubmission, nil)
 
 	if resp.Code == 1 {
 		response.FailWithMessage(resp.Message, c)

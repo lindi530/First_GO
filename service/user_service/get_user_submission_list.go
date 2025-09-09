@@ -1,4 +1,4 @@
-package problem_service
+package user_service
 
 import (
 	"GO1/database/mysql/problem_mysql"

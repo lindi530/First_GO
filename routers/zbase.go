@@ -23,6 +23,8 @@ func InitRouter() *gin.Engine {
 		AllowOrigins: []string{
 			"http://localhost:8080",
 			"http://192.168.1.17:8080",
+			"http://localhost:8081",
+			"http://192.168.1.17:8081",
 		}, // 允许前端地址
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
