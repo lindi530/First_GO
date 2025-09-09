@@ -20,9 +20,9 @@ func (h *Hub) Run() {
 			//h.mu.RLock()     // 读锁 只能读不能写入任何的client，现在看起来没有问题，但是高并发会出现数据竞争
 
 			h.mu.Lock()
-
+			global.Logger.Info(msg)
 			h.sendMessage(msg)
-			
+
 			h.mu.Unlock()
 			//h.mu.RUnlock()
 		}
@@ -39,6 +39,7 @@ func (h *Hub) UnregisterClient(client *Client) {
 }
 
 func (h *Hub) Broadcast(message []byte) { // 广播
+	global.Logger.Info(message)
 	h.privateMsg <- message
 }
 
@@ -57,6 +58,7 @@ func (h *Hub) sendMessage(msg []byte) {
 		global.Logger.Error("数据提取失败")
 		return
 	}
+	global.Logger.Info(msgType)
 
 	switch msgType {
 	case "chat":
