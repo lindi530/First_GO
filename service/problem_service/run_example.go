@@ -16,9 +16,11 @@ import (
 func RunExample(code, language, input string, memoryLimit, timeLimit int, message *ws_model.EditStatus) problem_model.RunResult {
 	ws_service.WsHub.SendEditData(message, "Pending")
 	// 1. 创建临时目录
-	var dir, pattern string
-	getRunPath(&dir, &pattern)
-	tempDir, err := os.MkdirTemp("", "ojcode-*")
+	dir := ""
+	if tempDirEnv := os.Getenv("TEMP_DIR"); tempDirEnv != "" {
+		dir = tempDirEnv
+	}
+	tempDir, err := os.MkdirTemp(dir, "ojcode-*")
 	if err != nil {
 		return problem_model.RunResult{Passed: false, Error: "Cannot create temp directory"}
 	}

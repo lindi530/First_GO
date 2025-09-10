@@ -39,13 +39,6 @@ upload:
 jwt:
     access_duration: 15
     refresh_duration: 24
-run_code_path:
-    local:
-        base_dir: ""
-        prefix: "ojcode-*"
-    service:
-        base_dir: "/home/lin/project/temp"
-        prefix: "ojcode-*"
 settings:
     user:
         avatar: "02d2b2b795d6b88dfc787bb71bfa7d41"
@@ -74,3 +67,5 @@ language:
         output_file: "output.txt"
         language: "go"
         need_compile: true
+rabbitmq:
+    url: "amqp://guest:guest@localhost:5672/"

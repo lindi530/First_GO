@@ -4,14 +4,21 @@ import (
 	"GO1/global"
 	"github.com/streadway/amqp"
 	"log"
+	"os"
 )
 
 var MQConn *amqp.Connection
 var MQChannel *amqp.Channel
 
 func InitRabbitMQ() {
+
+	rabbitURL := os.Getenv("RABBITMQ_URL")
+	if rabbitURL == "" {
+		rabbitURL = global.Config.RabbitMQ.URL
+	}
+
 	var err error
-	MQConn, err = amqp.Dial("amqp://guest:guest@localhost:5672/")
+	MQConn, err = amqp.Dial(rabbitURL)
 	if err != nil {
 		log.Fatalf("RabbitMQ connect error: %v", err)
 	}

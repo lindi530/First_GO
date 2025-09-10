@@ -13,10 +13,11 @@ import (
 )
 
 func RunCode(userid int64, code, language string, testcases *[]problem_model.Example, message *ws_model.EditStatus) []problem_model.RunResult {
-	var dir, pattern string
-	getRunPath(&dir, &pattern)
-
-	tempDir, err := os.MkdirTemp(dir, pattern)
+	dir := ""
+	if tempDirEnv := os.Getenv("TEMP_DIR"); tempDirEnv != "" {
+		dir = tempDirEnv
+	}
+	tempDir, err := os.MkdirTemp(dir, "ojcode-*")
 	if err != nil {
 		return []problem_model.RunResult{{Passed: false, Error: "Cannot create temp directory"}}
 	}

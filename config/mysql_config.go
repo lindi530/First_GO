@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"strconv"
 )
 
@@ -15,6 +16,9 @@ type Mysql struct {
 }
 
 func (m *Mysql) DSN() string {
-	dsn := m.User + ":" + m.Password + "@tcp(" + m.Host + ":" + strconv.Itoa(m.Port) + ")/" + m.DB + "?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := os.Getenv("MYSQL_DSN")
+	if dsn == "" {
+		dsn = m.User + ":" + m.Password + "@tcp(" + m.Host + ":" + strconv.Itoa(m.Port) + ")/" + m.DB + "?charset=utf8mb4&parseTime=True&loc=Local"
+	}
 	return dsn
 }
