@@ -14,14 +14,16 @@ func GetPostByPostId(postId int64, post *post_model.Post) error {
 	return err
 }
 
-func GetAllPost() ([]post_model.Post, error) {
-	var posts []post_model.Post
+func GetAllPost(posts *[]post_model.Post, offset, limit int) error {
+
+	limit = min(limit, 10)
 	err := global.DB.
 		Preload("Author").
 		Where("status = 0").
 		Order("created_at DESC").
-		Limit(10).
+		Offset(offset).
+		Limit(limit).
 		Find(&posts).Error
 
-	return posts, err
+	return err
 }

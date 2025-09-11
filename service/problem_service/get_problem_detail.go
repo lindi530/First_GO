@@ -21,7 +21,7 @@ func GetProblemDetails(id uint) (resp response.Response) {
 		return
 	}
 
-	if err := mysql.GetProblemExamples(id, &problemDetail.Examples); err != nil {
+	if err := mysql.GetOnProblemExamples(id, &problemDetail.Examples); err != nil {
 		resp.Code = 1
 		resp.Message = "读取题目信息失败"
 		return

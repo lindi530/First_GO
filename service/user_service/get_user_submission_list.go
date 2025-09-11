@@ -26,8 +26,8 @@ func GetUserSubmissionList(userId int64, page, pageSize int) (resp response.Resp
 	}
 	resp.Code = 0
 	resp.Data = gin.H{
-		"list":   submissions,
-		"length": length,
+		"list":  submissions,
+		"total": length,
 	}
 	return
 }

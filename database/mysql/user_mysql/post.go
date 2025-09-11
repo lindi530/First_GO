@@ -5,14 +5,17 @@ import (
 	"GO1/models/post_model"
 )
 
-func GetUserPost(userID int64) ([]post_model.Post, error) {
-	var posts []post_model.Post
+func GetUserPost(userID int64, page, pageSize int, posts *[]post_model.Post) error {
+	offset := (page - 1) * pageSize
+	limit := pageSize
 	err := global.DB.
 		Preload("Author").
 		Where("user_id = ? AND status = 0", userID).
 		Order("created_at DESC").
+		Offset(offset).
+		Limit(limit).
 		Find(&posts).Error
-	return posts, err
+	return err
 }
 
 func CreatePost(post *post_model.Post) {

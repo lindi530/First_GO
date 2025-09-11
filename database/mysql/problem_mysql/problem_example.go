@@ -17,3 +17,15 @@ func GetProblemExamples(problemId uint, examples *[]problem_model.Example) error
 
 	return nil
 }
+
+func GetOnProblemExamples(problemId uint, examples *[]problem_model.Example) error {
+	if err := global.DB.
+		Model(&problem_model.ProblemExample{}).
+		Select("input", "output").
+		Where("problem_id = ?", problemId).
+		First(examples).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

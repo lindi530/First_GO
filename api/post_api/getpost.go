@@ -11,12 +11,15 @@ import (
 )
 
 func (PostAPI) GetAllPost(c *gin.Context) {
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "10"))
 	userId := jwt.GetUserIdFromToken(c.GetHeader("Authorization"))
 	// 服务
-	posts, _ := service.GetAllPost(userId)
+	resp := service.GetAllPost(userId, page, pageSize)
 
 	// 响应
-	response.OkWithData(posts, c)
+	response.DataAndMessage(&resp, c)
 }
 
 func (PostAPI) GetOnePost(c *gin.Context) {

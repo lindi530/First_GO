@@ -26,10 +26,10 @@ func BuildPostResponse(userId int64, p models_post.Post) models_post.PostRespons
 	}
 }
 
-func BuildPostsResponse(userId int64, p []models_post.Post) []models_post.PostResponse {
-	postsResponse := make([]models_post.PostResponse, len(p), len(p))
-	for i, post := range p {
-		postsResponse[i] = BuildPostResponse(userId, post)
+func BuildPostsResponse(userId int64, posts []models_post.Post) []models_post.PostResponse {
+	respPosts := make([]models_post.PostResponse, len(posts)) // 预分配长度
+	for i, post := range posts {
+		respPosts[i] = BuildPostResponse(userId, post)
 	}
-	return postsResponse
+	return respPosts
 }

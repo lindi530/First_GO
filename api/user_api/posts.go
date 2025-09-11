@@ -15,18 +15,12 @@ import (
 func (UserAPI) GetUserPosts(c *gin.Context) {
 	// 得到此时登录的userID
 	userId, _ := strconv.ParseInt(c.Param("user_id"), 10, 64)
-
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "2"))
 	// 通过server获得帖子信息
-	posts, err := service.GetUserPosts(userId)
-	if err != nil {
-		response.FailWithMessage("出错", c)
-		return
-	}
-	// 返回信息
-	response.OkWithData(gin.H{
-		"len":   len(posts),
-		"posts": posts,
-	}, c)
+	resp := service.GetUserPosts(userId, page, pageSize)
+
+	response.DataAndMessage(&resp, c)
 }
 
 func (UserAPI) CreateUserPost(c *gin.Context) {
